@@ -1,7 +1,17 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('session.sessions');
+Route::get('/login', [MainController::class, 'loginview'])->name('login');
+
+Route::post('/loginrequest', [MainController::class, 'login']);
+Route::post('/logout', [MainController::class, 'logout'])->name('logout');
+
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+
 });

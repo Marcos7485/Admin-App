@@ -11,8 +11,11 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@inertiajs/progress": "^0.2.7",
+        "@inertiajs/vue3": "^1.2.0",
         "@vitejs/plugin-vue": "^5.1.2",
         "pinia": "^2.2.2",
-        "vue": "^3.4.38"
+        "vue": "^3.4.38",
+        "ziggy-js": "^2.3.0"
     }
 }
