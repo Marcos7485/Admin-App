@@ -7,11 +7,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [MainController::class, 'loginview'])->name('login');
 
 Route::post('/loginrequest', [MainController::class, 'login']);
+
+Route::get('/logout', function () {
+    return redirect()->route('dashboard');
+});
 Route::post('/logout', [MainController::class, 'logout'])->name('logout');
 
 
-Route::middleware(['auth'])->group(function () {
 
+
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
 
+
+    
 });
