@@ -7,6 +7,7 @@ import Principal from '../../components/dashboard/Principal.vue';
 import FormCliente from '../../components/clientes/FormCliente.vue';
 import BuscarCliente from '../../components/clientes/BuscarCliente.vue';
 import EditarCliente from '../../components/clientes/EditarCliente.vue';
+import EditarCredito from '../../components/creditos/EditarCredito.vue';
 import FormCredito from '../../components/creditos/FormCredito.vue';
 import Creditos from '../../components/creditos/Creditos.vue';
 
@@ -23,6 +24,7 @@ const components = {
     EditarCliente: markRaw(EditarCliente),
     FormCredito: markRaw(FormCredito),
     Creditos: markRaw(Creditos),
+    EditarCredito: markRaw(EditarCredito),
 };
 
 const currentComponent = ref(components.Principal);

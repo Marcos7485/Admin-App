@@ -29,12 +29,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/new/cliente', [ClientesController::class, 'ClientesForm']);
     Route::post('/new/cliente', [ClientesController::class, 'NewCliente'])->name('cliente.new');
  
-    Route::get('/datos-clientes', [ClientesController::class, 'getDatosCliente']);
+    Route::get('/datos-clientes', [ClientesController::class, 'getDatosClientes']);
     Route::get('/edit/cliente/{id}', [ClientesController::class, 'ClienteInfo']);
     Route::post('/modify/cliente', [ClientesController::class, 'ClienteEdit']);
 
     // Creditos:
+    Route::get('/datos-creditos', [CreditosController::class, 'getDatosCreditos']);
     Route::post('/new/credito', [CreditosController::class, 'NewCredito'])->name('credito.new');
     Route::get('/new/credito', [CreditosController::class, 'CreditoForm']);
+
+    Route::get('/edit/credito/{id}', [CreditosController::class, 'CreditoInfo']);
+    Route::post('/modify/credito', [CreditosController::class, 'CreditoEdit']);
+
+
 
 });

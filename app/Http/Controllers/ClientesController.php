@@ -35,7 +35,7 @@ class ClientesController extends Controller
         return response()->json(['message' => 'Cliente guardado correctamente']);
     }
 
-    public function getDatosCliente()
+    public function getDatosClientes()
     {
         $clientes = Clientes::all();
 

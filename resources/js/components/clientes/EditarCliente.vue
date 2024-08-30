@@ -131,21 +131,21 @@ const submitForm = async () => {
                         <div class="linea1">
                             <div>
                                 <input v-model="formData.id" type="hidden">
-                                <input v-model="formData.name" type="text" :placeholder="clienteData.name" required>
+                                <input v-model="formData.name" type="text" placeholder="Nombre" required>
                             </div>
                             <div>
-                                <input v-model="formData.dni" type="number" :placeholder="clienteData.dni" required>
+                                <input v-model="formData.dni" type="number" placeholder="DNI" required>
                             </div>
                             <div>
-                                <input v-model="formData.phone" type="number" :placeholder="clienteData.phone" required>
+                                <input v-model="formData.phone" type="number" placeholder="Telefono" required>
                             </div>
                             <div>
-                                <input v-model="formData.address" type="text" :placeholder="clienteData.address">
+                                <input v-model="formData.address" type="text" placeholder="Domicilio">
                             </div>
                         </div>
                         <div class="linea2">
                             <div>
-                                <input v-model="formData.localidad" :placeholder="clienteData.localidad" type="text">
+                                <input v-model="formData.localidad" placeholder="Localidad" type="text">
                             </div>
                         </div>
                     </div>
@@ -155,13 +155,13 @@ const submitForm = async () => {
                         <hr>
                         <div class="linea3">
                             <div>
-                                <input v-model="formData.comercio_address" :placeholder="clienteData.comercio_address" type="text">
+                                <input v-model="formData.comercio_address" placeholder="Domicilio de Comercio" type="text">
                             </div>
                             <div>
-                                <input v-model="formData.comercio_localidad" :placeholder="clienteData.comercio_localidad" type="text">
+                                <input v-model="formData.comercio_localidad" placeholder="Localidad de Comercio" type="text">
                             </div>
                             <div>
-                                <input v-model="formData.comercio_tipo" :placeholder="clienteData.comercio_tipo" type="text">
+                                <input v-model="formData.comercio_tipo" placeholder="Tipo" type="text">
                             </div>
                         </div>
                     </div>
@@ -180,6 +180,7 @@ const submitForm = async () => {
                     </div>
                     <div class="linea5">
                         <div>
+                            <button class="btn btn-danger" @click="$emit('changeComponent', 'BuscarCliente')">Cancelar</button>
                             <button class="btn btn-info" type="submit" :disabled="isDisabled">Guardar</button>
                         </div>
                     </div>
@@ -201,6 +202,10 @@ const submitForm = async () => {
     display: flex;
     flex-direction: column;
     margin-top: 5rem;
+}
+
+.linea5 button{
+    font-size: var(--fontsize);
 }
 
 .linea5 div {
