@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { ref, defineProps, onMounted, markRaw, computed } from 'vue';
-import SideMenu from '@/components/dashboard/SideMenu.vue';
-import FooterComponent from '@/components/layouts/Footer.vue';
+import SideMenu from '../../components/dashboard/SideMenu.vue';
+import FooterComponent from '../../components/layouts/Footer.vue';
 import { useImageStore } from '../../../store/imageStore.ts';
-
-
-import Principal from '@/components/dashboard/Principal.vue';
-import FormCliente from '@/components/clientes/FormCliente.vue';
-import BuscarCliente from '@/components/clientes/BuscarCliente.vue';
-import ModificarCliente from '@/components/clientes/ModificarCliente.vue';
+import Principal from '../../components/dashboard/Principal.vue';
+import FormCliente from '../../components/clientes/FormCliente.vue';
+import BuscarCliente from '../../components/clientes/BuscarCliente.vue';
+import ModificarCliente from '../../components/clientes/ModificarCliente.vue';
 
 const imageStore = useImageStore();
 

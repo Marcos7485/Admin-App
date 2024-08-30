@@ -27,4 +27,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/new/cliente', [ClientesController::class, 'ClientesForm'])->name('FormCliente');
     Route::post('/new/cliente', [ClientesController::class, 'NewCliente'])->name('cliente.new');
 
+    Route::get('/datos-clientes', [ClientesController::class, 'getDatosCliente']);
 });

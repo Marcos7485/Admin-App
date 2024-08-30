@@ -8,6 +8,11 @@ import './bootstrap';
 import '/public/css/styles.css';
 import '/public/js/scripts.js';
 
+import DataTable from 'datatables.net-vue3';
+import DataTablesLib from 'datatables.net';
+
+DataTable.use(DataTablesLib);
+
 const pinia = createPinia();
 
 
@@ -18,6 +23,7 @@ createInertiaApp({
     app.use(plugin);
     app.use(pinia);
     app.use(ZiggyVue, Ziggy); // Integración de Ziggy
+    app.component('DataTable', DataTable);
     app.mount(el);
   },
 });
