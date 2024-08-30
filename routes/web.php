@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\CreditosController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
@@ -24,10 +25,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 
-    Route::get('/new/cliente', [ClientesController::class, 'ClientesForm'])->name('FormCliente');
+    // Clientes:
+    Route::get('/new/cliente', [ClientesController::class, 'ClientesForm']);
     Route::post('/new/cliente', [ClientesController::class, 'NewCliente'])->name('cliente.new');
-
+ 
     Route::get('/datos-clientes', [ClientesController::class, 'getDatosCliente']);
     Route::get('/edit/cliente/{id}', [ClientesController::class, 'ClienteInfo']);
     Route::post('/modify/cliente', [ClientesController::class, 'ClienteEdit']);
+
+    // Creditos:
+    Route::post('/new/credito', [CreditosController::class, 'NewCredito'])->name('credito.new');
+    Route::get('/new/credito', [CreditosController::class, 'CreditoForm']);
+
 });

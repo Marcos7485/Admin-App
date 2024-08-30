@@ -13,7 +13,7 @@ class ClientesController extends Controller
 {
     public function ClientesForm()
     {
-        return Inertia::render('dashboard/clientes/FormCliente');
+        return Inertia::location(route('dashboard'));
     }
 
     public function NewCliente(RegistrarCliente $request)

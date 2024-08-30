@@ -196,6 +196,7 @@ const submitForm = async () => {
     height: 5rem;
     padding: 1rem;
     color: black;
+    font-size: var(--fontsize);
 }
 
 .form select {

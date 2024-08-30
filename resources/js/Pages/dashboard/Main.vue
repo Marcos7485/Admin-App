@@ -7,6 +7,8 @@ import Principal from '../../components/dashboard/Principal.vue';
 import FormCliente from '../../components/clientes/FormCliente.vue';
 import BuscarCliente from '../../components/clientes/BuscarCliente.vue';
 import EditarCliente from '../../components/clientes/EditarCliente.vue';
+import FormCredito from '../../components/creditos/FormCredito.vue';
+import Creditos from '../../components/creditos/Creditos.vue';
 
 const imageStore = useImageStore();
 
@@ -19,6 +21,8 @@ const components = {
     FormCliente: markRaw(FormCliente),
     BuscarCliente: markRaw(BuscarCliente),
     EditarCliente: markRaw(EditarCliente),
+    FormCredito: markRaw(FormCredito),
+    Creditos: markRaw(Creditos),
 };
 
 const currentComponent = ref(components.Principal);
