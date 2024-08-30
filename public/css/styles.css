@@ -22,8 +22,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --fontsize: 2rem;
-  --fontsizeTitles: 5rem;
+  --fontsize: 1.8rem;
+  --fontsizeTitles: 4rem;
   --fontsizeTitlesMobile: 4rem;
   --familyTitles: "Simonetta", static;
   --color-first: #4acdd5;

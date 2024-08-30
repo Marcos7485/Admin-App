@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
@@ -18,8 +19,12 @@ Route::post('/logout', [MainController::class, 'logout'])->name('logout');
 
 
 Route::middleware(['auth'])->group(function () {
+
+
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 
-    
+    Route::get('/new/cliente', [ClientesController::class, 'ClientesForm'])->name('FormCliente');
+    Route::post('/new/cliente', [ClientesController::class, 'NewCliente'])->name('cliente.new');
+
 });
