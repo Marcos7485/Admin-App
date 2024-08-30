@@ -3,7 +3,10 @@ import { ref, onMounted } from 'vue';
 import { useImageStore } from '../../../store/imageStore.ts';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
-import dayjs from 'dayjs'; 
+import dayjs from 'dayjs';
+import { useSelectedIdStore } from '../../../store/selectedIdStore.ts' // Ajusta la ruta según tu estructura de carpetas
+
+const selectedIdStore = useSelectedIdStore();
 
 const clientesData = ref([]);
 
@@ -12,7 +15,6 @@ onMounted(async () => {
     if (response.ok) {
         const data = await response.json();
         // Verifica la estructura de los datos
-        console.log(data);
         clientesData.value = data.map(cliente => ({
             id: cliente.id,
             name: cliente.name,
@@ -35,9 +37,17 @@ onMounted(() => {
     imageStore.fetchImagePath();
 });
 
-const columns = [{data:"id"}, {data:"name"}, {data:"dni"}, 
-{data:"phone"}, {data:"address"}, {data:"localidad"}, {data:"comercio_address"},
-{data:"comercio_localidad"}, {data:"comercio_tipo"}, {data:"recorrido"}, {data:"created_at"}];
+
+const columns = [{ data: "id" }, { data: "name" }, { data: "dni" },
+{ data: "phone" }, { data: "address" }, { data: "localidad" }, { data: "comercio_address" },
+{ data: "comercio_localidad" }, { data: "comercio_tipo" }, { data: "recorrido" }, { data: "created_at" },
+{
+    data: null,
+    render: function (data, type, row) {
+        return `<button class="btn btn-info edit-btn" data-id="${row.id}">Editar</button>`;
+    },
+    orderable: false,
+}];
 
 
 const options = {
@@ -49,25 +59,43 @@ const options = {
     }
 };
 
+const emit = defineEmits(['changeComponent']);
+
+onMounted(() => {
+    document.addEventListener('click', function (event) {
+        const target = event.target as HTMLElement;
+        if (target.classList.contains('edit-btn')) {
+            const id = target.getAttribute('data-id');
+            if (id) {
+                selectedIdStore.setSelectedId(id);
+                emit('changeComponent', 'EditarCliente');
+            }
+        }
+    });
+});
+
+
 </script>
 
 <template>
     <div class="content">
         <div class="box">
-            <DataTable  :data="clientesData" :columns="columns" :options="options" class="display table table-primary table-hover table-bordered">
+            <DataTable :data="clientesData" :columns="columns" :options="options"
+                class="display table table-primary table-hover table-bordered">
                 <thead>
                     <tr>
                         <th>Id</th>
                         <th>Cliente</th>
                         <th>DNI</th>
                         <th>Telefono</th>
-                        <th>Direccion Domicilio</th>
-                        <th>Localidad Domicilio</th>
+                        <th>Domicilio</th>
+                        <th>Localidad</th>
                         <th>Direccion Comercio</th>
                         <th>Localidad Local</th>
                         <th>Comercio</th>
                         <th>Recorrido</th>
                         <th>Fecha de inicio</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
             </DataTable>
@@ -76,7 +104,6 @@ const options = {
 </template>
 
 <style scoped>
-
 .box {
     border: solid 2px grey;
     padding: 2rem;

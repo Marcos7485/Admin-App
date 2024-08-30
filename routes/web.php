@@ -28,4 +28,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/new/cliente', [ClientesController::class, 'NewCliente'])->name('cliente.new');
 
     Route::get('/datos-clientes', [ClientesController::class, 'getDatosCliente']);
+    Route::get('/edit/cliente/{id}', [ClientesController::class, 'ClienteInfo']);
+    Route::post('/modify/cliente', [ClientesController::class, 'ClienteEdit']);
 });

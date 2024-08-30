@@ -57,7 +57,6 @@ const toggleSubMenu = (menu: string) => {
                     <ul v-if="showSubMenu.clientes" class="sub-menu" :class="{ active: showSubMenu.clientes }">
                         <a @click="$emit('changeComponent', 'FormCliente')"><li>Nuevo cliente</li></a>
                         <a @click="$emit('changeComponent', 'BuscarCliente')"><li>Buscar cliente</li></a>
-                        <a @click="$emit('changeComponent', 'ModificarCliente')"><li>Modificar cliente</li></a>
                     </ul>
                 </button>
             </ul>

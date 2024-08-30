@@ -117,6 +117,7 @@ const submitForm = async () => {
                         <div>
                             <label for="recorrido">Recorrido</label>
                             <select v-model="formData.recorrido" required>
+                                <option value="" disabled selected>Seleccione</option>
                                 <option value="1">Recorrido 1</option>
                                 <option value="2">Recorrido 2</option>
                                 <option value="3">Recorrido 3</option>

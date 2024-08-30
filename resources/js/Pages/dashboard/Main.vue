@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, defineProps, onMounted, markRaw, computed } from 'vue';
+import { ref, defineProps, onMounted, markRaw } from 'vue';
 import SideMenu from '../../components/dashboard/SideMenu.vue';
 import FooterComponent from '../../components/layouts/Footer.vue';
 import { useImageStore } from '../../../store/imageStore.ts';
 import Principal from '../../components/dashboard/Principal.vue';
 import FormCliente from '../../components/clientes/FormCliente.vue';
 import BuscarCliente from '../../components/clientes/BuscarCliente.vue';
-import ModificarCliente from '../../components/clientes/ModificarCliente.vue';
+import EditarCliente from '../../components/clientes/EditarCliente.vue';
 
 const imageStore = useImageStore();
 
@@ -18,7 +18,7 @@ const components = {
     Principal: markRaw(Principal),
     FormCliente: markRaw(FormCliente),
     BuscarCliente: markRaw(BuscarCliente),
-    ModificarCliente: markRaw(ModificarCliente),
+    EditarCliente: markRaw(EditarCliente),
 };
 
 const currentComponent = ref(components.Principal);
@@ -34,15 +34,16 @@ const props = defineProps<{
     };
 }>();
 
-const { user } = props;
 
+const { user } = props;
 </script>
 
 <template>
     <div class="app-layout">
         <SideMenu :user="user" @changeComponent="changeComponent" />
+        
         <div class="content">
-            <component :is="currentComponent"></component>
+            <component :is="currentComponent" @changeComponent="changeComponent"/>
         </div>
         <FooterComponent/>
     </div>
@@ -59,7 +60,7 @@ const { user } = props;
 
 .content {
     margin-left: 14.7rem;
-    width: 90.3%;
+    width: 90.5%;
     height: 100vh;
     overflow-x: hidden;
     overflow-y: hidden;
