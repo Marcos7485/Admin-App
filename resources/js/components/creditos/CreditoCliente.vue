@@ -15,29 +15,15 @@ DataTable.use(pdfmake);
 DataTable.use(ButtonsHtml5);
 
 const selectedIdStore = useSelectedIdStore();
+const selectedId = selectedIdStore.selectedId
 
-const creditosData = ref([]);
+const creditosData = ref();
 
 onMounted(async () => {
-    const response = await fetch('/datos-creditos');
+    const response = await fetch(`/datos-credito/cliente/${selectedId}`);
     if (response.ok) {
         const data = await response.json();
-        // Verifica la estructura de los datos
-        creditosData.value = data.map(credito => ({
-            id: credito.id,
-            cliente: credito.cliente,
-            credito: credito.credito,
-            interes: credito.interes,
-            total_credito: credito.total_credito,
-            cuotas: credito.cuotas,
-            cuotas_restantes: credito.cuotas_restantes,
-            cuotas_valor: credito.cuotas_valor,
-            modalidad: credito.modalidad,
-            pagado: credito.pagado,
-            pago_restante: credito.pago_restante,
-            inicio: credito.inicio,
-            estado: credito.status
-        }));
+        creditosData.value = data;
     }
 });
 
@@ -50,7 +36,7 @@ onMounted(() => {
 
 const columns = [{ data: "id" }, { data: "cliente" }, { data: "credito" },
 { data: "interes" }, { data: "total_credito" }, { data: "cuotas" }, { data: "cuotas_restantes" }, { data: "cuotas_valor" } , { data: "modalidad" },
-{ data: "pagado" }, { data: "pago_restante" }, { data: "inicio" }, { data: "estado" },
+{ data: "pagado" }, { data: "inicio" }, { data: "estado" },
 {
     data: null,
     render: function (data, type, row) {
@@ -135,7 +121,6 @@ onMounted(() => {
                         <th>Valor Cuota</th>
                         <th>Modalidad</th>
                         <th>Pagado</th>
-                        <th>Saldo Restante</th>
                         <th>Inicio</th>
                         <th>Estado</th>
                         <th>Editar</th>

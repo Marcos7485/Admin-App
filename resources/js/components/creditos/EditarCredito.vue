@@ -159,6 +159,7 @@ const submitForm = async () => {
                                     <option value="" disabled selected>Seleccione estado</option>
                                     <option value="Pendiente">Pendiente</option>
                                     <option value="Mora">Mora</option>
+                                    <option value="Refinanciado">Refinanciado</option>
                                     <option value="Pagado">Pagado</option>
                                     <option value="Renovado">Renovado</option>
                                 </select>

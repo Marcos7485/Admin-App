@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('cuotas_valor');
             $table->string('lugar_cobro');
             $table->string('pagado');
+            $table->string('pago_restante');
             $table->date('inicio');
             $table->date('finalizacion');
             $table->string('mora');

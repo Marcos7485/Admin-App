@@ -34,24 +34,28 @@ class CreditosController extends Controller
     public function CreditoEdit(Request $request)
     {
         $interes = 1.3;
-        $interes_mora = 1.6;
 
         $valordelcredito = (float) $request->credito;
         $totalCredito = number_format($valordelcredito * $interes, 2, '.', '');
         $cuotas_valor = number_format($totalCredito / (float)$request->cuotas, 2, '.', '');
 
         $cuotas_pagas = 5; // crear servicio con DB de pagos para q reste los pagados.
+        $pagado = 500; // crear servicio con DB de pagos para q sume el valor.
 
         $credito = Creditos::find($request->id);
         $credito->cliente = $request->cliente;
         $credito->credito = $request->credito;
         $credito->interes = $interes;
-        $credito->interes_mora = $interes_mora;
         $credito->total_credito = $totalCredito;
         $credito->cuotas = $request->cuotas;
         $credito->cuotas_restantes = ($request->cuotas - $cuotas_pagas);
         $credito->cuotas_valor = $cuotas_valor;
         $credito->modalidad = $request->modalidad;
+        $credito->pagado = $pagado;
+
+        $valor_restante = (integer)$credito->total_credito - (integer)$pagado;
+
+        $credito->pago_restante = $valor_restante;
         $credito->inicio = $request->inicio;
         $credito->lugar_cobro = $request->lugar_cobro;
         $credito->status = $request->status;
