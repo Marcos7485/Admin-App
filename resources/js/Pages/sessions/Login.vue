@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import FooterComponent from '../../components/layouts/Footer.vue';
 import { useImageStore } from '../../../store/imageStore.ts';
 import { router, usePage } from '@inertiajs/vue3'
 
@@ -28,7 +28,6 @@ const handleSubmit = async () => {
     isDisabled.value = true;
     try {
         router.post('/loginrequest', {
-            _token: page.props.csrf_token,
             email: formData.value.email,
             password: formData.value.password,
         })
@@ -71,6 +70,7 @@ const handleSubmit = async () => {
             </div>
         </div>
     </div>
+    <FooterComponent/>
 </template>
 <style scoped>
 .card-login button {

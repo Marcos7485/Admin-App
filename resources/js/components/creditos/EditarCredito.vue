@@ -3,98 +3,90 @@ import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useImageStore } from '../../../store/imageStore.ts';
 import { useSelectedIdStore } from '../../../store/selectedIdStore.ts'
-const selectedIdStore = useSelectedIdStore()
-const selectedId = selectedIdStore.selectedId
 
 const imageStore = useImageStore();
 onMounted(() => {
     imageStore.fetchImagePath();
 });
 
+const selectedIdStore = useSelectedIdStore()
+const selectedId = selectedIdStore.selectedId
 
 // Definir la interfaz
-interface ClienteData {
+interface CreditoData {
     id: string | number;
-    name: string;
-    dni: string;
-    phone: string;
-    address: string;
-    localidad: string;
-    comercio_address: string;
-    comercio_localidad: string;
-    comercio_tipo: string;
-    recorrido: string;
+    cliente: number | string;
+    credito: string;
+    cuotas: string;
+    modalidad: string;
+    inicio: string;
+    lugar_cobro: string;
+    status: string;
 }
 
 // Tipar clienteData con la interfaz
-const clienteData = ref<ClienteData>({
+const creditoData = ref<CreditoData>({
     id: '',
-    name: '',
-    dni: '',
-    phone: '',
-    address: '',
-    localidad: '',
-    comercio_address: '',
-    comercio_localidad: '',
-    comercio_tipo: '',
-    recorrido: ''
+    cliente: '',
+    credito: '',
+    cuotas: '',
+    modalidad: '',
+    inicio: '',
+    lugar_cobro: '',
+    status: ''
 });
+
+interface FormData {
+    id: string | number;
+    cliente: number | string;
+    credito: string | number;
+    cuotas: string | number;
+    modalidad: string;
+    inicio: string;
+    lugar_cobro: string;
+    status: string;
+}
+
 
 const formData = ref<FormData>({
     id: '',
-    name: '',
-    dni: '',
-    phone: '',
-    address: '',
-    localidad: '',
-    comercio_address: '',
-    comercio_localidad: '',
-    comercio_tipo: '',
-    recorrido: '',
+    cliente: '',
+    credito: '',
+    cuotas: '',
+    modalidad: '',
+    inicio: '',
+    lugar_cobro: '',
+    status: ''
 });
 
 // Función para cargar datos del cliente
-const loadClienteData = async () => {
-    const response = await fetch(`/edit/cliente/${selectedId}`);
+const loadCreditoData = async () => {
+    const response = await fetch(`/edit/credito/${selectedId}`);
     if (response.ok) {
         const data = await response.json();
-        clienteData.value = data;
+        creditoData.value = data;
     }
 };
 
 // Cargar datos del cliente al montar el componente
 onMounted(() => {
-    loadClienteData();
+    loadCreditoData();
 });
 
-// Actualizar formData cuando clienteData cambia
-watch(clienteData, (newData) => {
+// Actualizar formData cuando creditoData cambia
+watch(creditoData, (newData) => {
     formData.value = {
         id: newData.id,
-        name: newData.name,
-        dni: newData.dni,
-        phone: newData.phone,
-        address: newData.address,
-        localidad: newData.localidad,
-        comercio_address: newData.comercio_address,
-        comercio_localidad: newData.comercio_localidad,
-        comercio_tipo: newData.comercio_tipo,
-        recorrido: newData.recorrido,
+        cliente: newData.cliente,
+        credito: newData.credito,
+        cuotas: newData.cuotas,
+        modalidad: newData.modalidad,
+        inicio: newData.inicio,
+        lugar_cobro: newData.lugar_cobro,
+        status: newData.status,
     };
 }, { immediate: true });
 
-interface FormData {
-    id: string | number;
-    name: string;
-    dni: string | number;
-    phone: string | number;
-    address: string;
-    localidad: string;
-    comercio_address: string;
-    comercio_localidad: string;
-    comercio_tipo: string;
-    recorrido: string;
-}
 
 const responseMessage = ref<string | null>(null);
 const isDisabled = ref<boolean>(false);
@@ -106,10 +98,10 @@ const submitForm = async () => {
     isDisabled.value = true;
 
     try {
-        const response = await axios.post('/modify/cliente', formData.value);
+        const response = await axios.post('/modify/credito', formData.value);
         responseMessage.value = response.data.message;
         // Reiniciar formData solo si es necesario
-        emit('changeComponent', 'BuscarCliente');
+        emit('changeComponent', 'Creditos');
     } catch (error) {
         console.error('Error enviando formulario', error);
         responseMessage.value = 'Error al editar cliente.';
@@ -126,61 +118,57 @@ const submitForm = async () => {
             <div class="form">
                 <form @submit.prevent="submitForm">
                     <div class="cliente">
-                        <h1>Editar Cliente</h1>
+                        <h1>Editar Credito</h1>
                         <hr>
                         <div class="linea1">
                             <div>
                                 <input v-model="formData.id" type="hidden">
-                                <input v-model="formData.name" type="text" placeholder="Nombre" required>
+                                <input v-model="formData.cliente" type="text" placeholder="id Cliente" required>
                             </div>
                             <div>
-                                <input v-model="formData.dni" type="number" placeholder="DNI" required>
+                                <input v-model="formData.credito" type="number" placeholder="Credito otorgado" required>
                             </div>
                             <div>
-                                <input v-model="formData.phone" type="number" placeholder="Telefono" required>
+                                <input v-model="formData.cuotas" type="number" placeholder="Cuotas" required>
                             </div>
                             <div>
-                                <input v-model="formData.address" type="text" placeholder="Domicilio">
+                                <select v-model="formData.modalidad" required>
+                                    <option value="" disabled selected>Modalidad</option>
+                                    <option value="Diaria">Diaria</option>
+                                    <option value="Semanal">Semanal</option>
+                                    <option value="Mensual">Mensual</option>
+                                </select>
                             </div>
                         </div>
                         <div class="linea2">
                             <div>
-                                <input v-model="formData.localidad" placeholder="Localidad" type="text">
+                                <p>
+                                    <label for="inicio">Inicio de cobro</label>
+                                    <input v-model="formData.inicio" type="date" placeholder="Inicio" required>
+                                </p>
+                            </div>
+                            <div>
+                                <select v-model="formData.lugar_cobro" required>
+                                    <option value="" disabled selected>Cobrar en</option>
+                                    <option value="Domicilio">Domicilio</option>
+                                    <option value="Comercio">Comercio</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select v-model="formData.status" required>
+                                    <option value="" disabled selected>Seleccione estado</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Mora">Mora</option>
+                                    <option value="Pagado">Pagado</option>
+                                    <option value="Renovado">Renovado</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
-                    <div class="comercio">
-                        <h1>Comercio</h1>
-                        <hr>
-                        <div class="linea3">
-                            <div>
-                                <input v-model="formData.comercio_address" placeholder="Domicilio de Comercio" type="text">
-                            </div>
-                            <div>
-                                <input v-model="formData.comercio_localidad" placeholder="Localidad de Comercio" type="text">
-                            </div>
-                            <div>
-                                <input v-model="formData.comercio_tipo" placeholder="Tipo" type="text">
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <div class="linea4">
+                    <div class="linea3">
                         <div>
-                            <label for="recorrido">Recorrido</label>
-                            <select v-model="formData.recorrido">
-                                <option value="" disabled selected>Seleccione</option>
-                                <option value="1">Recorrido 1</option>
-                                <option value="2">Recorrido 2</option>
-                                <option value="3">Recorrido 3</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="linea5">
-                        <div>
-                            <button class="btn btn-danger" @click="$emit('changeComponent', 'BuscarCliente')">Cancelar</button>
+                            <button class="btn btn-danger" @click="$emit('changeComponent', 'Creditos')">Cancelar</button>
                             <button class="btn btn-info" type="submit" :disabled="isDisabled">Guardar</button>
                         </div>
                     </div>
@@ -204,21 +192,7 @@ const submitForm = async () => {
     margin-top: 5rem;
 }
 
-.linea5 button{
-    font-size: var(--fontsize);
-}
-
-.linea5 div {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    padding: 1rem;
-    flex: 1;
-}
-
-.linea4 div {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
+.linea3 button{
     font-size: var(--fontsize);
 }
 
@@ -229,11 +203,31 @@ const submitForm = async () => {
     flex: 1;
 }
 
+.linea2 select{
+    font-size: var(--fontsize);
+}
+
+.linea2 label{
+    font-size: var(--fontsize);
+}
+
+.linea2 input{
+    font-size: var(--fontsize);
+}
+
 .linea2 div {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     padding: 1rem;
     flex: 1;
+}
+
+.linea1 select{
+    font-size: var(--fontsize);
+}
+
+.linea1 input{
+    font-size: var(--fontsize);
 }
 
 .linea1 div {

@@ -41,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit/credito/{id}', [CreditosController::class, 'CreditoInfo']);
     Route::post('/modify/credito', [CreditosController::class, 'CreditoEdit']);
 
+    Route::get('/datos-credito/cliente/{id}', [CreditosController::class, 'CreditoInfo']);
+
 
 
 });

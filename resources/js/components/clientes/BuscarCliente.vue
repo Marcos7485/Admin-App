@@ -5,7 +5,16 @@ import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
 import dayjs from 'dayjs';
 import { useSelectedIdStore } from '../../../store/selectedIdStore.ts' // Ajusta la ruta según tu estructura de carpetas
-
+import $ from 'jquery';
+import pdfmake from 'pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import 'datatables.net-buttons-dt';
+import 'datatables.net-buttons/js/buttons.colVis.mjs';
+import ButtonsHtml5 from 'datatables.net-buttons/js/buttons.html5.mjs';
+import 'datatables.net-buttons/js/buttons.print.mjs';
+DataTable.use(DataTablesCore);
+DataTable.use(pdfmake);
+DataTable.use(ButtonsHtml5);
 const selectedIdStore = useSelectedIdStore();
 
 const clientesData = ref([]);
@@ -31,7 +40,7 @@ onMounted(async () => {
     }
 });
 
-DataTable.use(DataTablesCore);
+
 const imageStore = useImageStore();
 onMounted(() => {
     imageStore.fetchImagePath();
@@ -56,7 +65,39 @@ const options = {
     lengthChange: false,
     language: {
         search: "Buscar:",  // Cambia el texto de la caja de búsqueda
-    }
+    },
+    dom: "Bfrtip",
+    responsive: true,
+    autoWidth: false,
+    buttons: [
+        {
+            extend: 'print',
+            title: '', // Aquí defines el título que aparecerá
+            customize: function (win) {
+                $(win.document.body)
+                    .css({
+                        'font-size': '10pt', // Ajuste del tamaño de la fuente
+                        'text-align': 'center' // Centra el contenido
+                    })
+                    .prepend(
+                        '<div style="position:absolute; top: 0; width:10%;left:45%;">' +
+                        '<img src="/images/Logo.png" style="width: 150px; margin-bottom: 20px;" />' +
+                        '</div>'
+                    );
+
+                $(win.document.body).find('table')
+                    .css({
+                        'margin-top': '20px', // Añade margen superior para separar la tabla de la imagen
+                        'width': '100%', // Asegura que la tabla ocupe el 100% del ancho disponible
+                        'text-align': 'center' // Centra el contenido de la tabla
+                    });
+            },
+            exportOptions: {
+                // Configura las columnas que quieres exportar, etc.
+            }
+        },
+    ],
+
 };
 
 const emit = defineEmits(['changeComponent']);
@@ -73,6 +114,9 @@ onMounted(() => {
         }
     });
 });
+
+
+
 
 
 </script>
@@ -106,7 +150,7 @@ onMounted(() => {
 <style scoped>
 .box {
     border: solid 2px grey;
-    padding: 2rem;
+    padding: 1rem;
     height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;

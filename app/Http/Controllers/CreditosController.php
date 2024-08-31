@@ -31,8 +31,35 @@ class CreditosController extends Controller
         return response()->json($credito);
     }
 
-    public function CreditoEdit(Request $request){
+    public function CreditoEdit(Request $request)
+    {
+        $interes = 1.3;
+        $interes_mora = 1.6;
 
+        $valordelcredito = (float) $request->credito;
+        $totalCredito = number_format($valordelcredito * $interes, 2, '.', '');
+        $cuotas_valor = number_format($totalCredito / (float)$request->cuotas, 2, '.', '');
+
+        $cuotas_pagas = 5; // crear servicio con DB de pagos para q reste los pagados.
+
+        $credito = Creditos::find($request->id);
+        $credito->cliente = $request->cliente;
+        $credito->credito = $request->credito;
+        $credito->interes = $interes;
+        $credito->interes_mora = $interes_mora;
+        $credito->total_credito = $totalCredito;
+        $credito->cuotas = $request->cuotas;
+        $credito->cuotas_restantes = ($request->cuotas - $cuotas_pagas);
+        $credito->cuotas_valor = $cuotas_valor;
+        $credito->modalidad = $request->modalidad;
+        $credito->inicio = $request->inicio;
+        $credito->lugar_cobro = $request->lugar_cobro;
+        $credito->status = $request->status;
+    
+        // Guardar los cambios
+        $credito->save();
+
+        return response()->json(['message' => 'Credito editado correctamente']);
     }
 
     public function NewCredito(CreditoRequest $request)

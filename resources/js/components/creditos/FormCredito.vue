@@ -5,6 +5,8 @@ import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
 import { useImageStore } from '../../../store/imageStore.ts';
 import dayjs from 'dayjs';
+import { useSelectedIdStore } from '../../../store/selectedIdStore.ts'
+const selectedIdStore = useSelectedIdStore()
 
 const imageStore = useImageStore();
 onMounted(() => {
@@ -29,9 +31,10 @@ const formData = ref<FormData>({
     inicio: '',
     lugar_cobro: '',
 });
-
+const emit = defineEmits(['changeComponent']);
 const responseMessage = ref<string | null>(null);
 const isDisabled = ref<boolean>(false);
+
 
 const submitForm = async () => {
     if (isDisabled.value) return;
@@ -47,7 +50,10 @@ const submitForm = async () => {
             modalidad: '',
             inicio: '',
             lugar_cobro: '',
+
         };
+        emit('changeComponent', 'CreditoCliente');
+
     } catch (error) {
         console.error('Error enviando formulario', error);
         responseMessage.value = 'Error al guardar el cliente.';
@@ -115,7 +121,7 @@ onMounted(() => {
             const id = target.getAttribute('data-id');
             if (id) {
                 formData.value.cliente = id;
-                console.log(formData.value.cliente);
+                selectedIdStore.setSelectedId(id);
             }
         }
     });

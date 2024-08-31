@@ -27,7 +27,7 @@ const background = computed(() => ({
     position: absolute;
     width: 45rem;
     left: 45%;
-    top: 2rem;
+    top: -5rem;
     transform: translateX(-10rem);
     opacity: 0;
     animation: TranslateIzqDer 2s 1s forwards;
