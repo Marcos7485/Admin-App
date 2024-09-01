@@ -54,7 +54,7 @@ const columns = [{ data: "id" }, { data: "cliente" }, { data: "credito" },
 {
     data: null,
     render: function (data, type, row) {
-        return `<button class="btn btn-info edit-btn" data-id="${row.id}">Editar</button>`;
+        return `<button class="btn btn-success edit-btn" data-id="${row.id}">Renovar</button>`;
     },
     orderable: false,
 }];
@@ -128,7 +128,7 @@ onMounted(() => {
                         <th>Id</th>
                         <th>Cliente</th>
                         <th>Credito</th>
-                        <th>interes %</th>
+                        <th>interes</th>
                         <th>Total</th>
                         <th>Cuotas</th>
                         <th>Restantes</th>

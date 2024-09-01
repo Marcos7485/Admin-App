@@ -9,10 +9,29 @@ onMounted(() => {
     imageStore.fetchImagePath();
 });
 
+
+interface CuotaOption {
+    value: number | string;
+}
+
+const CuotaOptions = ref<CuotaOption[]>([]);
+
+const fetchCuotas = async (modalidad: string) => {
+    try {
+        const response = await axios.get(`/cuotas/${modalidad}`);
+        CuotaOptions.value = response.data.map((cuota: any) => ({
+            value: cuota.value
+        }));
+    } catch (error) {
+        console.log('Error al obtener ciertos valores');
+    }
+};
+
+
 const selectedIdStore = useSelectedIdStore()
 const selectedId = selectedIdStore.selectedId
+console.log(selectedId);
 
-// Definir la interfaz
 interface CreditoData {
     id: string | number;
     cliente: number | string;
@@ -21,7 +40,7 @@ interface CreditoData {
     modalidad: string;
     inicio: string;
     lugar_cobro: string;
-    status: string;
+    interes: string;
 }
 
 // Tipar clienteData con la interfaz
@@ -33,7 +52,7 @@ const creditoData = ref<CreditoData>({
     modalidad: '',
     inicio: '',
     lugar_cobro: '',
-    status: ''
+    interes: ''
 });
 
 interface FormData {
@@ -44,7 +63,7 @@ interface FormData {
     modalidad: string;
     inicio: string;
     lugar_cobro: string;
-    status: string;
+    interes: string;
 }
 
 
@@ -56,7 +75,7 @@ const formData = ref<FormData>({
     modalidad: '',
     inicio: '',
     lugar_cobro: '',
-    status: ''
+    interes: ''
 });
 
 // Función para cargar datos del cliente
@@ -83,11 +102,17 @@ watch(creditoData, (newData) => {
         modalidad: newData.modalidad,
         inicio: newData.inicio,
         lugar_cobro: newData.lugar_cobro,
-        status: newData.status,
+        interes: newData.interes,
     };
 }, { immediate: true });
 
-
+watch(() => formData.value.modalidad, (newModalidad) => {
+    if (newModalidad) {
+        fetchCuotas(newModalidad);
+    } else {
+        CuotaOptions.value = [];
+    }
+});
 const responseMessage = ref<string | null>(null);
 const isDisabled = ref<boolean>(false);
 
@@ -109,6 +134,25 @@ const submitForm = async () => {
         isDisabled.value = false;
     }
 };
+
+function cancelForm() {
+    FormClear();
+    emit('changeComponent', 'Creditos');
+}
+
+function FormClear() {
+    formData.value = {
+        id: '',
+        cliente: '',
+        credito: '',
+        cuotas: '',
+        modalidad: '',
+        inicio: '',
+        lugar_cobro: '',
+        interes: '',
+    };
+}
+
 </script>
 
 
@@ -122,54 +166,70 @@ const submitForm = async () => {
                         <hr>
                         <div class="linea1">
                             <div>
-                                <input v-model="formData.id" type="hidden">
-                                <input v-model="formData.cliente" type="text" placeholder="id Cliente" required>
+                                <p class="input-chico">
+                                    <label for="inicio">Cliente </label>
+                                    <input v-model="formData.id" type="hidden">
+                                    <input type="text" :placeholder="formData.cliente" disabled>
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <p>
+                                    <label for="inicio">Credito</label>
+                                    <input v-model="formData.credito" type="number" placeholder="Credito otorgado"
+                                        required>
+                                </p>
                             </div>
                             <div>
-                                <input v-model="formData.credito" type="number" placeholder="Credito otorgado" required>
-                            </div>
-                            <div>
-                                <input v-model="formData.cuotas" type="number" placeholder="Cuotas" required>
-                            </div>
-                            <div>
-                                <select v-model="formData.modalidad" required>
-                                    <option value="" disabled selected>Modalidad</option>
-                                    <option value="Diaria">Diaria</option>
-                                    <option value="Semanal">Semanal</option>
-                                    <option value="Mensual">Mensual</option>
-                                </select>
+                                <p>
+                                    <label for="inicio">Modalidad</label>
+                                    <select v-model="formData.modalidad" required>
+                                        <option value="Diaria">Diaria</option>
+                                        <option value="Semanal">Semanal</option>
+                                    </select>
+                                </p>
                             </div>
                         </div>
                         <div class="linea2">
                             <div>
                                 <p>
-                                    <label for="inicio">Inicio de cobro</label>
+                                    <label for="inicio">Cuotas</label>
+                                    <select v-model="formData.cuotas" required>
+                                        <option :value="formData.cuotas" disabled selected>{{ formData.cuotas }}
+                                        </option>
+                                        <option v-for="cuota in CuotaOptions" :key="cuota.value" :value="cuota.value">{{
+                                            cuota.value }}</option>
+                                    </select>
+                                </p>
+                            </div>
+                            <div>
+                                <p>
+                                    <label for="inicio">Inicio</label>
                                     <input v-model="formData.inicio" type="date" placeholder="Inicio" required>
                                 </p>
                             </div>
                             <div>
-                                <select v-model="formData.lugar_cobro" required>
-                                    <option value="" disabled selected>Cobrar en</option>
-                                    <option value="Domicilio">Domicilio</option>
-                                    <option value="Comercio">Comercio</option>
-                                </select>
-                            </div>
+                                <p>
+                                    <label for="inicio">Cobrar en</label>
+                                    <select v-model="formData.lugar_cobro" required>
+                                        <option value="Domicilio">Domicilio</option>
+                                        <option value="Comercio">Comercio</option>
+                                    </select>
+                                </p>
+                            </div>  
                             <div>
-                                <select v-model="formData.status" required>
-                                    <option value="" disabled selected>Seleccione estado</option>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Mora">Mora</option>
-                                    <option value="Refinanciado">Refinanciado</option>
-                                    <option value="Pagado">Pagado</option>
-                                    <option value="Renovado">Renovado</option>
-                                </select>
+                                <p class="input-chico">
+                                    <label for="interes">Interes</label>
+                                    <input v-model="formData.interes" type="number" required>
+                                    <label for="interes">%</label>
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <div class="linea3">
                         <div>
-                            <button class="btn btn-danger" @click="$emit('changeComponent', 'Creditos')">Cancelar</button>
+                            <button class="btn btn-danger" @click="cancelForm">Cancelar</button>
                             <button class="btn btn-info" type="submit" :disabled="isDisabled">Guardar</button>
                         </div>
                     </div>
@@ -193,7 +253,7 @@ const submitForm = async () => {
     margin-top: 5rem;
 }
 
-.linea3 button{
+.linea3 button {
     font-size: var(--fontsize);
 }
 
@@ -204,15 +264,20 @@ const submitForm = async () => {
     flex: 1;
 }
 
-.linea2 select{
+.linea2 select {
     font-size: var(--fontsize);
+    width: 15rem;
 }
 
-.linea2 label{
+.linea2 label {
     font-size: var(--fontsize);
+    margin-right: 1rem;
+}
+.input-chico input {
+    width: 10rem;
 }
 
-.linea2 input{
+.linea2 input {
     font-size: var(--fontsize);
 }
 
@@ -223,11 +288,17 @@ const submitForm = async () => {
     flex: 1;
 }
 
-.linea1 select{
+.linea1 label {
     font-size: var(--fontsize);
+    margin-right: 1rem;
 }
 
-.linea1 input{
+.linea1 select {
+    font-size: var(--fontsize);
+    width: 25rem;
+}
+
+.linea1 input {
     font-size: var(--fontsize);
 }
 

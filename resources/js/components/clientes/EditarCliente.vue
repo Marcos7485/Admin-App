@@ -6,6 +6,7 @@ import { useSelectedIdStore } from '../../../store/selectedIdStore.ts'
 const selectedIdStore = useSelectedIdStore()
 const selectedId = selectedIdStore.selectedId
 
+
 const imageStore = useImageStore();
 onMounted(() => {
     imageStore.fetchImagePath();
@@ -117,6 +118,28 @@ const submitForm = async () => {
         isDisabled.value = false;
     }
 };
+
+function cancelForm() {
+    FormClear();
+    emit('changeComponent', 'BuscarCliente');   
+}
+
+function FormClear() {
+    formData.value = {
+        id: '',
+        name: '',
+        dni: '',
+        phone: '',
+        address: '',
+        localidad: '',
+        comercio_address: '',
+        comercio_localidad: '',
+        comercio_tipo: '',
+        recorrido: ''
+    };
+}
+
+
 </script>
 
 
@@ -180,7 +203,7 @@ const submitForm = async () => {
                     </div>
                     <div class="linea5">
                         <div>
-                            <button class="btn btn-danger" @click="$emit('changeComponent', 'BuscarCliente')">Cancelar</button>
+                            <button class="btn btn-danger" @click="cancelForm">Cancelar</button>
                             <button class="btn btn-info" type="submit" :disabled="isDisabled">Guardar</button>
                         </div>
                     </div>

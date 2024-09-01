@@ -13,24 +13,23 @@ return new class extends Migration
     {
         Schema::create('creditos', function (Blueprint $table) {
             $table->id();
-            $table->integer('cliente');
-            $table->string('credito');
-            $table->string('interes');
-            $table->string('interes_mora');
-            $table->string('total_credito');
-            $table->string('cuotas');
-            $table->string('cuotas_restantes');
-            $table->string('modalidad');
-            $table->string('cuotas_valor');
-            $table->string('lugar_cobro');
-            $table->string('pagado');
-            $table->string('pago_restante');
-            $table->date('inicio');
-            $table->date('finalizacion');
-            $table->string('mora');
-            $table->string('status');
-            $table->boolean('active')->default(1);
+            $table->integer('cliente')->nullable();
+            $table->string('credito')->nullable();
+            $table->string('interes')->nullable();
+            $table->string('total_credito')->nullable();
+            $table->string('cuotas')->nullable();
+            $table->string('cuotas_restantes')->nullable();
+            $table->string('modalidad')->nullable();
+            $table->string('cuotas_valor')->nullable();
+            $table->string('lugar_cobro')->nullable();
+            $table->string('pagado')->nullable();
+            $table->string('pago_restante')->nullable();
+            $table->date('inicio')->nullable();
+            $table->date('finalizacion')->nullable();
+            $table->string('status')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

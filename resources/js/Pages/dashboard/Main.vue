@@ -10,7 +10,7 @@ import EditarCliente from '../../components/clientes/EditarCliente.vue';
 import EditarCredito from '../../components/creditos/EditarCredito.vue';
 import FormCredito from '../../components/creditos/FormCredito.vue';
 import Creditos from '../../components/creditos/Creditos.vue';
-import CreditoCliente from '../../components/creditos/CreditoCliente.vue';
+import FicheroCliente from '../../components/creditos/FicheroCliente.vue';
 import Refinanciacion from '../../components/creditos/Refinanciacion.vue';
 import Renovacion from '../../components/creditos/Renovacion.vue';
 
@@ -28,7 +28,7 @@ const components = {
     FormCredito: markRaw(FormCredito),
     Creditos: markRaw(Creditos),
     EditarCredito: markRaw(EditarCredito),
-    CreditoCliente: markRaw(CreditoCliente),
+    FicheroCliente: markRaw(FicheroCliente),
     Refinanciacion: markRaw(Refinanciacion),
     Renovacion: markRaw(Renovacion),
 };

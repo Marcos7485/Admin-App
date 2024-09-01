@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
@@ -13,12 +13,30 @@ onMounted(() => {
     imageStore.fetchImagePath();
 });
 
+interface CuotaOption {
+    value: number | string;
+}
+
+const CuotaOptions = ref<CuotaOption[]>([]);
+
+const fetchCuotas = async (modalidad: string) => {
+    try {
+        const response = await axios.get(`/cuotas/${modalidad}`);
+        CuotaOptions.value = response.data.map((cuota: any) => ({
+            value: cuota.value
+        }));
+    } catch (error) {
+        console.log('Error al obtener ciertos valores');
+    }
+};
+
 
 interface FormData {
     cliente: string | number;
     credito: string;
     cuotas: string | number;
     modalidad: string;
+    interes: string;
     inicio: string;
     lugar_cobro: string;
 }
@@ -28,6 +46,7 @@ const formData = ref<FormData>({
     credito: '',
     cuotas: '',
     modalidad: '',
+    interes: '',
     inicio: '',
     lugar_cobro: '',
 });
@@ -48,11 +67,11 @@ const submitForm = async () => {
             credito: '',
             cuotas: '',
             modalidad: '',
+            interes: '',
             inicio: '',
             lugar_cobro: '',
-
         };
-        emit('changeComponent', 'CreditoCliente');
+        emit('changeComponent', 'FicheroCliente');
 
     } catch (error) {
         console.error('Error enviando formulario', error);
@@ -131,7 +150,13 @@ function ModifyCliente(): void {
     formData.value.cliente = '';
 }
 
-
+watch(() => formData.value.modalidad, (newModalidad) => {
+    if (newModalidad) {
+        fetchCuotas(newModalidad);
+    } else {
+        CuotaOptions.value = [];
+    }
+});
 </script>
 
 <template>
@@ -173,25 +198,32 @@ function ModifyCliente(): void {
                         <h1>Nuevo Credito</h1>
                         <hr>
                         <div class="linea2">
-                            <div>
-                                <input v-model="formData.cliente" type="number" placeholder="Cliente id" required>
+                            <div class="input-chico">
+                                <p>
+                                    <label for="id">Cliente</label>
+                                    <input v-model="formData.cliente" type="number" placeholder="id" required>
+                                </p>
                             </div>
                             <div>
                                 <p>$ <input v-model="formData.credito" type="number" placeholder="Valor Entregado"
                                         required></p>
                             </div>
                             <div>
-                                <input v-model="formData.cuotas" type="number" placeholder="Cuotas" required>
-                            </div>
-                        </div>
-
-                        <div class="linea3">
-                            <div>
                                 <select v-model="formData.modalidad" required>
                                     <option value="" disabled selected>Modalidad</option>
                                     <option value="Diaria">Diaria</option>
                                     <option value="Semanal">Semanal</option>
-                                    <option value="Mensual">Mensual</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="linea3">
+
+                            <div>
+                                <select v-model="formData.cuotas" required>
+                                    <option value="" disabled selected>Cuotas</option>
+                                    <option v-for="cuota in CuotaOptions" :key="cuota.value" :value="cuota.value">{{
+                                        cuota.value }}</option>
                                 </select>
                             </div>
                             <div>
@@ -206,6 +238,14 @@ function ModifyCliente(): void {
                                     <option value="Domicilio">Domicilio</option>
                                     <option value="Comercio">Comercio</option>
                                 </select>
+                            </div>
+
+                            <div>
+                                <p class="input-chico">
+                                    <label for="interes">Interes</label>
+                                    <input v-model="formData.interes" type="number" required>
+                                    <label for="interes">%</label>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -236,6 +276,10 @@ function ModifyCliente(): void {
     display: flex;
     flex-direction: column;
     font-size: var(--fontsize);
+}
+
+.input-chico input {
+    width: 10rem;
 }
 
 .cliente {
@@ -271,6 +315,7 @@ function ModifyCliente(): void {
 
 .linea3 select {
     font-size: var(--fontsize);
+    height: 5rem;
 }
 
 .linea3 div {
@@ -290,7 +335,8 @@ function ModifyCliente(): void {
     margin-right: 1.5rem;
 }
 
-.linea2 input {
+.linea2 input,
+select {
     font-size: var(--fontsize);
 }
 
@@ -299,6 +345,10 @@ function ModifyCliente(): void {
     grid-template-columns: repeat(3, 1fr);
     padding: 1rem;
     flex: 1;
+}
+
+.form label {
+    padding-inline: 1rem;
 }
 
 .form select {

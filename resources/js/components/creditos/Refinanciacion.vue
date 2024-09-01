@@ -15,15 +15,29 @@ DataTable.use(pdfmake);
 DataTable.use(ButtonsHtml5);
 
 const selectedIdStore = useSelectedIdStore();
-const selectedId = selectedIdStore.selectedId
 
-const creditosData = ref();
+const creditosData = ref([]);
 
 onMounted(async () => {
-    const response = await fetch(`/datos-credito/cliente/${selectedId}`);
+    const response = await fetch('/datos-creditos');
     if (response.ok) {
         const data = await response.json();
-        creditosData.value = data;
+        // Verifica la estructura de los datos
+        creditosData.value = data.map(credito => ({
+            id: credito.id,
+            cliente: credito.cliente,
+            credito: credito.credito,
+            interes: credito.interes,
+            total_credito: credito.total_credito,
+            cuotas: credito.cuotas,
+            cuotas_restantes: credito.cuotas_restantes,
+            cuotas_valor: credito.cuotas_valor,
+            modalidad: credito.modalidad,
+            pagado: credito.pagado,
+            pago_restante: credito.pago_restante,
+            inicio: credito.inicio,
+            estado: credito.status
+        }));
     }
 });
 
@@ -36,11 +50,11 @@ onMounted(() => {
 
 const columns = [{ data: "id" }, { data: "cliente" }, { data: "credito" },
 { data: "interes" }, { data: "total_credito" }, { data: "cuotas" }, { data: "cuotas_restantes" }, { data: "cuotas_valor" } , { data: "modalidad" },
-{ data: "pagado" }, { data: "inicio" }, { data: "estado" },
+{ data: "pagado" }, { data: "pago_restante" }, { data: "inicio" }, { data: "estado" },
 {
     data: null,
     render: function (data, type, row) {
-        return `<button class="btn btn-info edit-btn" data-id="${row.id}">Editar</button>`;
+        return `<button class="btn btn-warning edit-btn" data-id="${row.id}">Refinanciar</button>`;
     },
     orderable: false,
 }];
@@ -102,6 +116,7 @@ onMounted(() => {
 });
 
 
+
 </script>
 
 <template>
@@ -121,6 +136,7 @@ onMounted(() => {
                         <th>Valor Cuota</th>
                         <th>Modalidad</th>
                         <th>Pagado</th>
+                        <th>Saldo Restante</th>
                         <th>Inicio</th>
                         <th>Estado</th>
                         <th>Editar</th>
