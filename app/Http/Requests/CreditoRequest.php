@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreditoRequest extends FormRequest
 {
@@ -22,12 +23,18 @@ class CreditoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cliente' => ['required', 'exists:clientes,id'],
+            'cliente' => [
+                'required',
+                'exists:clientes,id',
+                Rule::unique('creditos', 'cliente')->where(function ($query) {
+                    return $query->where('active', 1);
+                }),
+            ],
             'credito' => ['required'],
             'cuotas' => ['required'],
             'modalidad' => ['required'],
             'inicio' => ['required'],
-            'lugar_cobro' => ['required']
-        ];
+            'lugar_cobro' => ['required'],
+        ];  
     }
 }

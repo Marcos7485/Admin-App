@@ -40,11 +40,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/new/credito', [CreditosController::class, 'NewCredito'])->name('credito.new');
     Route::get('/new/credito', [CreditosController::class, 'CreditoForm']);
 
-    Route::get('/edit/credito/{id}', [CreditosController::class, 'CreditoInfo']);
+    Route::get('/info/credito/{id}', [CreditosController::class, 'CreditoInfo']);
+    Route::get('/info/fichero/{id}', [CreditosController::class, 'FicheroInfo']);
     Route::post('/modify/credito', [CreditosController::class, 'CreditoEdit']);
 
-    Route::get('/datos-credito/cliente/{id}', [CreditosController::class, 'CreditoInfo']);
-
-
+    Route::post('/refinanciar/credito', [CreditosController::class, 'Refinanciar']);
+    
 
 });

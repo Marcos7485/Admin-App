@@ -7,6 +7,7 @@ import { useImageStore } from '../../../store/imageStore.ts';
 import dayjs from 'dayjs';
 import { useSelectedIdStore } from '../../../store/selectedIdStore.ts'
 const selectedIdStore = useSelectedIdStore()
+const selectedId = selectedIdStore.selectedId;
 
 const imageStore = useImageStore();
 onMounted(() => {
@@ -62,6 +63,7 @@ const submitForm = async () => {
     try {
         const response = await axios.post('/new/credito', formData.value);
         responseMessage.value = response.data.message;
+        RegistrarCliente(formData.value.cliente);
         formData.value = {
             cliente: '',
             credito: '',
@@ -146,9 +148,13 @@ onMounted(() => {
     });
 });
 
-function ModifyCliente(): void {
-    formData.value.cliente = '';
+function RegistrarCliente(id): void {
+    selectedIdStore.setSelectedId(id);
 }
+
+// function ModifyCliente(): void {
+//     formData.value.cliente = '';
+// }
 
 watch(() => formData.value.modalidad, (newModalidad) => {
     if (newModalidad) {

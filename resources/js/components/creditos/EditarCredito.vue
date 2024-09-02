@@ -30,7 +30,6 @@ const fetchCuotas = async (modalidad: string) => {
 
 const selectedIdStore = useSelectedIdStore()
 const selectedId = selectedIdStore.selectedId
-console.log(selectedId);
 
 interface CreditoData {
     id: string | number;
@@ -80,7 +79,7 @@ const formData = ref<FormData>({
 
 // Función para cargar datos del cliente
 const loadCreditoData = async () => {
-    const response = await fetch(`/edit/credito/${selectedId}`);
+    const response = await fetch(`/info/credito/${selectedId}`);
     if (response.ok) {
         const data = await response.json();
         creditoData.value = data;
@@ -125,8 +124,8 @@ const submitForm = async () => {
     try {
         const response = await axios.post('/modify/credito', formData.value);
         responseMessage.value = response.data.message;
-        // Reiniciar formData solo si es necesario
-        emit('changeComponent', 'Creditos');
+        RegistrarCliente(formData.value.cliente);
+        emit('changeComponent', 'FicheroCliente');
     } catch (error) {
         console.error('Error enviando formulario', error);
         responseMessage.value = 'Error al editar cliente.';
@@ -152,6 +151,10 @@ function FormClear() {
         interes: '',
     };
 }
+function RegistrarCliente(id): void {
+    selectedIdStore.setSelectedId(id);
+}
+
 
 </script>
 

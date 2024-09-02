@@ -12,6 +12,7 @@ import FormCredito from '../../components/creditos/FormCredito.vue';
 import Creditos from '../../components/creditos/Creditos.vue';
 import FicheroCliente from '../../components/creditos/FicheroCliente.vue';
 import Refinanciacion from '../../components/creditos/Refinanciacion.vue';
+import RefinanciarCredito from '../../components/creditos/RefinanciarCredito.vue';
 import Renovacion from '../../components/creditos/Renovacion.vue';
 
 const imageStore = useImageStore();
@@ -31,6 +32,7 @@ const components = {
     FicheroCliente: markRaw(FicheroCliente),
     Refinanciacion: markRaw(Refinanciacion),
     Renovacion: markRaw(Renovacion),
+    RefinanciarCredito: markRaw(RefinanciarCredito),
 };
 
 const currentComponent = ref(components.Principal);

@@ -15,29 +15,17 @@ DataTable.use(pdfmake);
 DataTable.use(ButtonsHtml5);
 
 const selectedIdStore = useSelectedIdStore();
-
-const creditosData = ref([]);
+const selectedId = selectedIdStore.selectedId
+console.log(selectedId);
+const creditosData = ref();
 
 onMounted(async () => {
-    const response = await fetch('/datos-creditos');
+    const response = await fetch(`/info/fichero/${selectedId}`);
     if (response.ok) {
         const data = await response.json();
-        // Verifica la estructura de los datos
-        creditosData.value = data.map(credito => ({
-            id: credito.id,
-            cliente: credito.cliente,
-            credito: credito.credito,
-            interes: credito.interes,
-            total_credito: credito.total_credito,
-            cuotas: credito.cuotas,
-            cuotas_restantes: credito.cuotas_restantes,
-            cuotas_valor: credito.cuotas_valor,
-            modalidad: credito.modalidad,
-            pagado: credito.pagado,
-            pago_restante: credito.pago_restante,
-            inicio: credito.inicio,
-            estado: credito.status
-        }));
+        creditosData.value = [data]; 
+console.log(creditosData.value);
+
     }
 });
 
@@ -47,17 +35,8 @@ onMounted(() => {
     imageStore.fetchImagePath();
 });
 
-
-const columns = [{ data: "id" }, { data: "cliente" }, { data: "credito" },
-{ data: "interes" }, { data: "total_credito" }, { data: "cuotas" }, { data: "cuotas_restantes" }, { data: "cuotas_valor" } , { data: "modalidad" },
-{ data: "pagado" }, { data: "pago_restante" }, { data: "inicio" }, { data: "estado" },
-{
-    data: null,
-    render: function (data, type, row) {
-        return `<button class="btn btn-warning edit-btn" data-id="${row.id}">Refinanciar</button>`;
-    },
-    orderable: false,
-}];
+const columns = [{ data: "id" }, { data: "cliente" }, { data: "inicio" },
+{ data: "cuotas" }, { data: "cuotas_valor" }];
 
 const options = {
     info: false,
@@ -102,21 +81,6 @@ const options = {
 
 const emit = defineEmits(['changeComponent']);
 
-onMounted(() => {
-    document.addEventListener('click', function (event) {
-        const target = event.target as HTMLElement;
-        if (target.classList.contains('edit-btn')) {
-            const id = target.getAttribute('data-id');
-            if (id) {
-                selectedIdStore.setSelectedId(id);
-                emit('changeComponent', 'RefinanciarCredito');
-            }
-        }
-    });
-});
-
-
-
 </script>
 
 <template>
@@ -128,18 +92,9 @@ onMounted(() => {
                     <tr>
                         <th>Id</th>
                         <th>Cliente</th>
-                        <th>Credito</th>
-                        <th>interes</th>
-                        <th>Total</th>
-                        <th>Cuotas</th>
-                        <th>Restantes</th>
-                        <th>Valor Cuota</th>
-                        <th>Modalidad</th>
-                        <th>Pagado</th>
-                        <th>Saldo Restante</th>
                         <th>Inicio</th>
-                        <th>Estado</th>
-                        <th>Editar</th>
+                        <th>Cuotas</th>
+                        <th>Valor</th>
                     </tr>
                 </thead>
             </DataTable>

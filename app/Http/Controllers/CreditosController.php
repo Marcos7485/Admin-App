@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreditoRequest;
 use App\Models\Clientes;
 use App\Models\Creditos;
+use App\Models\Ficheros;
 use App\Services\CreditosSrv;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,22 +27,30 @@ class CreditosController extends Controller
 
     public function getDatosCreditos()
     {
-        $creditos = Creditos::all();
+        $creditos = Creditos::where('active', 1)->get();
 
         return response()->json($creditos);
     }
 
     public function CreditoInfo($id)
     {
-
-        $credito = Creditos::where('id', $id)->first();
+        $credito = Creditos::where('id', $id)->where('active', 1)->first();
 
         return response()->json($credito);
+    }
+
+    public function FicheroInfo($id){
+        $fichero = Ficheros::where('cliente', $id)->where('active', 1)->first();
+
+        return response()->json($fichero);
     }
 
     public function CreditoEdit(Request $request)
     {
         $totalCredito = $this->CreditosSrv->calcularValorCredito($request->interes, $request->credito);
+        $this->CreditosSrv->DesactivarFichero($request->cliente);
+        $cliente = $request->cliente;
+
 
         $cuotas_pagas = 0; // crear servicio con DB de pagos para q reste los pagados.
         $pagado = 0; // crear servicio con DB de pagos para q sume el valor.
@@ -62,20 +71,17 @@ class CreditosController extends Controller
         $credito->pago_restante = $valor_restante;
         $credito->inicio = $request->inicio;
         $credito->lugar_cobro = $request->lugar_cobro;
-        // $credito->status = Verificador de Status por pago, si fue pagado, 
-        // pendiente sino, refinanciado si fue refinanciado y renovado si fue renovado. en el SRV.
-
-        // Guardar los cambios
         $credito->save();
 
+        $this->CreditosSrv->CrearFichero($cliente);
         return response()->json(['message' => 'Credito editado correctamente']);
     }
 
-    public function NewCredito(CreditoRequest $request)
+    public function Refinanciar(Request $request)
     {
-
-        // $verificador = Creditos::where('cliente', $request->cliente)->where('active', 1)->first();
-        //  Crearlo en el request.
+        $this->CreditosSrv->Refinanciar($request->cliente);
+        $this->CreditosSrv->DesactivarFichero($request->cliente);
+        $cliente = $request->cliente;
 
         $totalCredito = $this->CreditosSrv->calcularValorCredito($request->interes, $request->credito);
 
@@ -92,9 +98,38 @@ class CreditosController extends Controller
         $credito->pago_restante = $totalCredito;
         $credito->pagado = 0;
         $credito->inicio = $request->inicio;
-        $credito->status = 'Pendiente';
+        $credito->status = 'Refinanciado';
         $credito->save();
 
+        $this->CreditosSrv->CrearFichero($cliente);
+
+        return response()->json(['message' => 'Credito refinanciado correctamente']);
+    }
+
+
+    public function NewCredito(CreditoRequest $request)
+    {
+
+        $totalCredito = $this->CreditosSrv->calcularValorCredito($request->interes, $request->credito);
+        $cliente = $request->cliente;
+
+        $credito = new Creditos();
+        $credito->cliente = $cliente;
+        $credito->credito = $request->credito;
+        $credito->interes = $request->interes;
+        $credito->total_credito = $totalCredito;
+        $credito->cuotas = $request->cuotas;
+        $credito->cuotas_restantes = $request->cuotas;
+        $credito->modalidad = $request->modalidad;
+        $credito->cuotas_valor = $this->CreditosSrv->calcularValorCuotas($totalCredito, $request->cuotas);
+        $credito->lugar_cobro = $request->lugar_cobro;
+        $credito->pago_restante = $totalCredito;
+        $credito->pagado = 0;
+        $credito->inicio = $request->inicio;
+        $credito->status = 'Pendiente';
+        $credito->save();
+        
+        $this->CreditosSrv->CrearFichero($cliente);
         return response()->json(['message' => 'Credito creado correctamente']);
     }
 
