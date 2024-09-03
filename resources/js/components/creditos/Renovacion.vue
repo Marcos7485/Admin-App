@@ -109,11 +109,12 @@ onMounted(() => {
             const id = target.getAttribute('data-id');
             if (id) {
                 selectedIdStore.setSelectedId(id);
-                emit('changeComponent', 'EditarCredito');
+                emit('changeComponent', 'RenovarCredito');
             }
         }
     });
 });
+
 
 
 </script>

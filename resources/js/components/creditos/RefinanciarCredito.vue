@@ -31,6 +31,7 @@ const fetchCuotas = async (modalidad: string) => {
 const selectedIdStore = useSelectedIdStore()
 const selectedId = selectedIdStore.selectedId
 
+
 interface CreditoData {
     id: string | number;
     cliente: number | string;
@@ -122,7 +123,8 @@ const submitForm = async () => {
     isDisabled.value = true;
 
     try {
-        const response = await axios.post('/modify/credito', formData.value);
+        console.log(formData.value);
+        const response = await axios.post('/refinanciar/credito', formData.value);
         responseMessage.value = response.data.message;
         RegistrarCliente(formData.value.cliente);
         emit('changeComponent', 'FicheroCliente');
@@ -134,9 +136,14 @@ const submitForm = async () => {
     }
 };
 
+function RegistrarCliente(id): void {
+    selectedIdStore.setSelectedId(id);
+}
+
+
 function cancelForm() {
     FormClear();
-    emit('changeComponent', 'Creditos');
+    emit('changeComponent', 'Refinanciacion');
 }
 
 function FormClear() {
@@ -151,10 +158,6 @@ function FormClear() {
         interes: '',
     };
 }
-function RegistrarCliente(id): void {
-    selectedIdStore.setSelectedId(id);
-}
-
 
 </script>
 

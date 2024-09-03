@@ -7,7 +7,7 @@ import { useImageStore } from '../../../store/imageStore.ts';
 const props = defineProps<{
     user: {
         name: string;
-        admin: number;
+        admin: boolean;
     };
 }>();
 
@@ -27,7 +27,7 @@ const handleLogout = async () => {
     }
 };
 
-const admin = ref(props.user.admin === 1);
+const admin = ref(props.user.admin == true);
 
 const showSubMenu = ref({
   clientes: false,

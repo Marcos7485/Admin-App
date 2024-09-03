@@ -106,6 +106,35 @@ class CreditosController extends Controller
         return response()->json(['message' => 'Credito refinanciado correctamente']);
     }
 
+    public function Renovar(Request $request)
+    {
+        $this->CreditosSrv->Renovar($request->cliente);
+        $this->CreditosSrv->DesactivarFichero($request->cliente);
+        $cliente = $request->cliente;
+
+        $totalCredito = $this->CreditosSrv->calcularValorCredito($request->interes, $request->credito);
+
+        $credito = new Creditos();
+        $credito->cliente = $request->cliente;
+        $credito->credito = $request->credito;
+        $credito->interes = $request->interes;
+        $credito->total_credito = $totalCredito;
+        $credito->cuotas = $request->cuotas;
+        $credito->cuotas_restantes = $request->cuotas;
+        $credito->modalidad = $request->modalidad;
+        $credito->cuotas_valor = $this->CreditosSrv->calcularValorCuotas($totalCredito, $request->cuotas);
+        $credito->lugar_cobro = $request->lugar_cobro;
+        $credito->pago_restante = $totalCredito;
+        $credito->pagado = 0;
+        $credito->inicio = $request->inicio;
+        $credito->status = 'Renovado';
+        $credito->save();
+
+        $this->CreditosSrv->CrearFichero($cliente);
+
+        return response()->json(['message' => 'Credito refinanciado correctamente']);
+    }
+
 
     public function NewCredito(CreditoRequest $request)
     {

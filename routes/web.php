@@ -5,6 +5,7 @@ use App\Http\Controllers\CreditosController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/login', [MainController::class, 'loginview'])->name('login');
 
@@ -45,6 +46,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/modify/credito', [CreditosController::class, 'CreditoEdit']);
 
     Route::post('/refinanciar/credito', [CreditosController::class, 'Refinanciar']);
+    Route::post('/renovar/credito', [CreditosController::class, 'Renovar']);
     
-
 });
