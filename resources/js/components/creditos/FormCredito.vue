@@ -222,7 +222,9 @@ watch(() => formData.value.modalidad, handleModalidadChange);
                                 <select v-model="formData.modalidad" required>
                                     <option value="" disabled selected>Modalidad</option>
                                     <option value="Diaria">Diaria</option>
+                                    <option value="Diaria-Articulo">Diaria-Articulo</option> 
                                     <option value="Semanal">Semanal</option>
+                                    <option value="Semanal-Articulo">Semanal-Articulo</option> 
                                 </select>
                             </div>
                         </div>

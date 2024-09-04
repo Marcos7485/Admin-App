@@ -28,14 +28,15 @@ class CreditosController extends Controller
     public function getDatosCreditos()
     {
         $creditos = Creditos::where('active', 1)->get();
-
+        $clientes = Clientes::all();
+        $this->CreditosSrv->TransformIdEnName($creditos, $clientes);
+        
         return response()->json($creditos);
     }
 
     public function CreditoInfo($id)
     {
         $credito = Creditos::where('id', $id)->where('active', 1)->first();
-
         return response()->json($credito);
     }
 
@@ -53,7 +54,7 @@ class CreditosController extends Controller
 
 
         $cuotas_pagas = 0; // crear servicio con DB de pagos para q reste los pagados.
-        $pagado = 0; // crear servicio con DB de pagos para q sume el valor.
+        $pagado = $this->CreditosSrv->verificarPagos($request->id);
 
         $credito = Creditos::find($request->id);
         $credito->cliente = $request->cliente;
@@ -182,7 +183,7 @@ class CreditosController extends Controller
                 ['value' => 6],
                 ['value' => 8]
             ];
-        } elseif ($modalidad == 'Articulo') {
+        } elseif ($modalidad == 'Diaria-Articulo') {
             $cuotas = [
                 ['value' => 30],
                 ['value' => 60],
@@ -193,7 +194,19 @@ class CreditosController extends Controller
                 ['value' => 160],
                 ['value' => 180],
                 ['value' => 200],
-                ['value' => 220]
+                ['value' => 220],
+                ['value' => 240]
+            ];
+        } elseif ($modalidad == 'Semanal-Articulo') {
+            $cuotas = [
+                ['value' => 4],
+                ['value' => 8],
+                ['value' => 12],
+                ['value' => 16],
+                ['value' => 20],
+                ['value' => 24],
+                ['value' => 28],
+                ['value' => 32]
             ];
         }
 

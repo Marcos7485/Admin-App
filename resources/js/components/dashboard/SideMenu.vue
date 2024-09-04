@@ -60,7 +60,7 @@ const toggleSubMenu = (menu: string) => {
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('prestamos')">
-                    Prestamos
+                    Creditos
                     <ul v-if="showSubMenu.prestamos" class="sub-menu" :class="{ active: showSubMenu.prestamos }">
                         <a @click="$emit('changeComponent', 'FormCredito')"><li>Nuevo credito</li></a>
                         <a @click="$emit('changeComponent', 'Creditos')"><li>Creditos</li></a>
@@ -68,18 +68,11 @@ const toggleSubMenu = (menu: string) => {
                         <a @click="$emit('changeComponent', 'Renovacion')"><li>Renovacion</li></a>
                     </ul>
                 </button>
-                <button @click="toggleSubMenu('articulos')">
-                    Articulos
-                    <ul v-if="showSubMenu.articulos" class="sub-menu" :class="{ active: showSubMenu.articulos }">
-                        <a @click="$emit('changeComponent', 'FormCredito')"><li>Otorgar articulo</li></a>
-                        <a @click="$emit('changeComponent', 'Creditos')"><li>Articulos</li></a>
-                    </ul>
-                </button>
                 <button @click="toggleSubMenu('pagos')">
                     Pagos
                     <ul v-if="showSubMenu.pagos" class="sub-menu" :class="{ active: showSubMenu.pagos }">
-                        <a @click="$emit('changeComponent', 'FormCredito')"><li>Nuevo pago</li></a>
-                        <a @click="$emit('changeComponent', 'Creditos')"><li>Pagos</li></a>
+                        <a @click="$emit('changeComponent', 'FormPagos')"><li>Nuevo pago</li></a>
+                        <a @click="$emit('changeComponent', 'Pagos')"><li>Pagos</li></a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('resumenes')">

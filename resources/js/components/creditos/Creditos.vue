@@ -25,7 +25,7 @@ onMounted(async () => {
         // Verifica la estructura de los datos
         creditosData.value = data.map(credito => ({
             id: credito.id,
-            cliente: credito.cliente,
+            nombre_cliente: credito.nombre_cliente,
             credito: credito.credito,
             interes: credito.interes,
             total_credito: credito.total_credito,
@@ -48,7 +48,7 @@ onMounted(() => {
 });
 
 
-const columns = [{ data: "id" }, { data: "cliente" }, { data: "credito" },
+const columns = [{ data: "id" }, { data: "nombre_cliente" }, { data: "credito" },
 { data: "interes" }, { data: "total_credito" }, { data: "cuotas" }, { data: "cuotas_restantes" }, { data: "cuotas_valor" } , { data: "modalidad" },
 { data: "pagado" }, { data: "pago_restante" }, { data: "inicio" }, { data: "estado" },
 {

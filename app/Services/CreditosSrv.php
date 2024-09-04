@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\AppSetup;
 use App\Models\Creditos;
 use App\Models\Ficheros;
+use App\Models\Pagos;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -70,7 +71,7 @@ class CreditosSrv
 
     public function DatasFichero($fechaInicial, $cantidadDias, $modalidad)
     {
-        if ($modalidad == 'Diaria') {
+        if ($modalidad == 'Diaria' || $modalidad == 'Diaria-Articulo') {
             // 0 - domingo, 1 - lunes, etc;
             $setup = AppSetup::where('active', 1)->first();
 
@@ -97,7 +98,7 @@ class CreditosSrv
             }
 
             return $fechas;
-        } elseif ($modalidad == 'Semanal') {
+        } elseif ($modalidad == 'Semanal' || $modalidad == 'Semanal-Articulo') {
             $fecha = Carbon::createFromFormat('Y-m-d', $fechaInicial);
             $diaSemana = $fecha->dayOfWeek; // Obtener el día de la semana de la fecha inicial (0 - domingo, 1 - lunes, etc.)
 
@@ -116,6 +117,72 @@ class CreditosSrv
             }
             
             return $fechas;
+        }
+    }
+
+    public function verificarPagos($idCredito){
+        $pagos = Pagos::where('idcredito', $idCredito)->get();
+        $valor = 0;
+        foreach ($pagos as $pago) {
+            $valor += $pago->valor;
+        }
+        return $valor;
+    }
+
+    // public function ActualizarPagos(){
+    //     $pagos = Pagos::where('active', 1)->get();
+    //     $creditos = Creditos::where('active', 1)->get();
+
+    //     foreach($pagos as $pago){
+    //         foreach($creditos as $credito){
+    //             if($credito->id == $pago->idcredito){
+    //                 $valor = $credito->pagado + $pago->valor;
+    //                 $credito->pagado = $valor;
+    //                 $credito->pago_restante = ($credito->total_credito - $valor);
+    //                 $credito->save();
+
+    //                 $pago->active = 0;
+    //                 $pago->save();
+    //             }
+    //         }
+    //     }
+    // }
+
+    public function ActualizarPagos(){
+        $pagos = Pagos::all();
+        $creditos = Creditos::where('active', 1)->get();
+
+        foreach($creditos as $credito){
+            $valor = 0;
+
+            foreach($pagos as $pago){
+                if($credito->id == $pago->idcredito){
+                    $valor += $pago->valor;
+                    $credito->pagado = $valor;
+                    $credito->pago_restante = ($credito->total_credito - $valor);
+                    $credito->save();
+
+                    $pago->active = 0;
+                    $pago->save();
+
+                    if($credito->pago_restante <= 0){
+                        $credito->status = 'Pagado';
+                        $credito->save();
+                    }
+                }
+            }
+        }
+    }
+
+    public function TransformIdEnName($array, $clientes){
+        $clienteMap = [];
+        foreach ($clientes as $cliente) {
+            $clienteMap[$cliente->id] = $cliente->name; // Ajusta 'id' y 'nombre' según las columnas de tu tabla Clientes
+        }
+
+        // Iterar sobre los pagos para asignar el nombre del cliente en lugar del idcliente
+        foreach ($array as $arr) {
+            $arr->nombre_cliente = $clienteMap[$arr->cliente] ?? 'Cliente desconocido';
         }
     }
 

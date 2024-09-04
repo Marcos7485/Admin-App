@@ -142,8 +142,8 @@ const splitDataIntoColumns = () => {
         lugar_cobro: ''
     }));
 
-    // Calcula el número de columnas necesarias
-    const numColumns = Math.min(Math.ceil(itemsArray.length / rowsPerColumn), maxColumns);
+    // Calcula el número de columnas necesarias basado en la cantidad total de elementos
+    const numColumns = Math.ceil(itemsArray.length / rowsPerColumn);
     const tempArray: FicheroItem[][] = [];
     const fechasPorColumna: string[][] = [];
 
@@ -156,8 +156,10 @@ const splitDataIntoColumns = () => {
     }
 
     groupedData.value = tempArray;
+    // Si el número de fechas no coincide con el número total de filas, puedes manejar eso aquí
     Fechas.value = fechasPorColumna.flat(); // Reasigna las fechas para que correspondan a cada columna
 };
+
 
 const emit = defineEmits(['changeComponent']);
 

@@ -15,6 +15,9 @@ import Refinanciacion from '../../components/creditos/Refinanciacion.vue';
 import RefinanciarCredito from '../../components/creditos/RefinanciarCredito.vue';
 import Renovacion from '../../components/creditos/Renovacion.vue';
 import RenovarCredito from '../../components/creditos/RenovarCredito.vue';
+import FormPagos from '../../components/pagos/FormPagos.vue';
+import Pagos from '../../components/pagos/Pagos.vue';
+import EditarPago from '../../components/pagos/EditarPago.vue';
 
 const imageStore = useImageStore();
 
@@ -35,6 +38,9 @@ const components = {
     Renovacion: markRaw(Renovacion),
     RefinanciarCredito: markRaw(RefinanciarCredito),
     RenovarCredito: markRaw(RenovarCredito),
+    FormPagos: markRaw(FormPagos),
+    Pagos: markRaw(Pagos),
+    EditarPago: markRaw(EditarPago),
 };
 
 const currentComponent = ref(components.Principal);

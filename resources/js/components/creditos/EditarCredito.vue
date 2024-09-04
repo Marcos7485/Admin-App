@@ -190,7 +190,9 @@ function RegistrarCliente(id): void {
                                     <label for="inicio">Modalidad</label>
                                     <select v-model="formData.modalidad" required>
                                         <option value="Diaria">Diaria</option>
+                                        <option value="Diaria-Articulo">Diaria-Articulo</option> 
                                         <option value="Semanal">Semanal</option>
+                                        <option value="Semanal-Articulo">Semanal-Articulo</option> 
                                     </select>
                                 </p>
                             </div>

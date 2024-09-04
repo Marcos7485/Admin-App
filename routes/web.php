@@ -4,6 +4,7 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\CreditosController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PagosController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -50,4 +51,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/info/fechasCuotas/{idCliente}', [CreditosController::class, 'fechasCuotas']);
     
+    // Pagos:
+    Route::post('/new/pago', [PagosController::class, 'NewPago'])->name('pago.new');
+    Route::get('/new/pago', [PagosController::class, 'PagoForm']);
+
+    Route::get('/datos-pagos', [PagosController::class, 'getDatosPagos']);
+    Route::get('/info/pago/{id}', [PagosController::class, 'PagosInfo']);
+    Route::post('/modify/pago', [PagosController::class, 'PagoEdit']);
+
+
+
 });
