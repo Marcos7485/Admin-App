@@ -294,7 +294,7 @@ const currentDate = new Date().toLocaleDateString();
 .logo {
     width: 10rem;
     background-color: var(--color-base);
-    border-radius: 50%;
+    border-radius: 10%;
 }
 
 .header {
@@ -389,7 +389,7 @@ const currentDate = new Date().toLocaleDateString();
         position: absolute;
         top: 10px;
         left: 10px;
-        width: 140px;
+        width: 120px;
     }
 }
 </style>

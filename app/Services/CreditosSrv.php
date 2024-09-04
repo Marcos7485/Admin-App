@@ -85,6 +85,7 @@ class CreditosSrv
 
             $fechas = [];
 
+            $fechas[] = $fecha->format('d/m');
             // Generar las fechas
             while (count($fechas) != $cantidadDias) {
                 $fecha->addDay();
