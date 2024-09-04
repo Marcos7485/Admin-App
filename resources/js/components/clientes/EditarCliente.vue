@@ -56,7 +56,7 @@ const formData = ref<FormData>({
 
 // Función para cargar datos del cliente
 const loadClienteData = async () => {
-    const response = await fetch(`/edit/cliente/${selectedId}`);
+    const response = await fetch(`/info/cliente/${selectedId}`);
     if (response.ok) {
         const data = await response.json();
         clienteData.value = data;

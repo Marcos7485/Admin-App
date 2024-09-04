@@ -13,32 +13,88 @@ const selectedId = selectedIdStore.selectedId
 
 interface FicheroItem {
     id: number;
-    cliente: number | string;
-    interes: string;
-    total_credito: string;
-    cuotas: number | string; // Ajustado a número o cadena
-    modalidad: string;
-    cuotas_valor: string;
-    lugar_cobro: string;
+    cliente: string;
     inicio: string;
+    cuotas: number | string;
+    cuotas_valor: string;
+    valor_otorgado: string;
+    valor_final: string;
+    modalidad: string;
+    lugar_cobro: string;
 }
 
+// Ficha
 const FicheroData = ref<FicheroItem[]>([]);
 const groupedData = ref<FicheroItem[][]>([]); // Array para manejar múltiples columnas
+const Fechas = ref<string[]>([]); // Array para manejar múltiples columnas
 const rowsPerColumn = 30;
 const maxColumns = 4; // Número máximo de columnas
+const idFicha = ref(0);
 const cuotaCount = ref(0);
 const cuotaValor = ref('');
 const fechaFirma = ref('');
+const idCliente = ref('');
+const valor_final = ref('');
+const modalidad = ref('');
+const credito_valor = ref('');
+
+// Cliente
+const nombreCliente = ref('');
+const domicilioCliente = ref('');
+const localidadDomicilio = ref('');
+const phone = ref('');
+const comercio_tipo = ref('');
+const comercio_address = ref('');
+const comercio_localidad = ref('');
+const recorrido = ref('');
+
+
+const fetchClientInfo = async (idCliente: string | null): Promise<void> => {
+    if (idCliente !== null) {
+        try {
+            const response = await fetch(`/info/cliente/${idCliente}`);
+            if (response.ok) {
+                const clientData = await response.json();
+                nombreCliente.value = clientData.name;
+                domicilioCliente.value = clientData.address;
+                localidadDomicilio.value = clientData.localidad;
+                phone.value = clientData.phone;
+                comercio_tipo.value = clientData.comercio_tipo;
+                recorrido.value = clientData.recorrido;
+                comercio_address.value = clientData.comercio_address;
+                comercio_localidad.value = clientData.comercio_localidad;
+
+            } else {
+                console.error('Error al obtener datos del cliente:', response.status);
+            }
+        } catch (error) {
+            console.error('Error en la solicitud del cliente:', error);
+        }
+    }
+};
+
+
+const fetchFechasInfo = async (idCliente: string | null): Promise<void> => {
+    if (idCliente !== null) {
+        try {
+            const response = await fetch(`/info/fechasCuotas/${idCliente}`);
+            if (response.ok) {
+                const FechaData = await response.json();
+                Fechas.value = FechaData;
+            } else {
+                console.error('Error al obtener datos del cliente:', response.status);
+            }
+        } catch (error) {
+            console.error('Error en la solicitud del cliente:', error);
+        }
+    }
+};
 
 onMounted(async () => {
     try {
         const response = await fetch(`/info/fichero/${selectedId}`);
         if (response.ok) {
             const data = await response.json();
-            console.log('Datos recibidos:', data);
-
-            // Verifica si `data` es un objeto y ajusta el código en consecuencia
             if (data && typeof data === 'object') {
                 FicheroData.value = [data]; // Envuelve el objeto en un array
 
@@ -46,11 +102,19 @@ onMounted(async () => {
                 if (FicheroData.value.length > 0) {
                     const firstItem = FicheroData.value[0];
                     cuotaCount.value = parseInt(firstItem.cuotas.toString(), 10);
+                    idFicha.value = parseInt(firstItem.id.toString(), 10);
                     cuotaValor.value = firstItem.cuotas_valor;
                     fechaFirma.value = firstItem.inicio;
+                    idCliente.value = firstItem.cliente;
+                    valor_final.value = firstItem.valor_final;
+                    modalidad.value = firstItem.modalidad;
+                    credito_valor.value = firstItem.valor_otorgado;
                 }
 
                 splitDataIntoColumns();
+                await fetchClientInfo(idCliente.value);
+                await fetchFechasInfo(idCliente.value);
+
             } else {
                 console.error('Los datos recibidos no son un objeto.');
             }
@@ -62,32 +126,37 @@ onMounted(async () => {
     }
 });
 
+
+
 const splitDataIntoColumns = () => {
     // Genera una lista de elementos basada en el número de cuotas
     const itemsArray: FicheroItem[] = Array.from({ length: cuotaCount.value }, (_, i) => ({
-        id: i, // Puedes generar un ID único si es necesario
-        cliente: '', // Ajusta este valor según sea necesario
-        interes: '', // Ajusta este valor según sea necesario
-        total_credito: '', // Ajusta este valor según sea necesario
+        id: i,
+        cliente: '',
+        inicio: fechaFirma.value,
         cuotas: cuotaCount.value.toString(),
-        modalidad: '', // Ajusta este valor según sea necesario
         cuotas_valor: cuotaValor.value,
-        lugar_cobro: '', // Ajusta este valor según sea necesario
-        inicio: fechaFirma.value
+        valor_otorgado: '',
+        valor_final: '',
+        modalidad: '',
+        lugar_cobro: ''
     }));
 
     // Calcula el número de columnas necesarias
     const numColumns = Math.min(Math.ceil(itemsArray.length / rowsPerColumn), maxColumns);
     const tempArray: FicheroItem[][] = [];
+    const fechasPorColumna: string[][] = [];
 
     // Divide los elementos en columnas
     for (let i = 0; i < numColumns; i++) {
         const start = i * rowsPerColumn;
         const end = start + rowsPerColumn;
         tempArray.push(itemsArray.slice(start, end));
+        fechasPorColumna.push(Fechas.value.slice(start, end)); // Divide las fechas en columnas
     }
 
     groupedData.value = tempArray;
+    Fechas.value = fechasPorColumna.flat(); // Reasigna las fechas para que correspondan a cada columna
 };
 
 const emit = defineEmits(['changeComponent']);
@@ -128,22 +197,27 @@ const currentDate = new Date().toLocaleDateString();
                     </div>
                     <div class="info-fichero">
                         <div class="info-section">
-                            <p>Fecha: {{ currentDate }}</p>
-                            <p>Nº Ficha: 1</p>
-                            <p>Recorrido: 1</p>
-                            <p>Rubro: Heladeria</p>
+                            <p>{{ currentDate }}</p>
+                            <p>Nº Ficha: {{ idFicha }}</p>
+                            <p>Recorrido: {{ recorrido }}</p>
+                            <p>Modalidad: {{ modalidad }}</p>
                         </div>
                         <div class="info-section">
-                            <p>Cliente: Marcos Gonzalez</p>
-                            <p>Domicilio: Arelauquen 255</p>
-                            <p>Zona: Merlo</p>
-                            <p>Telefono: 1155448575</p>
+                            <p>Cliente: {{ nombreCliente }}</p>
+                            <p>Domicilio: {{ domicilioCliente }}</p>
+                            <p>Zona: {{ localidadDomicilio }}</p>
+                            <p>Telefono: {{ phone }}</p>
                         </div>
                         <div class="info-section">
-                            <p>Cuotas: 10</p>
-                            <p>Valor: $15000</p>
-                            <p>Total: $150000</p>
-                            <p>Metodologia: Diario</p>
+                            <p>Rubro: {{ comercio_tipo }}</p>
+                            <p>Direccion: {{ comercio_address }}</p>
+                            <p>Zona: {{ comercio_localidad }}</p>
+                        </div>
+                        <div class="info-section">
+                            <p>Credito: ${{ credito_valor }}</p>
+                            <p>Cuotas: {{ cuotaCount }}</p>
+                            <p>Valor: ${{ cuotaValor }}</p>
+                            <p>Total: ${{ valor_final }}</p>
                         </div>
                     </div>
                 </div>
@@ -161,7 +235,7 @@ const currentDate = new Date().toLocaleDateString();
                             <tbody>
                                 <!-- Iterar sobre las filas dentro de cada columna -->
                                 <tr v-for="(item, rowIndex) in column" :key="rowIndex">
-                                    <td>{{ item.inicio }}</td>
+                                    <td>{{ Fechas[rowIndex + columnIndex * rowsPerColumn] }}</td>
                                     <td>{{ item.cuotas_valor }}</td>
                                     <td></td>
                                 </tr>

@@ -16,7 +16,11 @@ return new class extends Migration
             $table->integer('cliente');
             $table->date('inicio');
             $table->string('cuotas');
-            $table->string('cuotas_varlor');
+            $table->string('cuotas_valor');
+            $table->string('valor_otorgado');
+            $table->string('valor_final');
+            $table->string('modalidad');
+            $table->string('lugar_cobro');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();

@@ -199,4 +199,10 @@ class CreditosController extends Controller
 
         return response()->json($cuotas);
     }
+
+    public function fechasCuotas($idCliente){
+        $credito = Creditos::where('cliente', $idCliente)->where('active', 1)->first();
+        $fechas = $this->CreditosSrv->DatasFichero($credito->inicio, $credito->cuotas, $credito->modalidad);
+        return response()->json($fechas);
+    }
 }

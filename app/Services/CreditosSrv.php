@@ -61,33 +61,61 @@ class CreditosSrv
         $fichero->inicio = $creditoActivo->inicio;
         $fichero->cuotas = $creditoActivo->cuotas;
         $fichero->cuotas_valor = $creditoActivo->cuotas_valor;
+        $fichero->valor_otorgado = $creditoActivo->credito;
+        $fichero->valor_final = $creditoActivo->total_credito;
+        $fichero->modalidad = $creditoActivo->modalidad;
+        $fichero->lugar_cobro = $creditoActivo->lugar_cobro;
         $fichero->save();
     }
 
-    public function DatasFichero($fechaInicial, $cantidadDias)
+    public function DatasFichero($fechaInicial, $cantidadDias, $modalidad)
     {
-        // 0 - domingo, 1 - lunes, etc;
-        $setup = AppSetup::where('active', 1)->first();
+        if ($modalidad == 'Diaria') {
+            // 0 - domingo, 1 - lunes, etc;
+            $setup = AppSetup::where('active', 1)->first();
 
-        // se guarda en una cadena separada por comas.
-        $diasLibres = explode(',', $setup->diaslibres);
-        $diasLibres = array_map('intval', $diasLibres);  // Convertir a enteros por si acaso
 
-        // Configurar la fecha inicial
-        $fecha = Carbon::createFromFormat('d/m/y', $fechaInicial);
-        $fechas = [];
+            // se guarda en una cadena separada por comas.
+            $diasLibres = explode(',', $setup->diaslibres);
+            $diasLibres = array_map('intval', $diasLibres);  // Convertir a enteros por si acaso
 
-        // Generar las fechas
-        while (count($fechas) < $cantidadDias) {
-            $fecha->addDay();
 
-            // Si el día actual no está en los días libres, añadirlo al array
-            if (!in_array($fecha->dayOfWeek, $diasLibres)) {
+            // Configurar la fecha inicial
+            $fecha = Carbon::createFromFormat('Y-m-d', $fechaInicial);
+
+            $fechas = [];
+
+            // Generar las fechas
+            while (count($fechas) != $cantidadDias) {
+                $fecha->addDay();
+
+                // Si el día actual no está en los días libres, añadirlo al array
+                if (!in_array($fecha->dayOfWeek, $diasLibres)) {
+                    $fechas[] = $fecha->format('d/m');
+                }
+            }
+
+            return $fechas;
+        } elseif ($modalidad == 'Semanal') {
+            $fecha = Carbon::createFromFormat('Y-m-d', $fechaInicial);
+            $diaSemana = $fecha->dayOfWeek; // Obtener el día de la semana de la fecha inicial (0 - domingo, 1 - lunes, etc.)
+
+            $fechas = [];
+
+            // Agregar la fecha inicial
+            $fechas[] = $fecha->format('d/m');
+
+            // Generar las fechas para los siguientes mismos días de la semana
+            for ($i = 1; $i < $cantidadDias; $i++) {
+                // Añadir 1 semana (7 días) para obtener el mismo día de la semana en la siguiente semana
+                $fecha->addWeek();
+
+                // Agregar la nueva fecha al array
                 $fechas[] = $fecha->format('d/m');
             }
+            
+            return $fechas;
         }
-
-        return $fechas;
     }
 
     public function generarQR(Request $request)

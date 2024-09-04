@@ -125,6 +125,9 @@ const columns = [{ data: "id" }, { data: "name" }, { data: "dni" },
     orderable: false,
 }];
 
+function ModifyCliente(): void {
+    formData.value.cliente = '';
+}   
 
 const options = {
     info: false,
@@ -152,17 +155,18 @@ function RegistrarCliente(id): void {
     selectedIdStore.setSelectedId(id);
 }
 
-// function ModifyCliente(): void {
-//     formData.value.cliente = '';
-// }
+function handleModalidadChange(newValue: string) {
+    formData.value.cuotas = '';
 
-watch(() => formData.value.modalidad, (newModalidad) => {
-    if (newModalidad) {
-        fetchCuotas(newModalidad);
+    if (newValue) {
+        fetchCuotas(newValue);
     } else {
         CuotaOptions.value = [];
     }
-});
+}
+
+watch(() => formData.value.modalidad, handleModalidadChange);
+
 </script>
 
 <template>

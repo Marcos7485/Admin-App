@@ -11,7 +11,7 @@ onMounted(() => {
 
 
 interface CuotaOption {
-    value: number | null;
+    value: number | string;
 }
 
 const CuotaOptions = ref<CuotaOption[]>([]);
@@ -31,11 +31,12 @@ const fetchCuotas = async (modalidad: string) => {
 const selectedIdStore = useSelectedIdStore()
 const selectedId = selectedIdStore.selectedId
 
+
 interface CreditoData {
     id: string | number;
     cliente: number | string;
     credito: string;
-    cuotas: string | number;
+    cuotas: string;
     modalidad: string;
     inicio: string;
     lugar_cobro: string;
@@ -106,15 +107,12 @@ watch(creditoData, (newData) => {
 }, { immediate: true });
 
 watch(() => formData.value.modalidad, (newModalidad) => {
-    formData.value.cuotas = '';
     if (newModalidad) {
         fetchCuotas(newModalidad);
     } else {
         CuotaOptions.value = [];
     }
 });
-
-
 const responseMessage = ref<string | null>(null);
 const isDisabled = ref<boolean>(false);
 
@@ -125,7 +123,8 @@ const submitForm = async () => {
     isDisabled.value = true;
 
     try {
-        const response = await axios.post('/modify/credito', formData.value);
+        console.log(formData.value);
+        const response = await axios.post('/renovar/credito', formData.value);
         responseMessage.value = response.data.message;
         RegistrarCliente(formData.value.cliente);
         emit('changeComponent', 'FicheroCliente');
@@ -137,9 +136,14 @@ const submitForm = async () => {
     }
 };
 
+function RegistrarCliente(id): void {
+    selectedIdStore.setSelectedId(id);
+}
+
+
 function cancelForm() {
     FormClear();
-    emit('changeComponent', 'Creditos');
+    emit('changeComponent', 'Renovacion');
 }
 
 function FormClear() {
@@ -153,9 +157,6 @@ function FormClear() {
         lugar_cobro: '',
         interes: '',
     };
-}
-function RegistrarCliente(id): void {
-    selectedIdStore.setSelectedId(id);
 }
 
 </script>
