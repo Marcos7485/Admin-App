@@ -18,6 +18,10 @@ import RenovarCredito from '../../components/creditos/RenovarCredito.vue';
 import FormPagos from '../../components/pagos/FormPagos.vue';
 import Pagos from '../../components/pagos/Pagos.vue';
 import EditarPago from '../../components/pagos/EditarPago.vue';
+import Resumenes from '../../components/resumenes/Resumenes.vue';
+import RecorridoHoy from '../../components/cobradores/RecorridoHoy.vue';
+import Recorridos from '../../components/cobradores/Recorridos.vue';
+import RecorridoDetails from '../../components/cobradores/RecorridoDetails.vue';
 
 const imageStore = useImageStore();
 
@@ -41,6 +45,10 @@ const components = {
     FormPagos: markRaw(FormPagos),
     Pagos: markRaw(Pagos),
     EditarPago: markRaw(EditarPago),
+    Resumenes: markRaw(Resumenes),
+    RecorridoHoy: markRaw(RecorridoHoy),
+    Recorridos: markRaw(Recorridos),
+    RecorridoDetails: markRaw(RecorridoDetails),
 };
 
 const currentComponent = ref(components.Principal);

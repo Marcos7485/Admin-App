@@ -48,6 +48,8 @@ class PagosController extends Controller
         $pago->pago_fecha = $request->fecha;
         $pago->active = 1;
         $pago->save();
+
+        $this->CreditosSrv->PagoRecorridoHoy($request->cliente, $request->valor);
         $this->CreditosSrv->ActualizarPagos();
         return response()->json(['message' => 'Pago registrado correctamente']);
     }

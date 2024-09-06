@@ -20,3 +20,13 @@ El interes por refinanciacion q lo elija en el momento.
 # Refinanciacion:
 
 Saber el funcionamiento de una refinanciacion por mora.
+
+
+
+
+
+
+
+
+
+

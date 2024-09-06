@@ -41,8 +41,12 @@ class CreditosController extends Controller
     }
 
     public function FicheroInfo($id){
+        
         $fichero = Ficheros::where('cliente', $id)->where('active', 1)->first();
-
+        if(empty($fichero)){
+            $credito = Creditos::where('id', $id)->where('active', 1)->first();
+            $fichero = Ficheros::where('cliente', $credito->cliente)->where('active', 1)->first();
+        }
         return response()->json($fichero);
     }
 

@@ -121,6 +121,7 @@ onMounted(() => {
 <template>
     <div class="content">
         <div class="box">
+            <h1>Creditos</h1><br>
             <DataTable :data="creditosData" :columns="columns" :options="options"
                 class="display table table-primary table-hover table-bordered">
                 <thead>

@@ -124,6 +124,7 @@ onMounted(() => {
 <template>
     <div class="content">
         <div class="box">
+            <h1>Clientes</h1><br>
             <DataTable :data="clientesData" :columns="columns" :options="options"
                 class="display table table-primary table-hover table-bordered">
                 <thead>

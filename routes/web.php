@@ -5,6 +5,7 @@ use App\Http\Controllers\CreditosController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PagosController;
+use App\Http\Controllers\RecorridosController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -60,5 +61,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/modify/pago', [PagosController::class, 'PagoEdit']);
 
 
+    // Recorridos:
+
+    Route::get('/recorrido/{recorrido}', [RecorridosController::class, 'RecorridoHoy']);
+    Route::get('/datos-recorridos', [RecorridosController::class, 'getDatosRecorridos']);
+    Route::get('/info/recorrido/{id}', [RecorridosController::class, 'RecorridoInfo']);
 
 });

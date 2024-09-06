@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Models\AppSetup;
+use App\Models\Clientes;
 use App\Models\Creditos;
 use App\Models\Ficheros;
 use App\Models\Pagos;
+use App\Models\Recorridos;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -115,12 +117,13 @@ class CreditosSrv
                 // Agregar la nueva fecha al array
                 $fechas[] = $fecha->format('d/m');
             }
-            
+
             return $fechas;
         }
     }
 
-    public function verificarPagos($idCredito){
+    public function verificarPagos($idCredito)
+    {
         $pagos = Pagos::where('idcredito', $idCredito)->get();
         $valor = 0;
         foreach ($pagos as $pago) {
@@ -129,34 +132,16 @@ class CreditosSrv
         return $valor;
     }
 
-    // public function ActualizarPagos(){
-    //     $pagos = Pagos::where('active', 1)->get();
-    //     $creditos = Creditos::where('active', 1)->get();
-
-    //     foreach($pagos as $pago){
-    //         foreach($creditos as $credito){
-    //             if($credito->id == $pago->idcredito){
-    //                 $valor = $credito->pagado + $pago->valor;
-    //                 $credito->pagado = $valor;
-    //                 $credito->pago_restante = ($credito->total_credito - $valor);
-    //                 $credito->save();
-
-    //                 $pago->active = 0;
-    //                 $pago->save();
-    //             }
-    //         }
-    //     }
-    // }
-
-    public function ActualizarPagos(){
+    public function ActualizarPagos()
+    {
         $pagos = Pagos::all();
         $creditos = Creditos::where('active', 1)->get();
 
-        foreach($creditos as $credito){
+        foreach ($creditos as $credito) {
             $valor = 0;
 
-            foreach($pagos as $pago){
-                if($credito->id == $pago->idcredito){
+            foreach ($pagos as $pago) {
+                if ($credito->id == $pago->idcredito) {
                     $valor += $pago->valor;
                     $credito->pagado = $valor;
                     $credito->pago_restante = ($credito->total_credito - $valor);
@@ -165,7 +150,7 @@ class CreditosSrv
                     $pago->active = 0;
                     $pago->save();
 
-                    if($credito->pago_restante <= 0){
+                    if ($credito->pago_restante <= 0) {
                         $credito->status = 'Pagado';
                         $credito->save();
                     }
@@ -174,7 +159,8 @@ class CreditosSrv
         }
     }
 
-    public function TransformIdEnName($array, $clientes){
+    public function TransformIdEnName($array, $clientes)
+    {
         $clienteMap = [];
         foreach ($clientes as $cliente) {
             $clienteMap[$cliente->id] = $cliente->name; // Ajusta 'id' y 'nombre' según las columnas de tu tabla Clientes
@@ -184,6 +170,85 @@ class CreditosSrv
         foreach ($array as $arr) {
             $arr->nombre_cliente = $clienteMap[$arr->cliente] ?? 'Cliente desconocido';
         }
+    }
+
+    public function NombreCliente($idCliente)
+    {
+        $cliente = Clientes::where('id', $idCliente)->first();
+        $nombre = $cliente->name;
+        return $nombre;
+    }
+
+
+    public function CobroAddress($idCredito)
+    {
+        $credito = Creditos::where('id', $idCredito)->first();
+        $cliente = Clientes::where('id', $credito->cliente)->first();
+
+        if ($credito->lugar_cobro == 'Domicilio') {
+            $direccion = $cliente->address;
+        } else {
+            $direccion = $cliente->comercio_address;
+        }
+
+        return $direccion;
+    }
+
+
+    public function GuardarRecorrido($data, $recorridoId, $fechaHoy)
+    {
+        if (!empty($data['ids'])) {
+            $pagos = [];
+            foreach ($data['ids'] as $elemento) {
+                array_push($pagos, 'No pago');
+            }
+
+            $verificador = Recorridos::whereDate('created_at', $fechaHoy)->where('recorrido', $recorridoId)->first();
+
+            if (empty($verificador)) {
+                $recorrido = new Recorridos();
+                $recorrido->elementos = json_encode($data['elementos']);
+                $recorrido->ids = json_encode($data['ids']);
+                $recorrido->nombres = json_encode($data['nombres']);
+                $recorrido->direcciones = json_encode($data['direcciones']);
+                $recorrido->totales_creditos = json_encode($data['totales_creditos']);
+                $recorrido->recorrido = $recorridoId;
+                $recorrido->pagos = json_encode($pagos);
+                $recorrido->save();
+            }
+        }
+    }
+
+    public function PagoRecorridoHoy($idCliente, $valor)
+    {
+        $cliente = Clientes::where('id', $idCliente)->first();
+
+        if (!$cliente) {
+            return response()->json(['error' => 'Cliente no encontrado'], 404);
+        }
+
+        $recorrido = $cliente->recorrido;
+        $hoy = Carbon::now()->format('Y-m-d');
+
+
+        $FichaRecorrido = Recorridos::where('recorrido', $recorrido)
+            ->whereDate('created_at', $hoy)
+            ->first();
+
+
+
+        $idsRecorrido = json_decode($FichaRecorrido->ids);
+        $pagos = json_decode($FichaRecorrido->pagos);
+        $indexCliente = array_search($idCliente, $idsRecorrido);
+
+        if ($indexCliente === false) {
+            return;
+        }
+        
+        $pagos[$indexCliente] = $valor;
+
+        $FichaRecorrido->pagos = json_encode($pagos);
+        $FichaRecorrido->save();
     }
 
     public function generarQR(Request $request)

@@ -175,7 +175,7 @@ const printPage = () => {
     }
 };
 
-const companyLogo = `${imageStore.imagePath}/Logo.png`;
+const companyLogo = `${imageStore.imagePath}/Principal/logomarca.png`;
 const companyName = 'Lemax Finanzas';
 const reportTitle = 'Fichero de pago';
 const currentDate = new Date().toLocaleDateString();
@@ -238,7 +238,7 @@ const currentDate = new Date().toLocaleDateString();
                                 <!-- Iterar sobre las filas dentro de cada columna -->
                                 <tr v-for="(item, rowIndex) in column" :key="rowIndex">
                                     <td>{{ Fechas[rowIndex + columnIndex * rowsPerColumn] }}</td>
-                                    <td>{{ item.cuotas_valor }}</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                             </tbody>
@@ -314,6 +314,10 @@ const currentDate = new Date().toLocaleDateString();
     height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
+}
+
+.content button {
+    font-size: 1.2rem;
 }
 
 .content {

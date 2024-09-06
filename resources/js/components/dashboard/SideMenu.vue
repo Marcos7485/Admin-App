@@ -78,8 +78,14 @@ const toggleSubMenu = (menu: string) => {
                 <button @click="toggleSubMenu('resumenes')">
                     Resumenes
                     <ul v-if="showSubMenu.resumenes" class="sub-menu" :class="{ active: showSubMenu.resumenes }">
-                        <a @click="$emit('changeComponent', 'FormCredito')"><li>Cobrador</li></a>
-                        <a @click="$emit('changeComponent', 'Creditos')"><li>Cliente</li></a>
+                        <a @click="$emit('changeComponent', 'Resumenes')"><li>Clientes</li></a>
+                    </ul>
+                </button>
+                <button @click="toggleSubMenu('cobradores')">
+                    Cobradores
+                    <ul v-if="showSubMenu.cobradores" class="sub-menu" :class="{ active: showSubMenu.cobradores }">
+                        <a @click="$emit('changeComponent', 'RecorridoHoy')"><li>Hoy</li></a>
+                        <a @click="$emit('changeComponent', 'Recorridos')"><li>Recorridos</li></a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('configuraciones')">
