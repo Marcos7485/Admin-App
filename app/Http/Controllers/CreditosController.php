@@ -113,11 +113,14 @@ class CreditosController extends Controller
 
     public function Renovar(Request $request)
     {
-        $this->CreditosSrv->Renovar($request->cliente);
+        
         $this->CreditosSrv->DesactivarFichero($request->cliente);
         $cliente = $request->cliente;
 
         $totalCredito = $this->CreditosSrv->calcularValorCredito($request->interes, $request->credito);
+
+        $dineroCancelado = $this->CreditosSrv->Renovar($request->cliente);
+        $dineroARecibir = ($request->credito - $dineroCancelado);
 
         $credito = new Creditos();
         $credito->cliente = $request->cliente;
@@ -133,6 +136,8 @@ class CreditosController extends Controller
         $credito->pagado = 0;
         $credito->inicio = $request->inicio;
         $credito->status = 'Renovado';
+        $credito->dinero_cancelado = $dineroCancelado;
+        $credito->dinero_arecibir = $dineroARecibir;
         $credito->save();
 
         $this->CreditosSrv->CrearFichero($cliente);

@@ -41,10 +41,14 @@ class CreditosSrv
     public function Renovar($idCliente)
     {
         $credito = Creditos::where('cliente', $idCliente)->where('active', 1)->first();
+        $dineroCancelado = $credito->pago_restante;
 
+        $credito->dinero_cancelado = $dineroCancelado;
         $credito->active = 0;
         $credito->status = 'Renovado';
         $credito->save();
+
+        return $dineroCancelado;
     }
 
     public function DesactivarFichero($idCliente)
@@ -59,16 +63,33 @@ class CreditosSrv
 
         $creditoActivo = Creditos::where('cliente', $idCliente)->where('active', 1)->first();
 
-        $fichero = new Ficheros();
-        $fichero->cliente = $idCliente;
-        $fichero->inicio = $creditoActivo->inicio;
-        $fichero->cuotas = $creditoActivo->cuotas;
-        $fichero->cuotas_valor = $creditoActivo->cuotas_valor;
-        $fichero->valor_otorgado = $creditoActivo->credito;
-        $fichero->valor_final = $creditoActivo->total_credito;
-        $fichero->modalidad = $creditoActivo->modalidad;
-        $fichero->lugar_cobro = $creditoActivo->lugar_cobro;
-        $fichero->save();
+        if ($creditoActivo->status == 'Renovado') {
+            $fichero = new Ficheros();
+            $fichero->cliente = $idCliente;
+            $fichero->inicio = $creditoActivo->inicio;
+            $fichero->cuotas = $creditoActivo->cuotas;
+            $fichero->cuotas_valor = $creditoActivo->cuotas_valor;
+            $fichero->valor_otorgado = $creditoActivo->credito;
+            $fichero->valor_final = $creditoActivo->total_credito;
+            $fichero->modalidad = $creditoActivo->modalidad;
+            $fichero->lugar_cobro = $creditoActivo->lugar_cobro;
+            $fichero->status = $creditoActivo->status;
+            $fichero->dinero_cancelado = $creditoActivo->dinero_cancelado;
+            $fichero->dinero_arecibir = $creditoActivo->dinero_arecibir;
+            $fichero->save();
+        } else {
+            $fichero = new Ficheros();
+            $fichero->cliente = $idCliente;
+            $fichero->inicio = $creditoActivo->inicio;
+            $fichero->cuotas = $creditoActivo->cuotas;
+            $fichero->cuotas_valor = $creditoActivo->cuotas_valor;
+            $fichero->valor_otorgado = $creditoActivo->credito;
+            $fichero->valor_final = $creditoActivo->total_credito;
+            $fichero->modalidad = $creditoActivo->modalidad;
+            $fichero->lugar_cobro = $creditoActivo->lugar_cobro;
+            $fichero->status = $creditoActivo->status;
+            $fichero->save();
+        }
     }
 
     public function DatasFichero($fechaInicial, $cantidadDias, $modalidad)
@@ -143,8 +164,12 @@ class CreditosSrv
             foreach ($pagos as $pago) {
                 if ($credito->id == $pago->idcredito) {
                     $valor += $pago->valor;
-                    $credito->pagado = $valor;
-                    $credito->pago_restante = ($credito->total_credito - $valor);
+                    $pago_restante = ($credito->total_credito - $valor);
+                    $cuotas_restantes = floor($pago_restante / $credito->cuotas_valor);
+                    
+                    $credito->cuotas_restantes = $cuotas_restantes;
+                    $credito->pagado = $valor;  
+                    $credito->pago_restante = $pago_restante;
                     $credito->save();
 
                     $pago->active = 0;
@@ -228,7 +253,7 @@ class CreditosSrv
         }
 
         $recorrido = $cliente->recorrido;
-        
+
         $fecha = Carbon::parse($fecha);
 
 

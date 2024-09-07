@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('valor_final');
             $table->string('modalidad');
             $table->string('lugar_cobro');
+            $table->string('status');
+            $table->string('dinero_cancelado');
+            $table->string('dinero_arecibir');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();

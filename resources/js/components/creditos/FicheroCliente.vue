@@ -21,6 +21,9 @@ interface FicheroItem {
     valor_final: string;
     modalidad: string;
     lugar_cobro: string;
+    dinero_cancelado: string;
+    dinero_arecibir: string;
+    status: string;
 }
 
 // Ficha
@@ -28,7 +31,6 @@ const FicheroData = ref<FicheroItem[]>([]);
 const groupedData = ref<FicheroItem[][]>([]); // Array para manejar múltiples columnas
 const Fechas = ref<string[]>([]); // Array para manejar múltiples columnas
 const rowsPerColumn = 30;
-const maxColumns = 4; // Número máximo de columnas
 const idFicha = ref(0);
 const cuotaCount = ref(0);
 const cuotaValor = ref('');
@@ -46,7 +48,10 @@ const phone = ref('');
 const comercio_tipo = ref('');
 const comercio_address = ref('');
 const comercio_localidad = ref('');
+const dinero_cancelado = ref('');
+const dinero_arecibir = ref('');
 const recorrido = ref('');
+const status = ref('');
 
 
 const fetchClientInfo = async (idCliente: string | null): Promise<void> => {
@@ -63,7 +68,7 @@ const fetchClientInfo = async (idCliente: string | null): Promise<void> => {
                 recorrido.value = clientData.recorrido;
                 comercio_address.value = clientData.comercio_address;
                 comercio_localidad.value = clientData.comercio_localidad;
-
+            
             } else {
                 console.error('Error al obtener datos del cliente:', response.status);
             }
@@ -109,6 +114,9 @@ onMounted(async () => {
                     valor_final.value = firstItem.valor_final;
                     modalidad.value = firstItem.modalidad;
                     credito_valor.value = firstItem.valor_otorgado;
+                    dinero_cancelado.value = firstItem.dinero_cancelado;
+                    dinero_arecibir.value = firstItem.dinero_arecibir;
+                    status.value = firstItem.status;
                 }
 
                 splitDataIntoColumns();
@@ -139,7 +147,10 @@ const splitDataIntoColumns = () => {
         valor_otorgado: '',
         valor_final: '',
         modalidad: '',
-        lugar_cobro: ''
+        lugar_cobro: '',
+        dinero_cancelado: '',
+        dinero_arecibir: '',
+        status: ''
     }));
 
     // Calcula el número de columnas necesarias basado en la cantidad total de elementos
@@ -212,8 +223,9 @@ const currentDate = new Date().toLocaleDateString();
                         </div>
                         <div class="info-section">
                             <p>Rubro: {{ comercio_tipo }}</p>
-                            <p>Direccion: {{ comercio_address }}</p>
-                            <p>Zona: {{ comercio_localidad }}</p>
+                            <p>Estado: {{ status }}</p>
+                            <p>Dinero Cancelado: {{ dinero_cancelado }}</p>
+                            <p>A recibir: {{ dinero_arecibir }}</p>
                         </div>
                         <div class="info-section">
                             <p>Credito: ${{ credito_valor }}</p>

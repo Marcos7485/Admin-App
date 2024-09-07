@@ -27,6 +27,8 @@ return new class extends Migration
             $table->date('inicio')->nullable();
             $table->date('finalizacion')->nullable();
             $table->string('status')->nullable();
+            $table->string('dinero_cancelado')->nullable();
+            $table->string('dinero_arecibir')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();

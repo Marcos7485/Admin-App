@@ -168,7 +168,7 @@ function FormClear() {
             <div class="form">
                 <form @submit.prevent="submitForm">
                     <div class="cliente">
-                        <h1>Editar Credito</h1>
+                        <h1>Renovar Credito</h1>
                         <hr>
                         <div class="linea1">
                             <div>
