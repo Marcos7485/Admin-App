@@ -30,7 +30,7 @@ const handleLogout = async () => {
 const admin = ref(props.user.admin == true);
 
 const showSubMenu = ref({
-  clientes: false,
+  clientes: false, prestamos: false, pagos: false, resumenes: false, recorridos: false, configuraciones: false
 });
 
 const toggleSubMenu = (menu: string) => {
@@ -81,18 +81,18 @@ const toggleSubMenu = (menu: string) => {
                         <a @click="$emit('changeComponent', 'Resumenes')"><li>Clientes</li></a>
                     </ul>
                 </button>
-                <button @click="toggleSubMenu('cobradores')">
-                    Cobradores
-                    <ul v-if="showSubMenu.cobradores" class="sub-menu" :class="{ active: showSubMenu.cobradores }">
+                <button @click="toggleSubMenu('recorridos')">
+                    Recorridos
+                    <ul v-if="showSubMenu.recorridos" class="sub-menu" :class="{ active: showSubMenu.recorridos }">
                         <a @click="$emit('changeComponent', 'RecorridoHoy')"><li>Hoy</li></a>
-                        <a @click="$emit('changeComponent', 'Recorridos')"><li>Recorridos</li></a>
+                        <a @click="$emit('changeComponent', 'Recorridos')"><li>Historico</li></a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('configuraciones')">
                     Configuraciones
                     <ul v-if="showSubMenu.configuraciones" class="sub-menu" :class="{ active: showSubMenu.configuraciones }">
                         <a @click="$emit('changeComponent', 'FormCredito')"><li>Seguridad</li></a>
-                        <a @click="$emit('changeComponent', 'Creditos')"><li>Intereses</li></a>
+                        <a @click="$emit('changeComponent', 'Creditos')"><li>App</li></a>
                     </ul>
                 </button>
             </ul>

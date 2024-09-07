@@ -219,7 +219,7 @@ class CreditosSrv
         }
     }
 
-    public function PagoRecorridoHoy($idCliente, $valor)
+    public function PagoRecorridoHoy($idCliente, $valor, $fecha)
     {
         $cliente = Clientes::where('id', $idCliente)->first();
 
@@ -228,14 +228,17 @@ class CreditosSrv
         }
 
         $recorrido = $cliente->recorrido;
-        $hoy = Carbon::now()->format('Y-m-d');
+        
+        $fecha = Carbon::parse($fecha);
 
 
         $FichaRecorrido = Recorridos::where('recorrido', $recorrido)
-            ->whereDate('created_at', $hoy)
+            ->whereDate('created_at', $fecha)
             ->first();
 
-
+        if (!$FichaRecorrido) {
+            return;
+        }
 
         $idsRecorrido = json_decode($FichaRecorrido->ids);
         $pagos = json_decode($FichaRecorrido->pagos);
@@ -244,7 +247,7 @@ class CreditosSrv
         if ($indexCliente === false) {
             return;
         }
-        
+
         $pagos[$indexCliente] = $valor;
 
         $FichaRecorrido->pagos = json_encode($pagos);

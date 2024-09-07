@@ -204,7 +204,7 @@ function RegistrarCliente(id): void {
                                     <select v-model="formData.cuotas" required>
                                         <option :value="formData.cuotas" disabled selected>{{ formData.cuotas }}
                                         </option>
-                                        <option v-for="cuota in CuotaOptions" :key="cuota.value" :value="cuota.value">{{
+                                        <option v-for="cuota in CuotaOptions" :key="cuota.value ?? 'default-key'" :value="cuota.value">{{
                                             cuota.value }}</option>
                                     </select>
                                 </p>

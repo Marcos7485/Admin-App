@@ -8,6 +8,7 @@ use App\Models\Clientes;
 use App\Models\Creditos;
 use App\Models\Pagos;
 use App\Services\CreditosSrv;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -45,11 +46,11 @@ class PagosController extends Controller
         $pago->cliente = $request->cliente;
         $pago->valor = $request->valor;
         $pago->pago_numero = $pago_numero;
-        $pago->pago_fecha = $request->fecha;
+        $pago->pago_fecha = Carbon::parse($request->pago_fecha);
         $pago->active = 1;
         $pago->save();
 
-        $this->CreditosSrv->PagoRecorridoHoy($request->cliente, $request->valor);
+        $this->CreditosSrv->PagoRecorridoHoy($request->cliente, $request->valor, $request->pago_fecha);
         $this->CreditosSrv->ActualizarPagos();
         return response()->json(['message' => 'Pago registrado correctamente']);
     }
@@ -60,9 +61,10 @@ class PagosController extends Controller
 
         $pago->cliente = $request->cliente;
         $pago->valor = $request->valor;
-        $pago->pago_fecha = $request->pago_fecha;
+        $pago->pago_fecha = Carbon::parse($request->pago_fecha);
         $pago->save();
-
+        
+        $this->CreditosSrv->PagoRecorridoHoy($request->cliente, $request->valor, $request->pago_fecha);
         $this->CreditosSrv->ActualizarPagos();
         return response()->json(['message' => 'Credito editado correctamente']);
     }

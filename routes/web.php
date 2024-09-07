@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppSetupController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\CreditosController;
 use App\Http\Controllers\DashboardController;
@@ -66,5 +67,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/recorrido/{recorrido}', [RecorridosController::class, 'RecorridoHoy']);
     Route::get('/datos-recorridos', [RecorridosController::class, 'getDatosRecorridos']);
     Route::get('/info/recorrido/{id}', [RecorridosController::class, 'RecorridoInfo']);
+
+    // App Setup:
+
+    Route::get('/setup/recorridos', [AppSetupController::class, 'Recorridos']);
+    Route::get('/setup/vendedores', [AppSetupController::class, 'Vendedores']);
+    Route::get('/setup/cobradores', [AppSetupController::class, 'Cobradores']);
 
 });

@@ -33,6 +33,18 @@ const formData = ref<FormData>({
     recorrido: '',
 });
 
+const recorridos = ref<{ id: number; name: string }[]>([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('/setup/recorridos'); // Ajusta la URL según sea necesario
+    recorridos.value = response.data;
+
+  } catch (error) {
+    console.error('Error al obtener los recorridos:', error);
+  }
+});
+
 const responseMessage = ref<string | null>(null);
 const isDisabled = ref<boolean>(false);
 
@@ -118,9 +130,9 @@ const submitForm = async () => {
                             <label for="recorrido">Recorrido</label>
                             <select v-model="formData.recorrido" required>
                                 <option value="" disabled selected>Seleccione</option>
-                                <option value="1">Recorrido 1</option>
-                                <option value="2">Recorrido 2</option>
-                                <option value="3">Recorrido 3</option>
+                                <option v-for="recorrido in recorridos" :key="recorrido.id" :value="recorrido.id">
+                                    {{ recorrido.name }}
+                                </option>
                             </select>
                         </div>
                     </div>
