@@ -95,47 +95,48 @@ class CreditosSrv
     public function DatasFichero($fechaInicial, $cantidadDias, $modalidad)
     {
         if ($modalidad == 'Diaria' || $modalidad == 'Diaria-Articulo') {
-            // 0 - domingo, 1 - lunes, etc;
             $setup = AppSetup::where('active', 1)->first();
 
+            if (!$setup) {
 
-            // se guarda en una cadena separada por comas.
-            $diasLibres = explode(',', $setup->diaslibres);
-            $diasLibres = array_map('intval', $diasLibres);  // Convertir a enteros por si acaso
+                return [];
+            }
 
 
-            // Configurar la fecha inicial
+            $diasLibres = json_decode($setup->diaslibres, true);
+
+            if (!is_array($diasLibres)) {
+
+                $diasLibres = [];
+            }
+
             $fecha = Carbon::createFromFormat('Y-m-d', $fechaInicial);
 
             $fechas = [];
+            $count = 0;
 
-            $fechas[] = $fecha->format('d/m');
-            // Generar las fechas
-            while (count($fechas) != $cantidadDias) {
-                $fecha->addDay();
-
-                // Si el día actual no está en los días libres, añadirlo al array
+            while ($count < $cantidadDias) {
                 if (!in_array($fecha->dayOfWeek, $diasLibres)) {
                     $fechas[] = $fecha->format('d/m');
+                    $count++;
                 }
+                $fecha->addDay();
             }
 
             return $fechas;
         } elseif ($modalidad == 'Semanal' || $modalidad == 'Semanal-Articulo') {
             $fecha = Carbon::createFromFormat('Y-m-d', $fechaInicial);
-            $diaSemana = $fecha->dayOfWeek; // Obtener el día de la semana de la fecha inicial (0 - domingo, 1 - lunes, etc.)
+            $diaSemana = $fecha->dayOfWeek;
 
             $fechas = [];
 
-            // Agregar la fecha inicial
             $fechas[] = $fecha->format('d/m');
 
-            // Generar las fechas para los siguientes mismos días de la semana
             for ($i = 1; $i < $cantidadDias; $i++) {
-                // Añadir 1 semana (7 días) para obtener el mismo día de la semana en la siguiente semana
+
                 $fecha->addWeek();
 
-                // Agregar la nueva fecha al array
+                // Agregar la nueva fecha al arra
                 $fechas[] = $fecha->format('d/m');
             }
 
@@ -166,9 +167,9 @@ class CreditosSrv
                     $valor += $pago->valor;
                     $pago_restante = ($credito->total_credito - $valor);
                     $cuotas_restantes = floor($pago_restante / $credito->cuotas_valor);
-                    
+
                     $credito->cuotas_restantes = $cuotas_restantes;
-                    $credito->pagado = $valor;  
+                    $credito->pagado = $valor;
                     $credito->pago_restante = $pago_restante;
                     $credito->save();
 

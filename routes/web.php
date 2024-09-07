@@ -74,4 +74,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/setup/vendedores', [AppSetupController::class, 'Vendedores']);
     Route::get('/setup/cobradores', [AppSetupController::class, 'Cobradores']);
 
+    Route::post('/setup/password', [AppSetupController::class, 'UpdatePassword']);
+    Route::post('/setup/update', [AppSetupController::class, 'UpdateConfig']);
+
 });

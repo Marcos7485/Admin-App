@@ -92,7 +92,7 @@ const toggleSubMenu = (menu: string) => {
                     Configuraciones
                     <ul v-if="showSubMenu.configuraciones" class="sub-menu" :class="{ active: showSubMenu.configuraciones }">
                         <a @click="$emit('changeComponent', 'Seguridad')"><li>Seguridad</li></a>
-                        <a @click="$emit('changeComponent', 'Creditos')"><li>App</li></a>
+                        <a @click="$emit('changeComponent', 'App')"><li>App</li></a>
                     </ul>
                 </button>
             </ul>
