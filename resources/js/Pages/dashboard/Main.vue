@@ -22,6 +22,7 @@ import Resumenes from '../../components/resumenes/Resumenes.vue';
 import RecorridoHoy from '../../components/cobradores/RecorridoHoy.vue';
 import Recorridos from '../../components/cobradores/Recorridos.vue';
 import RecorridoDetails from '../../components/cobradores/RecorridoDetails.vue';
+import Seguridad from '../../components/configuraciones/Seguridad.vue';
 
 const imageStore = useImageStore();
 
@@ -49,6 +50,7 @@ const components = {
     RecorridoHoy: markRaw(RecorridoHoy),
     Recorridos: markRaw(Recorridos),
     RecorridoDetails: markRaw(RecorridoDetails),
+    Seguridad: markRaw(Seguridad),
 };
 
 const currentComponent = ref(components.Principal);
