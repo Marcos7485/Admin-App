@@ -29,6 +29,7 @@ class ClientesController extends Controller
         $cliente->comercio_localidad = $request->comercio_localidad;
         $cliente->comercio_tipo = $request->comercio_tipo;
         $cliente->recorrido = $request->recorrido;
+        $cliente->vendedor = $request->vendedor;
         $cliente->created_by = Auth::user()->id;
         $cliente->save();
 

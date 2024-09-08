@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PagosController;
 use App\Http\Controllers\RecorridosController;
+use App\Http\Controllers\VendedorController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -32,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     // Clientes:
     Route::get('/new/cliente', [ClientesController::class, 'ClientesForm']);
     Route::post('/new/cliente', [ClientesController::class, 'NewCliente'])->name('cliente.new');
- 
+
     Route::get('/datos-clientes', [ClientesController::class, 'getDatosClientes']);
     Route::get('/info/cliente/{id}', [ClientesController::class, 'ClienteInfo']);
     Route::post('/modify/cliente', [ClientesController::class, 'ClienteEdit']);
@@ -52,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/renovar/credito', [CreditosController::class, 'Renovar']);
 
     Route::get('/info/fechasCuotas/{idCliente}', [CreditosController::class, 'fechasCuotas']);
-    
+
     // Pagos:
     Route::post('/new/pago', [PagosController::class, 'NewPago'])->name('pago.new');
     Route::get('/new/pago', [PagosController::class, 'PagoForm']);
@@ -63,18 +65,21 @@ Route::middleware(['auth'])->group(function () {
 
 
     // Recorridos:
-
     Route::get('/recorrido/{recorrido}', [RecorridosController::class, 'RecorridoHoy']);
     Route::get('/datos-recorridos', [RecorridosController::class, 'getDatosRecorridos']);
     Route::get('/info/recorrido/{id}', [RecorridosController::class, 'RecorridoInfo']);
 
-    // App Setup:
-
+    // App:
     Route::get('/setup/recorridos', [AppSetupController::class, 'Recorridos']);
     Route::get('/setup/vendedores', [AppSetupController::class, 'Vendedores']);
     Route::get('/setup/cobradores', [AppSetupController::class, 'Cobradores']);
 
-    Route::post('/setup/password', [AppSetupController::class, 'UpdatePassword']);
-    Route::post('/setup/update', [AppSetupController::class, 'UpdateConfig']);
+    Route::middleware([AdminMiddleware::class])->group(function () {
+        Route::post('/setup/password', [AppSetupController::class, 'UpdatePassword']);
+        Route::post('/setup/update', [AppSetupController::class, 'UpdateConfig']);
+    });
 
+
+    // Vendedor
+    Route::get('/vendedor/{id}', [VendedorController::class, 'getResumeVendedor']);
 });

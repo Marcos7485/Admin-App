@@ -30,11 +30,11 @@ const handleLogout = async () => {
 const admin = ref(props.user.admin == true);
 
 const showSubMenu = ref({
-  clientes: false, prestamos: false, pagos: false, resumenes: false, recorridos: false, configuraciones: false
+    clientes: false, prestamos: false, pagos: false, resumenes: false, recorridos: false, configuraciones: false
 });
 
 const toggleSubMenu = (menu: string) => {
-  showSubMenu.value[menu] = !showSubMenu.value[menu];
+    showSubMenu.value[menu] = !showSubMenu.value[menu];
 };
 
 </script>
@@ -55,53 +55,90 @@ const toggleSubMenu = (menu: string) => {
                 <button @click="toggleSubMenu('clientes')">
                     Clientes
                     <ul v-if="showSubMenu.clientes" class="sub-menu" :class="{ active: showSubMenu.clientes }">
-                        <a @click="$emit('changeComponent', 'FormCliente')"><li>Nuevo cliente</li></a>
-                        <a @click="$emit('changeComponent', 'BuscarCliente')"><li>Buscar cliente</li></a>
+                        <a @click="$emit('changeComponent', 'FormCliente')">
+                            <li>Nuevo cliente</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'BuscarCliente')">
+                            <li>Buscar cliente</li>
+                        </a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('prestamos')">
                     Creditos
                     <ul v-if="showSubMenu.prestamos" class="sub-menu" :class="{ active: showSubMenu.prestamos }">
-                        <a @click="$emit('changeComponent', 'FormCredito')"><li>Nuevo credito</li></a>
-                        <a @click="$emit('changeComponent', 'Creditos')"><li>Creditos</li></a>
-                        <a @click="$emit('changeComponent', 'Refinanciacion')"><li>Refinanciacion</li></a>
-                        <a @click="$emit('changeComponent', 'Renovacion')"><li>Renovacion</li></a>
+                        <a @click="$emit('changeComponent', 'FormCredito')">
+                            <li>Nuevo credito</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Creditos')">
+                            <li>Creditos</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Refinanciacion')">
+                            <li>Refinanciacion</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Renovacion')">
+                            <li>Renovacion</li>
+                        </a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('pagos')">
                     Pagos
                     <ul v-if="showSubMenu.pagos" class="sub-menu" :class="{ active: showSubMenu.pagos }">
-                        <a @click="$emit('changeComponent', 'FormPagos')"><li>Nuevo pago</li></a>
-                        <a @click="$emit('changeComponent', 'Pagos')"><li>Pagos</li></a>
+                        <a @click="$emit('changeComponent', 'FormPagos')">
+                            <li>Nuevo pago</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Pagos')">
+                            <li>Pagos</li>
+                        </a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('resumenes')">
                     Resumenes
                     <ul v-if="showSubMenu.resumenes" class="sub-menu" :class="{ active: showSubMenu.resumenes }">
-                        <a @click="$emit('changeComponent', 'Resumenes')"><li>Clientes</li></a>
+                        <a @click="$emit('changeComponent', 'Resumenes')">
+                            <li>Clientes</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Vendedores')">
+                            <li>Vendedores</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Resumenes')">
+                            <li>Cobradores</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Resumenes')">
+                            <li>Mensual</li>
+                        </a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('recorridos')">
                     Recorridos
                     <ul v-if="showSubMenu.recorridos" class="sub-menu" :class="{ active: showSubMenu.recorridos }">
-                        <a @click="$emit('changeComponent', 'RecorridoHoy')"><li>Hoy</li></a>
-                        <a @click="$emit('changeComponent', 'Recorridos')"><li>Historico</li></a>
+                        <a @click="$emit('changeComponent', 'RecorridoHoy')">
+                            <li>Hoy</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'Recorridos')">
+                            <li>Historico</li>
+                        </a>
                     </ul>
                 </button>
-                <button @click="toggleSubMenu('configuraciones')">
-                    Configuraciones
-                    <ul v-if="showSubMenu.configuraciones" class="sub-menu" :class="{ active: showSubMenu.configuraciones }">
-                        <a @click="$emit('changeComponent', 'Seguridad')"><li>Seguridad</li></a>
-                        <a @click="$emit('changeComponent', 'App')"><li>App</li></a>
-                    </ul>
-                </button>
+                <div v-if="admin">
+                    <button @click="toggleSubMenu('configuraciones')">
+                        Configuraciones
+                        <ul v-if="showSubMenu.configuraciones" class="sub-menu"
+                            :class="{ active: showSubMenu.configuraciones }">
+                            <a @click="$emit('changeComponent', 'Seguridad')">
+                                <li>Seguridad</li>
+                            </a>
+                            <a @click="$emit('changeComponent', 'App')">
+                                <li>App</li>
+                            </a>
+                        </ul>
+                    </button>
+                </div>  
             </ul>
         </div>
     </div>
 </template>
 
 <style scoped>
-
 .sub-menu {
     position: relative;
     text-align: center;
@@ -110,20 +147,24 @@ const toggleSubMenu = (menu: string) => {
     overflow: hidden;
 }
 
-.lista-sideMenu ul li{
-    width: 100%; /* Asegura que los elementos <li> ocupen todo el ancho del contenedor <ul> */
-    background-color: rgba(0, 0, 0, 0.5); /* Elige el color de fondo deseado */
+.lista-sideMenu ul li {
+    width: 100%;
+    /* Asegura que los elementos <li> ocupen todo el ancho del contenedor <ul> */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Elige el color de fondo deseado */
     border-radius: 4rem 1rem;
     margin-bottom: .2rem;
-    padding: .1rem; /* Añade un relleno para que el contenido no esté pegado a los bordes */
-    box-sizing: border-box; /* Asegura que el padding no altere el ancho del <li> */
+    padding: .1rem;
+    /* Añade un relleno para que el contenido no esté pegado a los bordes */
+    box-sizing: border-box;
+    /* Asegura que el padding no altere el ancho del <li> */
 }
 
-.lista-sideMenu ul li a{
+.lista-sideMenu ul li a {
     color: black;
 }
 
-.lista-sideMenu{
+.lista-sideMenu {
     position: relative;
     list-style: none;
     text-align: center;
@@ -145,12 +186,12 @@ const toggleSubMenu = (menu: string) => {
     margin-top: 1rem;
 }
 
-.user p{
+.user p {
     font-size: 1.5rem;
     color: whitesmoke;
 }
 
-.user{
+.user {
     position: relative;
     margin-top: -5rem;
     border: solid .2rem white;

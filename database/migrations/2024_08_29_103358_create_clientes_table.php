@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('comercio_localidad')->nullable();
             $table->string('comercio_tipo')->nullable();
             $table->string('recorrido')->nullable();
+            $table->string('vendedor')->nullable();
             $table->string('status')->nullable();
             $table->boolean('active')->default(true);
             $table->string('created_by')->nullable();

@@ -19,6 +19,7 @@ interface FormData {
     comercio_localidad: string;
     comercio_tipo: string;
     recorrido: string;
+    vendedor: string;
 }
 
 const formData = ref<FormData>({
@@ -31,18 +32,19 @@ const formData = ref<FormData>({
     comercio_localidad: '',
     comercio_tipo: '',
     recorrido: '',
+    vendedor: '',
 });
 
 const recorridos = ref<{ id: number; name: string }[]>([]);
 
 onMounted(async () => {
-  try {
-    const response = await axios.get('/setup/recorridos'); // Ajusta la URL según sea necesario
-    recorridos.value = response.data;
+    try {
+        const response = await axios.get('/setup/recorridos'); // Ajusta la URL según sea necesario
+        recorridos.value = response.data;
 
-  } catch (error) {
-    console.error('Error al obtener los recorridos:', error);
-  }
+    } catch (error) {
+        console.error('Error al obtener los recorridos:', error);
+    }
 });
 
 const responseMessage = ref<string | null>(null);
@@ -65,14 +67,28 @@ const submitForm = async () => {
             comercio_localidad: '',
             comercio_tipo: '',
             recorrido: '',
+            vendedor: ''
         };
     } catch (error) {
         console.error('Error enviando formulario', error);
         responseMessage.value = 'Error al guardar el cliente.';
     } finally {
-        isDisabled.value = false; 
+        isDisabled.value = false;
     }
 };
+
+
+const vendedores = ref<{ id: number; name: string }[]>([]);
+
+onMounted(async () => {
+    try {
+        const response = await axios.get('/setup/vendedores'); // Ajusta la URL según sea necesario
+        vendedores.value = response.data;
+
+    } catch (error) {
+        console.error('Error al obtener los recorridos:', error);
+    }
+});
 
 
 </script>
@@ -101,8 +117,17 @@ const submitForm = async () => {
                         </div>
                         <div class="linea2">
                             <div>
-                                <input v-model="formData.localidad" type="text" placeholder="Localidad">
+                                <input v-model="formData.localidad" type="text" placeholder="Localidad" required>
                             </div>
+                            <div>
+                                <label for="vendedor">Seleccione Vendedor</label>
+                                <select v-model="formData.vendedor" required>
+                                    <option v-for="vendedor in vendedores" :key="vendedor.id" :value="vendedor.id">
+                                        {{ vendedor.name }}
+                                    </option>
+                                </select>
+                            </div>
+
                         </div>
                     </div>
 
@@ -149,7 +174,6 @@ const submitForm = async () => {
 </template>
 
 <style scoped>
-
 .cliente {
     display: flex;
     flex-direction: column;
@@ -181,6 +205,12 @@ const submitForm = async () => {
     grid-template-columns: repeat(3, 1fr);
     padding: 1rem;
     flex: 1;
+}
+
+
+.linea2 label {
+    padding: 1rem;
+    color: black;
 }
 
 .linea2 div {

@@ -24,6 +24,7 @@ import Recorridos from '../../components/cobradores/Recorridos.vue';
 import RecorridoDetails from '../../components/cobradores/RecorridoDetails.vue';
 import Seguridad from '../../components/configuraciones/Seguridad.vue';
 import App from '../../components/configuraciones/App.vue';
+import Vendedores from '../../components/resumenes/Vendedores.vue';
 
 const imageStore = useImageStore();
 
@@ -48,6 +49,7 @@ const components = {
     Pagos: markRaw(Pagos),
     EditarPago: markRaw(EditarPago),
     Resumenes: markRaw(Resumenes),
+    Vendedores: markRaw(Vendedores),
     RecorridoHoy: markRaw(RecorridoHoy),
     Recorridos: markRaw(Recorridos),
     RecorridoDetails: markRaw(RecorridoDetails),
