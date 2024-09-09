@@ -149,15 +149,11 @@ const toggleSubMenu = (menu: string) => {
 
 .lista-sideMenu ul li {
     width: 100%;
-    /* Asegura que los elementos <li> ocupen todo el ancho del contenedor <ul> */
     background-color: rgba(0, 0, 0, 0.5);
-    /* Elige el color de fondo deseado */
     border-radius: 4rem 1rem;
     margin-bottom: .2rem;
     padding: .1rem;
-    /* Añade un relleno para que el contenido no esté pegado a los bordes */
     box-sizing: border-box;
-    /* Asegura que el padding no altere el ancho del <li> */
 }
 
 .lista-sideMenu ul li a {
@@ -173,7 +169,7 @@ const toggleSubMenu = (menu: string) => {
 .menu-content button {
     margin-top: 1rem;
     width: 100%;
-    border-radius: 4rem 1rem;
+    border-radius: 1rem 4rem;
     background-color: var(--color-first);
     border: solid 2px black;
     color: black;
