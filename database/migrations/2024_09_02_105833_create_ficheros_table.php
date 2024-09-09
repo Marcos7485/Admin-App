@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('ficheros', function (Blueprint $table) {
             $table->id();
-            $table->integer('cliente');
-            $table->date('inicio');
-            $table->string('cuotas');
-            $table->string('cuotas_valor');
-            $table->string('valor_otorgado');
-            $table->string('valor_final');
-            $table->string('modalidad');
-            $table->string('lugar_cobro');
-            $table->string('status');
-            $table->string('dinero_cancelado');
-            $table->string('dinero_arecibir');
+            $table->integer('cliente')->nullable();
+            $table->date('inicio')->nullable();
+            $table->string('cuotas')->nullable();
+            $table->string('cuotas_valor')->nullable();
+            $table->string('valor_otorgado')->nullable();
+            $table->string('valor_final')->nullable();
+            $table->string('modalidad')->nullable();
+            $table->string('lugar_cobro')->nullable();
+            $table->string('status')->nullable();
+            $table->string('dinero_cancelado')->nullable();
+            $table->string('dinero_arecibir')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();

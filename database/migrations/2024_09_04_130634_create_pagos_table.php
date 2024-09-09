@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('pagos', function (Blueprint $table) {
             $table->id();
             $table->integer('idCredito');
-            $table->integer('idCliente');
+            $table->integer('cliente');
             $table->string('valor');
             $table->string('pago_numero');
-            $table->date('pago_fecha');
+            $table->date('pago_fecha')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();

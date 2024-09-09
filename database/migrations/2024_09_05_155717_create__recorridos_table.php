@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('nombres');
             $table->string('direcciones');
             $table->string('totales_creditos');
-            $table->integer('recorrido');
+            $table->integer('recorrido')->nullable();
+            $table->integer('pagos')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();

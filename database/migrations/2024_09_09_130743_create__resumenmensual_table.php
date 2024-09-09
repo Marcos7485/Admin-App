@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appsetup', function (Blueprint $table) {
+        Schema::create('resumenmensual', function (Blueprint $table) {
             $table->id();
-            $table->string('diaslibres')->nullable();
-            $table->string('recorridos')->nullable();
-            $table->string('vendedores')->nullable();
-            $table->string('cobradores')->nullable();
+            $table->string('creditos_otorgados');
+            $table->string('creditos_renovados');
+            $table->string('creditos_refinanciados');
+            $table->string('dinero_renovaciones');
+            $table->string('pagos_totales');
+            $table->date('data');
             $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('appsetup');
+        Schema::dropIfExists('resumenmensual');
     }
 };
