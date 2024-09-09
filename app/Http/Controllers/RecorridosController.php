@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clientes;
 use App\Models\Creditos;
+use App\Models\Pagos;
 use App\Models\Recorridos;
 use App\Services\CreditosSrv;
 use Carbon\Carbon;
@@ -107,7 +108,7 @@ class RecorridosController extends Controller
     public function RecorridoInfo($id)
     {
         $recorrido = Recorridos::where('id', $id)->first();
-    
+
         $datosDecodificados = [
             'id' => $recorrido->id,
             'elementos' => json_decode($recorrido->elementos, true),
@@ -119,10 +120,36 @@ class RecorridosController extends Controller
             'created_at' => $recorrido->created_at,
             'updated_at' => $recorrido->updated_at
         ];
-    
+
         return response()->json($datosDecodificados);
     }
 
-    
-    
+    public function getResumeCobrador($idRecorrido)
+    {
+        $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
+        $endOfMonth = Carbon::now()->endOfMonth()->toDateString();
+
+        $clientes = Clientes::where('recorrido', $idRecorrido)
+            ->where('active', 1)
+            ->get();
+
+        $pagos_totales = [];
+
+        foreach ($clientes as $cliente) {
+            $pagos = Pagos::where('cliente', $cliente->id)
+                ->whereBetween('pago_fecha', [$startOfMonth, $endOfMonth])
+                ->get();
+
+            if (!$pagos->isEmpty()) {
+                foreach ($pagos as $pago) {
+                    array_push($pagos_totales, $pago);
+                }
+            }
+        }
+
+        $this->CreditosSrv->TransformIdEnName($pagos_totales, $clientes);
+
+        return response()->json($pagos_totales);
+    }
+
 }

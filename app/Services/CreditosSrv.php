@@ -8,6 +8,7 @@ use App\Models\Creditos;
 use App\Models\Ficheros;
 use App\Models\Pagos;
 use App\Models\Recorridos;
+use App\Models\ResumenMensual;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -278,6 +279,89 @@ class CreditosSrv
 
         $FichaRecorrido->pagos = json_encode($pagos);
         $FichaRecorrido->save();
+    }
+
+    public function NewResumenMensual()
+    {
+        // creditos Otorgados
+        // creditos Renovados
+        // dinero cancelado por renovaciones
+        // creditos Refinanciados
+        // pagos totales
+        // data mes correspondiente al resumen
+
+        $now = Carbon::now();
+
+        // Definir el inicio y el fin del mes actual
+        $startOfMonth = $now->copy()->startOfMonth();
+        $endOfMonth = $now->copy()->endOfMonth();
+        
+
+        // Obtener los créditos activos creados en el mes actual
+        $creditos = Creditos::where('active', 1)
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->get();
+
+
+        $pendiente = [];
+        $renovados = [];
+        $refinanciados = [];
+
+        foreach ($creditos as $credito) {
+            if ($credito->status == 'Renovado') {
+                array_push($renovados, $credito);
+            } elseif ($credito->status == 'Refinanciado') {
+                array_push($refinanciados, $credito);
+            } else {
+                array_push($pendiente, $credito);
+            }
+        }
+
+        $creditos_otorgados = 0;
+        $creditos_renovados = 0;
+        $dinero_cancelado = 0;
+        $creditos_refinanciados = 0;
+
+        foreach($pendiente as $cr){
+            $creditos_otorgados += $cr->credito;
+        }
+
+        foreach($refinanciados as $cr){
+            $creditos_refinanciados += $cr->credito;
+        }
+
+        foreach($renovados as $cr){
+            $creditos_renovados += $cr->credito;
+            $dinero_cancelado += $cr->dinero_cancelado;
+        }
+
+        $pagos_totales = Pagos::whereBetween('pago_fecha', [$startOfMonth, $endOfMonth])->sum('valor');
+
+        $verificador = ResumenMensual::whereMonth('data', $now->month)
+            ->whereYear('data', $now->year)
+            ->where('active', 1)
+            ->first();
+
+
+        if ($verificador) {
+            // Actualizar el resumen existente
+            $verificador->creditos_otorgados = $creditos_otorgados;
+            $verificador->creditos_renovados = $creditos_renovados;
+            $verificador->creditos_refinanciados = $creditos_refinanciados;
+            $verificador->dinero_renovaciones = $dinero_cancelado;
+            $verificador->pagos_totales = $pagos_totales;
+            $verificador->save();
+        } else {
+            // Crear un nuevo resumen mensual
+            $ResumenMensual = new ResumenMensual();
+            $ResumenMensual->creditos_otorgados = $creditos_otorgados;
+            $ResumenMensual->creditos_renovados = $creditos_renovados;
+            $ResumenMensual->creditos_refinanciados = $creditos_refinanciados;
+            $ResumenMensual->dinero_renovaciones = $dinero_cancelado;
+            $ResumenMensual->pagos_totales = $pagos_totales;
+            $ResumenMensual->data = $now->format('Y-m-d'); // Aquí puedes guardar la fecha actual en formato yyyy-mm-dd
+            $ResumenMensual->save();
+        }
     }
 
     public function generarQR(Request $request)

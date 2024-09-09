@@ -100,10 +100,10 @@ const toggleSubMenu = (menu: string) => {
                         <a @click="$emit('changeComponent', 'Vendedores')">
                             <li>Vendedores</li>
                         </a>
-                        <a @click="$emit('changeComponent', 'Resumenes')">
+                        <a @click="$emit('changeComponent', 'Cobradores')">
                             <li>Cobradores</li>
                         </a>
-                        <a @click="$emit('changeComponent', 'Resumenes')">
+                        <a @click="$emit('changeComponent', 'Mensual')">
                             <li>Mensual</li>
                         </a>
                     </ul>

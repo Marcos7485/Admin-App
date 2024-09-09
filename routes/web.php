@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PagosController;
 use App\Http\Controllers\RecorridosController;
+use App\Http\Controllers\ResumenMensualController;
 use App\Http\Controllers\VendedorController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -82,4 +83,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Vendedor
     Route::get('/vendedor/{id}', [VendedorController::class, 'getResumeVendedor']);
+    Route::get('/cobrador/{id}', [RecorridosController::class, 'getResumeCobrador']);
+    Route::get('/resumen/datas', [ResumenMensualController::class, 'ResumenDatas']);
+    Route::get('/mensual/{data}', [ResumenMensualController::class, 'getResumeMensual']);
 });
