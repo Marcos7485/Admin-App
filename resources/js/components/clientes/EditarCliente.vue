@@ -121,7 +121,7 @@ const submitForm = async () => {
 
 function cancelForm() {
     FormClear();
-    emit('changeComponent', 'BuscarCliente');   
+    emit('changeComponent', 'BuscarCliente');
 }
 
 function FormClear() {
@@ -178,10 +178,12 @@ function FormClear() {
                         <hr>
                         <div class="linea3">
                             <div>
-                                <input v-model="formData.comercio_address" placeholder="Domicilio de Comercio" type="text">
+                                <input v-model="formData.comercio_address" placeholder="Domicilio de Comercio"
+                                    type="text">
                             </div>
                             <div>
-                                <input v-model="formData.comercio_localidad" placeholder="Localidad de Comercio" type="text">
+                                <input v-model="formData.comercio_localidad" placeholder="Localidad de Comercio"
+                                    type="text">
                             </div>
                             <div>
                                 <input v-model="formData.comercio_tipo" placeholder="Tipo" type="text">
@@ -227,7 +229,7 @@ function FormClear() {
     margin-top: 5rem;
 }
 
-.linea5 button{
+.linea5 button {
     font-size: var(--fontsize);
 }
 
@@ -307,7 +309,6 @@ h1 {
 .box {
     border: solid .2rem grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
 }
 
@@ -320,6 +321,18 @@ h1 {
 @keyframes appear {
     100% {
         opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .form div {
+        flex-direction: column;
+        align-items: center;
     }
 }
 </style>

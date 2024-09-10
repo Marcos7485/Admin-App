@@ -168,7 +168,7 @@ function FormClear() {
             <div class="form">
                 <form @submit.prevent="submitForm">
                     <div class="cliente">
-                        <h1>Editar Credito</h1>
+                        <h1>Refinanciar Credito</h1>
                         <hr>
                         <div class="linea1">
                             <div>
@@ -178,7 +178,7 @@ function FormClear() {
                                     <input type="text" :placeholder="String(formData.cliente)" disabled>
                                 </p>
                             </div>
-                            
+
                             <div>
                                 <p>
                                     <label for="inicio">Credito</label>
@@ -222,7 +222,7 @@ function FormClear() {
                                         <option value="Comercio">Comercio</option>
                                     </select>
                                 </p>
-                            </div>  
+                            </div>
                             <div>
                                 <p class="input-chico">
                                     <label for="interes">Interes</label>
@@ -236,7 +236,7 @@ function FormClear() {
                     <div class="linea3">
                         <div>
                             <button class="btn btn-danger" @click="cancelForm">Cancelar</button>
-                            <button class="btn btn-info" type="submit" :disabled="isDisabled">Guardar</button>
+                            <button class="btn btn-warning" type="submit" :disabled="isDisabled">Refinanciar</button>
                         </div>
                     </div>
                 </form>
@@ -279,6 +279,7 @@ function FormClear() {
     font-size: var(--fontsize);
     margin-right: 1rem;
 }
+
 .input-chico input {
     width: 10rem;
 }
@@ -356,7 +357,6 @@ h1 {
 .box {
     border: solid .2rem grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
 }
 
@@ -370,5 +370,18 @@ h1 {
     100% {
         opacity: 1;
     }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .form div {
+        flex-direction: column;
+        align-items: center;
+    }
+
 }
 </style>

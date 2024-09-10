@@ -177,7 +177,7 @@ function RegistrarCliente(id): void {
                                     <input type="text" :placeholder="String(formData.cliente)" disabled>
                                 </p>
                             </div>
-                            
+
                             <div>
                                 <p>
                                     <label for="inicio">Credito</label>
@@ -190,9 +190,9 @@ function RegistrarCliente(id): void {
                                     <label for="inicio">Modalidad</label>
                                     <select v-model="formData.modalidad" required>
                                         <option value="Diaria">Diaria</option>
-                                        <option value="Diaria-Articulo">Diaria-Articulo</option> 
+                                        <option value="Diaria-Articulo">Diaria-Articulo</option>
                                         <option value="Semanal">Semanal</option>
-                                        <option value="Semanal-Articulo">Semanal-Articulo</option> 
+                                        <option value="Semanal-Articulo">Semanal-Articulo</option>
                                     </select>
                                 </p>
                             </div>
@@ -204,8 +204,9 @@ function RegistrarCliente(id): void {
                                     <select v-model="formData.cuotas" required>
                                         <option :value="formData.cuotas" disabled selected>{{ formData.cuotas }}
                                         </option>
-                                        <option v-for="cuota in CuotaOptions" :key="cuota.value ?? 'default-key'" :value="cuota.value">{{
-                                            cuota.value }}</option>
+                                        <option v-for="cuota in CuotaOptions" :key="cuota.value ?? 'default-key'"
+                                            :value="cuota.value">{{
+                                                cuota.value }}</option>
                                     </select>
                                 </p>
                             </div>
@@ -223,7 +224,7 @@ function RegistrarCliente(id): void {
                                         <option value="Comercio">Comercio</option>
                                     </select>
                                 </p>
-                            </div>  
+                            </div>
                             <div>
                                 <p class="input-chico">
                                     <label for="interes">Interes</label>
@@ -280,6 +281,7 @@ function RegistrarCliente(id): void {
     font-size: var(--fontsize);
     margin-right: 1rem;
 }
+
 .input-chico input {
     width: 10rem;
 }
@@ -357,7 +359,6 @@ h1 {
 .box {
     border: solid .2rem grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
 }
 
@@ -370,6 +371,18 @@ h1 {
 @keyframes appear {
     100% {
         opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .form div {
+        flex-direction: column;
+        align-items: center;
     }
 }
 </style>

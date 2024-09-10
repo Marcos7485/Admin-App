@@ -269,7 +269,6 @@ h1 {
 .box {
     border: solid .2rem grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
 }
 
@@ -282,6 +281,25 @@ h1 {
 @keyframes appear {
     100% {
         opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .box {
+        border: solid .2rem grey;
+        padding: 2rem;
+        margin-bottom: 1rem;
+        border-radius: 4rem;
+    }
+
+    .form div {
+        flex-direction: column;
+        align-items: center;
     }
 }
 </style>

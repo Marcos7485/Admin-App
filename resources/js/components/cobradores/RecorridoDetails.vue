@@ -40,8 +40,8 @@ const fetchRecorridoInfo = async (recorrido: string | null): Promise<void> => {
 
                 // Actualizar los datos
                 elementos.value = data.elementos;
-                createdAt.value = formatDate(data.created_at); 
-              
+                createdAt.value = formatDate(data.created_at);
+
                 // Asignación de arrays en un formato adecuado
                 RecorridoData.value = data.ids.map((id: string | number, index: number) => ({
                     id: id,
@@ -63,11 +63,11 @@ const fetchRecorridoInfo = async (recorrido: string | null): Promise<void> => {
 };
 
 function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
 }
 
 const splitDataIntoColumns = () => {
@@ -224,7 +224,6 @@ const reportTitle = 'Fichero de cobro';
     border: solid 2px grey;
     padding: 2rem;
     width: 100%;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -296,6 +295,13 @@ const reportTitle = 'Fichero de cobro';
         top: 10px;
         left: 10px;
         width: 120px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
     }
 }
 </style>

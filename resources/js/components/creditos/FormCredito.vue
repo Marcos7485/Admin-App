@@ -125,9 +125,18 @@ const columns = [{ data: "id" }, { data: "name" }, { data: "dni" },
     orderable: false,
 }];
 
+const columnsCel = [{ data: "id" }, { data: "name" }, { data: "dni" },
+{
+    data: null,
+    render: function (data, type, row) {
+        return `<button class="btn btn-info edit-btn" data-id="${row.id}">Seleccionar</button>`;
+    },
+    orderable: false,
+}];
+
 function ModifyCliente(): void {
     formData.value.cliente = '';
-}   
+}
 
 const options = {
     info: false,
@@ -193,7 +202,20 @@ watch(() => formData.value.modalidad, handleModalidadChange);
                                     <th>Comercio</th>
                                     <th>Recorrido</th>
                                     <th>Fecha de inicio</th>
-                                    <th>Editar</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </DataTable>
+                    </div>
+                    <div v-if="!formData.cliente" class="linea1-cel">
+                        <DataTable :data="clientesData" :columns="columnsCel" :options="options"
+                            class="display table table-primary table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Cliente</th>
+                                    <th>DNI</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </DataTable>
@@ -222,9 +244,9 @@ watch(() => formData.value.modalidad, handleModalidadChange);
                                 <select v-model="formData.modalidad" required>
                                     <option value="" disabled selected>Modalidad</option>
                                     <option value="Diaria">Diaria</option>
-                                    <option value="Diaria-Articulo">Diaria-Articulo</option> 
+                                    <option value="Diaria-Articulo">Diaria-Articulo</option>
                                     <option value="Semanal">Semanal</option>
-                                    <option value="Semanal-Articulo">Semanal-Articulo</option> 
+                                    <option value="Semanal-Articulo">Semanal-Articulo</option>
                                 </select>
                             </div>
                         </div>
@@ -359,6 +381,10 @@ select {
     flex: 1;
 }
 
+.linea1-cel {
+    display: none !important;
+}
+
 .form label {
     padding-inline: 1rem;
 }
@@ -391,7 +417,6 @@ h1 {
 .box {
     border: solid .2rem grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
 }
 
@@ -404,6 +429,42 @@ h1 {
 @keyframes appear {
     100% {
         opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .linea1 {
+        display: none !important;
+    }
+
+    .linea1-cel {
+        display: block !important;
+    }
+
+    .credito div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 5rem;
+        font-size: var(--fontsize);
+        font-size: 1.3rem;
+    }
+
+    .linea2 div {
+        padding: 0rem;
+    }
+
+    .linea3 div {
+        padding: 0rem;
+    }
+
+    .linea4 div {
+        padding: 1rem;
     }
 }
 </style>

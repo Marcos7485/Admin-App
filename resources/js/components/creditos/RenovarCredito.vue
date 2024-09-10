@@ -236,7 +236,7 @@ function FormClear() {
                     <div class="linea3">
                         <div>
                             <button class="btn btn-danger" @click="cancelForm">Cancelar</button>
-                            <button class="btn btn-info" type="submit" :disabled="isDisabled">Guardar</button>
+                            <button class="btn btn-success" type="submit" :disabled="isDisabled">Renovar</button>
                         </div>
                     </div>
                 </form>
@@ -356,7 +356,6 @@ h1 {
 .box {
     border: solid .2rem grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
 }
 
@@ -370,5 +369,18 @@ h1 {
     100% {
         opacity: 1;
     }
+}
+
+@media (max-width: 600px) {
+
+.content {
+    margin-top: 15rem;
+}
+
+.form div {
+    flex-direction: column;
+    align-items: center;
+}
+
 }
 </style>

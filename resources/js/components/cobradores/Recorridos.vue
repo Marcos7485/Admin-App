@@ -23,7 +23,7 @@ interface Recorrido {
     nombres: string[];
     direcciones: string[];
     totales_creditos: string[];
-    recorrido: string; 
+    recorrido: string;
     created_at: string;
     updated_at: string;
 }
@@ -31,11 +31,11 @@ interface Recorrido {
 const RecorridoData = ref<Recorrido[]>([]);
 
 function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
 }
 
 onMounted(async () => {
@@ -73,7 +73,7 @@ onMounted(() => {
 
 
 const columns = [{ data: "id" }, { data: "elementos" }, { data: "ids" }, { data: "nombres" }, { data: "direcciones" },
-{ data: "totales_creditos"}, { data: "recorrido"}, { data: "created_at"},
+{ data: "totales_creditos" }, { data: "recorrido" }, { data: "created_at" },
 {
     data: null,
     render: function (data, type, row) {
@@ -81,6 +81,16 @@ const columns = [{ data: "id" }, { data: "elementos" }, { data: "ids" }, { data:
     },
     orderable: false,
 }];
+
+const columnsCel = [{ data: "id" }, { data: "elementos" }, { data: "ids" }, { data: "recorrido" }, { data: "created_at" },
+{
+    data: null,
+    render: function (data, type, row) {
+        return `<button class="btn btn-info edit-btn" data-id="${row.id}">Ver</button>`;
+    },
+    orderable: false,
+}];
+
 
 const options = {
     info: false,
@@ -162,14 +172,33 @@ onMounted(() => {
                 </thead>
             </DataTable>
         </div>
+        <div class="box-cel">
+            <h1>Recorridos</h1><br>
+            <DataTable :data="RecorridoData" :columns="columnsCel" :options="options"
+                class="display table table-primary table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Clientes</th>
+                        <th>Ids</th>
+                        <th>Recorrido</th>
+                        <th>Fecha</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+            </DataTable>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.box-cel {
+    display: none;
+}
+
 .box {
     border: solid 2px grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -183,6 +212,25 @@ onMounted(() => {
 @keyframes appear {
     100% {
         opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .box {
+        display: none;
+    }
+
+    .box-cel {
+        display: block;
+        border: solid 2px grey;
+        padding: 2rem;
+        border-radius: 4rem;
+        font-size: 1.4rem;
     }
 }
 </style>

@@ -41,7 +41,7 @@ const fetchVendedorInfo = async (vendedor: string | null): Promise<void> => {
 
                 // Asignación de los datos obtenidos a VendedorData
                 VendedorData.value = data.map((item: any, index: number) => ({
-                    id: index+1,
+                    id: index + 1,
                     fecha: new Date(item.created_at).toLocaleDateString(),
                     idCredito: item.id,
                     cliente: item.nombre_cliente,
@@ -238,7 +238,6 @@ const currentDate = new Date().toLocaleDateString();
     border: solid 2px grey;
     padding: 2rem;
     width: 100%;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -310,6 +309,13 @@ const currentDate = new Date().toLocaleDateString();
         top: 10px;
         left: 10px;
         width: 120px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
     }
 }
 </style>

@@ -68,7 +68,7 @@ const fetchClientInfo = async (idCliente: string | null): Promise<void> => {
                 recorrido.value = clientData.recorrido;
                 comercio_address.value = clientData.comercio_address;
                 comercio_localidad.value = clientData.comercio_localidad;
-            
+
             } else {
                 console.error('Error al obtener datos del cliente:', response.status);
             }
@@ -272,7 +272,7 @@ const currentDate = new Date().toLocaleDateString();
     flex: 1;
     min-width: 0;
     max-width: 100%;
-    margin: 0 1rem;
+    margin: 0 0rem;
     /* Ajusta el margen entre columnas según sea necesario */
     box-sizing: border-box;
 }
@@ -323,7 +323,6 @@ const currentDate = new Date().toLocaleDateString();
     border: solid 2px grey;
     padding: 2rem;
     width: 100%;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -408,6 +407,17 @@ const currentDate = new Date().toLocaleDateString();
         top: 10px;
         left: 10px;
         width: 120px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .header p {
+        font-size: 1rem;
     }
 }
 </style>

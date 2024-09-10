@@ -90,13 +90,13 @@ const splitDataIntoColumns = () => {
 const recorridos = ref<{ id: number; name: string }[]>([]);
 
 onMounted(async () => {
-  try {
-    const response = await axios.get('/setup/recorridos'); // Ajusta la URL según sea necesario
-    recorridos.value = response.data;
+    try {
+        const response = await axios.get('/setup/recorridos'); // Ajusta la URL según sea necesario
+        recorridos.value = response.data;
 
-  } catch (error) {
-    console.error('Error al obtener los recorridos:', error);
-  }
+    } catch (error) {
+        console.error('Error al obtener los recorridos:', error);
+    }
 });
 
 const printPage = () => {
@@ -237,7 +237,6 @@ const currentDate = new Date().toLocaleDateString();
     border: solid 2px grey;
     padding: 2rem;
     width: 100%;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -309,6 +308,13 @@ const currentDate = new Date().toLocaleDateString();
         top: 10px;
         left: 10px;
         width: 120px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
     }
 }
 </style>

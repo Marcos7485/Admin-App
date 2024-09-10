@@ -30,7 +30,7 @@ const handleLogout = async () => {
 const admin = ref(props.user.admin == true);
 
 const showSubMenu = ref({
-    clientes: false, prestamos: false, pagos: false, resumenes: false, recorridos: false, configuraciones: false
+    clientes: false, prestamos: false, pagos: false, resumenes: false, recorridos: false, configuraciones: false, mainmenu: false
 });
 
 
@@ -38,10 +38,12 @@ const toggleSubMenu = (menu: string) => {
     // Cierra todos los submenús
     Object.keys(showSubMenu.value).forEach(key => {
         if (key !== menu) {
-            showSubMenu.value[key] = false;
+            if (key !== 'mainmenu') {
+                showSubMenu.value[key] = false;
+            }
         }
     });
-    
+
     // Alterna el submenú que se está seleccionando
     showSubMenu.value[menu] = !showSubMenu.value[menu];
 };
@@ -49,17 +51,20 @@ const toggleSubMenu = (menu: string) => {
 </script>
 
 <template>
-    <div class="side-menu-content">
+    <div class="side-menu-content" :class="{ active: showSubMenu.mainmenu }">
         <div class="icon">
             <a @click="$emit('changeComponent', 'Principal')"><img :src="`${imageStore.imagePath}/Logo.png`"></a>
         </div>
-        <div class="user">
-            <p>Usuario: {{ user.name }}</p>
-            <p v-if="admin"><i class="fa-solid fa-user-shield"></i> Administrador</p>
-            <p v-if="!admin"><i class="fa-solid fa-user-large"></i> Asistente</p>
-            <button class="btn btn-info" @click="handleLogout">Logout</button>
+        <div class="icon-cel" @click="toggleSubMenu('mainmenu')">
+            <img :src="`${imageStore.imagePath}/Logo.png`">
         </div>
-        <div class="menu-content">
+        <div class="menu-content" :class="{ active: showSubMenu.mainmenu }">
+            <div class="user">
+                <p>Usuario: {{ user.name }}</p>
+                <p v-if="admin"><i class="fa-solid fa-user-shield"></i> Administrador</p>
+                <p v-if="!admin"><i class="fa-solid fa-user-large"></i> Asistente</p>
+                <button class="btn btn-info" @click="handleLogout">Logout</button>
+            </div>
             <ul class="lista-sideMenu">
                 <button @click="toggleSubMenu('clientes')">
                     Clientes
@@ -150,7 +155,8 @@ const toggleSubMenu = (menu: string) => {
 .sub-menu.active {
     opacity: 1;
     transform: scaleY(1);
-    max-height: 500px; /* O el tamaño que necesites */
+    max-height: 500px;
+    /* O el tamaño que necesites */
 }
 
 .sub-menu {
@@ -185,7 +191,7 @@ const toggleSubMenu = (menu: string) => {
     text-align: center;
 }
 
-.menu-content button:hover{
+.menu-content button:hover {
     border: solid 2px black;
     box-shadow: -1px -1px 1px black;
 }
@@ -202,7 +208,6 @@ const toggleSubMenu = (menu: string) => {
     position: relative;
     width: 28rem;
     font-size: var(--fontsize);
-    margin-top: 1rem;
 }
 
 .user p {
@@ -214,11 +219,15 @@ const toggleSubMenu = (menu: string) => {
     position: relative;
     margin-top: -5rem;
     border: solid .2rem white;
-    border-radius: 2rem;
+    border-radius: 1rem 2rem;
     width: 20rem;
     left: 5rem;
     background-color: rgba(0, 0, 0, 0.2);
     padding: .2rem;
+}
+
+.icon-cel img {
+    display: none;
 }
 
 .icon img {
@@ -247,5 +256,52 @@ const toggleSubMenu = (menu: string) => {
     to {
         opacity: 1;
     }
+}
+
+
+@media (max-width: 600px) {
+
+    .icon-cel img {
+        display: block;
+        position: relative;
+        margin-top: -5rem;
+        margin-left: 3rem;
+        width: 25rem;
+        cursor: pointer;
+    }
+
+    .icon img {
+        display: none;
+    }
+
+    .side-menu-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 30rem;
+        height: 15rem;
+        border-radius: 1rem 4rem;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        z-index: 1000;
+        background-color: var(--color-base);
+        transition: height 1s;
+    }
+
+    .side-menu-content.active {
+        height: 75rem;
+    }
+
+    .menu-content {
+        position: relative;
+        opacity: 0;
+        transition: opacity 1s;
+    }
+
+    .menu-content.active {
+        position: relative;
+        opacity: 1;
+    }
+
 }
 </style>

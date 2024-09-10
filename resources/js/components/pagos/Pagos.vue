@@ -136,7 +136,6 @@ onMounted(() => {
 .box {
     border: solid 2px grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -151,5 +150,13 @@ onMounted(() => {
     100% {
         opacity: 1;
     }
+}
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
 }
 </style>

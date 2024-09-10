@@ -49,8 +49,25 @@ onMounted(() => {
 
 
 const columns = [{ data: "id" }, { data: "nombre_cliente" }, { data: "credito" },
-{ data: "interes" }, { data: "total_credito" }, { data: "cuotas" }, { data: "cuotas_restantes" }, { data: "cuotas_valor" } , { data: "modalidad" },
+{ data: "interes" }, { data: "total_credito" }, { data: "cuotas" }, { data: "cuotas_restantes" }, { data: "cuotas_valor" }, { data: "modalidad" },
 { data: "pagado" }, { data: "pago_restante" }, { data: "inicio" }, { data: "estado" },
+{
+    data: null,
+    render: function (data, type, row) {
+        return `<button class="btn btn-warning edit-btn" data-id="${row.id}">Refinanciar</button>`;
+    },
+    orderable: false,
+}];
+
+const columnsCel = [{ data: "id" }, { data: "nombre_cliente" }, { data: "credito" },
+{ data: "total_credito" }, { data: "estado" },
+{
+    data: null,
+    render: function (data, type, row) {
+        return `<button class="btn btn-info ver-btn" data-id="${row.id}">Ver</button>`;
+    },
+    orderable: false,
+},
 {
     data: null,
     render: function (data, type, row) {
@@ -112,6 +129,14 @@ onMounted(() => {
                 emit('changeComponent', 'RefinanciarCredito');
             }
         }
+
+        if (target.classList.contains('ver-btn')) {
+            const id = target.getAttribute('data-id');
+            if (id) {
+                selectedIdStore.setSelectedId(id);
+                emit('changeComponent', 'VerCredito');
+            }
+        }
     });
 });
 
@@ -140,7 +165,24 @@ onMounted(() => {
                         <th>Saldo Restante</th>
                         <th>Inicio</th>
                         <th>Estado</th>
-                        <th>Editar</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </DataTable>
+        </div>
+        <div class="box-cel">
+            <h1>Refinanciación</h1><br>
+            <DataTable :data="creditosData" :columns="columnsCel" :options="options"
+                class="display table table-primary table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Cliente</th>
+                        <th>Credito</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Ver</th>
+                        <th></th>
                     </tr>
                 </thead>
             </DataTable>
@@ -149,10 +191,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.box-cel{
+    display: none;
+} 
+
 .box {
     border: solid 2px grey;
     padding: 2rem;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -167,5 +212,26 @@ onMounted(() => {
     100% {
         opacity: 1;
     }
+}
+
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .box {
+        display: none;
+    }
+
+    .box-cel {
+        display: block;
+        border: solid 2px grey;
+        padding: 2rem;
+        border-radius: 4rem;
+        font-size: 1.4rem;
+    }
+
 }
 </style>

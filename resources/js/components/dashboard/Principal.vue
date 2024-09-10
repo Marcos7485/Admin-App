@@ -20,9 +20,6 @@ const background = computed(() => ({
 </template>
 
 <style scoped>
-
-
-
 .content img {
     position: absolute;
     width: 45rem;
@@ -52,6 +49,13 @@ const background = computed(() => ({
     100% {
         transform: translateX(0);
         opacity: 1;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .content img {
+        display: none;
     }
 }
 </style>

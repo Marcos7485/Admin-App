@@ -27,6 +27,8 @@ import App from '../../components/configuraciones/App.vue';
 import Vendedores from '../../components/resumenes/Vendedores.vue';
 import Cobradores from '../../components/resumenes/Cobradores.vue';
 import Mensual from '../../components/resumenes/Mensual.vue';
+import VerCliente from '../../components/clientes/VerCliente.vue';
+import VerCredito from '../../components/creditos/VerCredito.vue';
 
 const imageStore = useImageStore();
 
@@ -39,9 +41,11 @@ const components = {
     FormCliente: markRaw(FormCliente),
     BuscarCliente: markRaw(BuscarCliente),
     EditarCliente: markRaw(EditarCliente),
+    VerCliente: markRaw(VerCliente),
     FormCredito: markRaw(FormCredito),
     Creditos: markRaw(Creditos),
     EditarCredito: markRaw(EditarCredito),
+    VerCredito: markRaw(VerCredito),
     FicheroCliente: markRaw(FicheroCliente),
     Refinanciacion: markRaw(Refinanciacion),
     Renovacion: markRaw(Renovacion),
@@ -64,7 +68,7 @@ const components = {
 const currentComponent = ref(components.Principal);
 
 function changeComponent(componentName: string) {
-  currentComponent.value = components[componentName];
+    currentComponent.value = components[componentName];
 }
 
 const props = defineProps<{
@@ -81,11 +85,11 @@ const { user } = props;
 <template>
     <div class="app-layout">
         <SideMenu :user="user" @changeComponent="changeComponent" />
-        
+
         <div class="content">
-            <component :is="currentComponent" @changeComponent="changeComponent"/>
+            <component :is="currentComponent" @changeComponent="changeComponent" />
         </div>
-        <FooterComponent/>
+        <FooterComponent />
     </div>
 </template>
 
@@ -103,6 +107,24 @@ const { user } = props;
     width: 90.5%;
     height: 100vh;
     overflow-x: hidden;
-    overflow-y: hidden;
+  
+}
+
+@media (max-width: 600px) {
+    .app-layout {
+        position: relative;
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+    }
+
+
+    .content {
+        margin-left: 0rem;
+        width: 100%;
+        margin-bottom: 7rem;
+        overflow-x: hidden;
+    }
 }
 </style>

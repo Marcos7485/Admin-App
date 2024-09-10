@@ -58,6 +58,22 @@ const columns = [{ data: "id" }, { data: "name" }, { data: "dni" },
     orderable: false,
 }];
 
+const columnsCel = [{ data: "id" }, { data: "name" }, { data: "dni" },
+{
+    data: null,
+    render: function (data, type, row) {
+        return `<button class="btn btn-info ver-btn" data-id="${row.id}">Ver</button>`;
+    },
+    orderable: false,
+},
+{
+    data: null,
+    render: function (data, type, row) {
+        return `<button class="btn btn-info edit-btn" data-id="${row.id}">Editar</button>`;
+    },
+    orderable: false,
+}];
+
 
 const options = {
     info: false,
@@ -112,6 +128,15 @@ onMounted(() => {
                 emit('changeComponent', 'EditarCliente');
             }
         }
+
+        if (target.classList.contains('ver-btn')) {
+            const id = target.getAttribute('data-id');
+            if (id) {
+                selectedIdStore.setSelectedId(id);
+                emit('changeComponent', 'VerCliente');
+            }
+        }
+
     });
 });
 
@@ -126,7 +151,7 @@ onMounted(() => {
         <div class="box">
             <h1>Clientes</h1><br>
             <DataTable :data="clientesData" :columns="columns" :options="options"
-                class="display table table-primary table-hover table-bordered">
+                class="data-table display table table-primary table-hover table-bordered">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -145,14 +170,33 @@ onMounted(() => {
                 </thead>
             </DataTable>
         </div>
+
+        <div class="box-cel">
+            <h1>Clientes</h1><br>
+            <DataTable :data="clientesData" :columns="columnsCel" :options="options"
+                class="data-table display table table-primary table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Cliente</th>
+                        <th>DNI</th>
+                        <th>Detalles</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+            </DataTable>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.box-cel {
+    display: none;
+}
+
 .box {
     border: solid 2px grey;
     padding: 1rem;
-    height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
 }
@@ -166,6 +210,26 @@ onMounted(() => {
 @keyframes appear {
     100% {
         opacity: 1;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .content {
+        margin-top: 15rem;
+    }
+
+    .box {
+        display: none;
+    }
+
+    .box-cel {
+        display: block;
+        border: solid 2px grey;
+        padding: 1rem;
+        border-radius: 4rem;
+        font-size: 1.4rem;
     }
 }
 </style>
