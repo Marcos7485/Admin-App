@@ -48,6 +48,13 @@ const toggleSubMenu = (menu: string) => {
     showSubMenu.value[menu] = !showSubMenu.value[menu];
 };
 
+const saveMenu = () => {
+    // Cierra todos los submenús
+    Object.keys(showSubMenu.value).forEach(key => {
+        showSubMenu.value[key] = false;
+    });
+};
+
 </script>
 
 <template>
@@ -70,10 +77,10 @@ const toggleSubMenu = (menu: string) => {
                     Clientes
                     <ul class="sub-menu" :class="{ active: showSubMenu.clientes }">
                         <a @click="$emit('changeComponent', 'FormCliente')">
-                            <li>Nuevo cliente</li>
+                            <li @click="saveMenu()">Nuevo cliente</li>
                         </a>
                         <a @click="$emit('changeComponent', 'BuscarCliente')">
-                            <li>Buscar cliente</li>
+                            <li @click="saveMenu()">Buscar cliente</li>
                         </a>
                     </ul>
                 </button>
@@ -81,16 +88,16 @@ const toggleSubMenu = (menu: string) => {
                     Creditos
                     <ul class="sub-menu" :class="{ active: showSubMenu.prestamos }">
                         <a @click="$emit('changeComponent', 'FormCredito')">
-                            <li>Nuevo credito</li>
+                            <li @click="saveMenu()">Nuevo credito</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Creditos')">
-                            <li>Creditos</li>
+                            <li @click="saveMenu()">Creditos</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Refinanciacion')">
-                            <li>Refinanciacion</li>
+                            <li @click="saveMenu()">Refinanciacion</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Renovacion')">
-                            <li>Renovacion</li>
+                            <li @click="saveMenu()">Renovacion</li>
                         </a>
                     </ul>
                 </button>
@@ -98,10 +105,10 @@ const toggleSubMenu = (menu: string) => {
                     Pagos
                     <ul class="sub-menu" :class="{ active: showSubMenu.pagos }">
                         <a @click="$emit('changeComponent', 'FormPagos')">
-                            <li>Nuevo pago</li>
+                            <li @click="saveMenu()">Nuevo pago</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Pagos')">
-                            <li>Pagos</li>
+                            <li @click="saveMenu()">Pagos</li>
                         </a>
                     </ul>
                 </button>
@@ -109,16 +116,16 @@ const toggleSubMenu = (menu: string) => {
                     Resumenes
                     <ul class="sub-menu" :class="{ active: showSubMenu.resumenes }">
                         <a @click="$emit('changeComponent', 'Resumenes')">
-                            <li>Clientes</li>
+                            <li @click="saveMenu()">Clientes</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Vendedores')">
-                            <li>Vendedores</li>
+                            <li @click="saveMenu()">Vendedores</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Cobradores')">
-                            <li>Cobradores</li>
+                            <li @click="saveMenu()">Cobradores</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Mensual')">
-                            <li>Mensual</li>
+                            <li @click="saveMenu()">Mensual</li>
                         </a>
                     </ul>
                 </button>
@@ -126,10 +133,10 @@ const toggleSubMenu = (menu: string) => {
                     Recorridos
                     <ul class="sub-menu" :class="{ active: showSubMenu.recorridos }">
                         <a @click="$emit('changeComponent', 'RecorridoHoy')">
-                            <li>Hoy</li>
+                            <li @click="saveMenu()">Hoy</li>
                         </a>
                         <a @click="$emit('changeComponent', 'Recorridos')">
-                            <li>Historico</li>
+                            <li @click="saveMenu()">Historico</li>
                         </a>
                     </ul>
                 </button>
@@ -138,10 +145,10 @@ const toggleSubMenu = (menu: string) => {
                         Configuraciones
                         <ul class="sub-menu" :class="{ active: showSubMenu.configuraciones }">
                             <a @click="$emit('changeComponent', 'Seguridad')">
-                                <li>Seguridad</li>
+                                <li @click="saveMenu()">Seguridad</li>
                             </a>
                             <a @click="$emit('changeComponent', 'App')">
-                                <li>App</li>
+                                <li @click="saveMenu()">App</li>
                             </a>
                         </ul>
                     </button>

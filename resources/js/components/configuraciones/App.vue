@@ -57,6 +57,7 @@ const submitForm = async () => {
                     <form @submit.prevent="submitForm()">
                         <div class="linea1">
                             <div>
+                                <label for="">Dias inoperantes:</label>
                                 <label v-for="(day, index) in daysOfWeek" :key="index">
                                     <input type="checkbox" :value="index" v-model="selectedDays" />
                                     {{ day }}
