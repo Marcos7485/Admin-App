@@ -33,7 +33,16 @@ const showSubMenu = ref({
     clientes: false, prestamos: false, pagos: false, resumenes: false, recorridos: false, configuraciones: false
 });
 
+
 const toggleSubMenu = (menu: string) => {
+    // Cierra todos los submenús
+    Object.keys(showSubMenu.value).forEach(key => {
+        if (key !== menu) {
+            showSubMenu.value[key] = false;
+        }
+    });
+    
+    // Alterna el submenú que se está seleccionando
     showSubMenu.value[menu] = !showSubMenu.value[menu];
 };
 
@@ -54,7 +63,7 @@ const toggleSubMenu = (menu: string) => {
             <ul class="lista-sideMenu">
                 <button @click="toggleSubMenu('clientes')">
                     Clientes
-                    <ul v-if="showSubMenu.clientes" class="sub-menu" :class="{ active: showSubMenu.clientes }">
+                    <ul class="sub-menu" :class="{ active: showSubMenu.clientes }">
                         <a @click="$emit('changeComponent', 'FormCliente')">
                             <li>Nuevo cliente</li>
                         </a>
@@ -65,7 +74,7 @@ const toggleSubMenu = (menu: string) => {
                 </button>
                 <button @click="toggleSubMenu('prestamos')">
                     Creditos
-                    <ul v-if="showSubMenu.prestamos" class="sub-menu" :class="{ active: showSubMenu.prestamos }">
+                    <ul class="sub-menu" :class="{ active: showSubMenu.prestamos }">
                         <a @click="$emit('changeComponent', 'FormCredito')">
                             <li>Nuevo credito</li>
                         </a>
@@ -82,7 +91,7 @@ const toggleSubMenu = (menu: string) => {
                 </button>
                 <button @click="toggleSubMenu('pagos')">
                     Pagos
-                    <ul v-if="showSubMenu.pagos" class="sub-menu" :class="{ active: showSubMenu.pagos }">
+                    <ul class="sub-menu" :class="{ active: showSubMenu.pagos }">
                         <a @click="$emit('changeComponent', 'FormPagos')">
                             <li>Nuevo pago</li>
                         </a>
@@ -93,7 +102,7 @@ const toggleSubMenu = (menu: string) => {
                 </button>
                 <button @click="toggleSubMenu('resumenes')">
                     Resumenes
-                    <ul v-if="showSubMenu.resumenes" class="sub-menu" :class="{ active: showSubMenu.resumenes }">
+                    <ul class="sub-menu" :class="{ active: showSubMenu.resumenes }">
                         <a @click="$emit('changeComponent', 'Resumenes')">
                             <li>Clientes</li>
                         </a>
@@ -110,7 +119,7 @@ const toggleSubMenu = (menu: string) => {
                 </button>
                 <button @click="toggleSubMenu('recorridos')">
                     Recorridos
-                    <ul v-if="showSubMenu.recorridos" class="sub-menu" :class="{ active: showSubMenu.recorridos }">
+                    <ul class="sub-menu" :class="{ active: showSubMenu.recorridos }">
                         <a @click="$emit('changeComponent', 'RecorridoHoy')">
                             <li>Hoy</li>
                         </a>
@@ -122,8 +131,7 @@ const toggleSubMenu = (menu: string) => {
                 <div v-if="admin">
                     <button @click="toggleSubMenu('configuraciones')">
                         Configuraciones
-                        <ul v-if="showSubMenu.configuraciones" class="sub-menu"
-                            :class="{ active: showSubMenu.configuraciones }">
+                        <ul class="sub-menu" :class="{ active: showSubMenu.configuraciones }">
                             <a @click="$emit('changeComponent', 'Seguridad')">
                                 <li>Seguridad</li>
                             </a>
@@ -132,25 +140,36 @@ const toggleSubMenu = (menu: string) => {
                             </a>
                         </ul>
                     </button>
-                </div>  
+                </div>
             </ul>
         </div>
     </div>
 </template>
 
 <style scoped>
+.sub-menu.active {
+    opacity: 1;
+    transform: scaleY(1);
+    max-height: 500px; /* O el tamaño que necesites */
+}
+
 .sub-menu {
     position: relative;
     text-align: center;
     list-style: none;
-    opacity: 1;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: all 0.3s ease-in-out;
+    max-height: 0;
     overflow: hidden;
 }
 
-.lista-sideMenu ul li {
+.lista-sideMenu ul li:hover {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 4rem 1rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 1rem 4rem;
     margin-bottom: .2rem;
     padding: .1rem;
     box-sizing: border-box;
@@ -166,12 +185,16 @@ const toggleSubMenu = (menu: string) => {
     text-align: center;
 }
 
+.menu-content button:hover{
+    border: solid 2px black;
+    box-shadow: -1px -1px 1px black;
+}
+
 .menu-content button {
     margin-top: 1rem;
     width: 100%;
     border-radius: 1rem 4rem;
     background-color: var(--color-first);
-    border: solid 2px black;
     color: black;
 }
 
