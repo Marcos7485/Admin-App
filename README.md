@@ -1,32 +1,80 @@
-Renovacion: paga el antiguo o queda el nuevo.
-Mora: se le colocara interes manualmente a la refinanciacion.
+### Documentación del Proyecto: Lemax Finanzas
 
-Colocar opcion lateral "Articulo", otorgar articulo, articulos. al crear imprimir planilla de articulo.
-opcion editar.
+# Descripción del Proyecto
+- Nombre del Proyecto: Sistema de Administración de Créditos
 
-Menu cobrador -> planilla diaria imprimir por recorrido.
+- Descripción: Esta aplicación web permite la gestión completa de créditos, incluyendo clientes, vendedores de créditos, cobradores de pagos y los pagos mismos. Ofrece funcionalidades para el seguimiento de créditos, resúmenes mensuales, renovaciones y refinanciamientos. Los usuarios pueden tener roles diferentes, como administrador y asistente, con distintos niveles de acceso.
+
+# Tecnologías Usadas:
+
+Backend: Laravel (PHP).
+Frontend: Vue.js, TypeScript.
+Construcción y Gestión de Activos: Vite.
+Gestión de Estado y Enrutamiento: Inertia.
+
+Instalación
+Requisitos
+PHP: 8.2 o superior
+Composer: 2.2 o superior
+Node.js: 18.0 o superior
+NPM/Yarn: Para manejar dependencias frontend
+
+# Uso
+ - Acceso
+Administrador:
+
+Usuario: admin@lemaxfinanzas
+Contraseña: 123123123/
+Asistente:
+
+Usuario: asistente@lemaxfinanzas
+Contraseña: 123123123/
+
+Funcionalidades Principales
+
+- Administración de Créditos
+
+Crear, editar y eliminar créditos.
+Visualizar resúmenes de créditos.
+Renovaciones y Refinanciamientos.
+Gestionar créditos renovados y refinanciados.
+
+- Gestión de Clientes
+
+Agregar y editar clientes.
+Consultar información de clientes.
+
+- Manejo de Vendedores y Cobradores:
+
+Asignar clientes a vendedores.
+Monitorear y gestionar cobradores.
+
+- Pagos y Resúmenes
+
+Registrar pagos y visualizar resúmenes.
+Generar informes mensuales y por vendedor.
 
 
-# automatizar:
+- Configuración de la Aplicación (Solo para Administradores)
 
-Status de creditos.
-
-Opcion maestra para el interes por credito -> cada vez q se cree un creditorequisitar el interes en un banco de datos.
-
-El interes por refinanciacion q lo elija en el momento.
+Cambiar configuraciones globales de la aplicación.
+Cambiar contraseñas.
 
 
+# Estructura del Proyecto
+Backend
+app/Http/Controllers: Controladores para manejar la lógica de la aplicación.
+app/Models: Modelos de Eloquent para interactuar con la base de datos.
+database/migrations: Migraciones para definir la estructura de la base de datos.
+routes/web.php: Definición de rutas para la aplicación.
+Frontend
+resources/js: Código fuente de Vue.js y TypeScript.
 
-# Refinanciacion:
+components: Componentes de Vue.js.
+pages: Páginas de la aplicación gestionadas por Inertia.
+app.js: Configuración de la aplicación Vue.js e Inertia.
+vite.config.js: Configuración de Vite para el manejo de activos.
 
-Saber el funcionamiento de una refinanciacion por mora.
-
-
-
-
-
-
-
-
-
-
+# Configuración
+config: Archivos de configuración para Laravel.
+.env: Variables de entorno.
