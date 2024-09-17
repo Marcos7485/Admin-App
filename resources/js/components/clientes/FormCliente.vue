@@ -15,6 +15,7 @@ interface FormData {
     phone: string | number;
     address: string;
     localidad: string;
+    prenda: string;
     comercio_address: string;
     comercio_localidad: string;
     comercio_tipo: string;
@@ -28,6 +29,7 @@ const formData = ref<FormData>({
     phone: '',
     address: '',
     localidad: '',
+    prenda: '',
     comercio_address: '',
     comercio_localidad: '',
     comercio_tipo: '',
@@ -63,6 +65,7 @@ const submitForm = async () => {
             phone: '',
             address: '',
             localidad: '',
+            prenda: '',
             comercio_address: '',
             comercio_localidad: '',
             comercio_tipo: '',
@@ -118,6 +121,9 @@ onMounted(async () => {
                         <div class="linea2">
                             <div>
                                 <input v-model="formData.localidad" type="text" placeholder="Localidad" required>
+                            </div>
+                            <div>
+                                <input v-model="formData.prenda" type="text" placeholder="Articulo de prenda" required>
                             </div>
                             <div>
                                 <label for="vendedor">Seleccione Vendedor</label>

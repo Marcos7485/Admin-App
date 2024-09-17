@@ -25,6 +25,7 @@ class ClientesController extends Controller
         $cliente->phone = $request->phone;
         $cliente->address = $request->address;
         $cliente->localidad = $request->localidad;
+        $cliente->prenda = $request->prenda;
         $cliente->comercio_address = $request->comercio_address;
         $cliente->comercio_localidad = $request->comercio_localidad;
         $cliente->comercio_tipo = $request->comercio_tipo;
@@ -62,6 +63,7 @@ class ClientesController extends Controller
         $cliente->comercio_localidad = $request->comercio_localidad;
         $cliente->comercio_tipo = $request->comercio_tipo;
         $cliente->recorrido = $request->recorrido;
+        $cliente->prenda = $request->prenda;
     
         // Guardar los cambios
         $cliente->save();

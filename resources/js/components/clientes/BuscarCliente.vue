@@ -53,6 +53,13 @@ const columns = [{ data: "id" }, { data: "name" }, { data: "dni" },
 {
     data: null,
     render: function (data, type, row) {
+        return `<button class="btn btn-info ver-btn" data-id="${row.id}">Ver</button>`;
+    },
+    orderable: false,
+},
+{
+    data: null,
+    render: function (data, type, row) {
         return `<button class="btn btn-info edit-btn" data-id="${row.id}">Editar</button>`;
     },
     orderable: false,
@@ -165,6 +172,7 @@ onMounted(() => {
                         <th>Comercio</th>
                         <th>Recorrido</th>
                         <th>Fecha de inicio</th>
+                        <th>Detalles</th>
                         <th>Editar</th>
                     </tr>
                 </thead>

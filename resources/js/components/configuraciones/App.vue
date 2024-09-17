@@ -71,10 +71,10 @@ const submitForm = async () => {
                                 <label for="vendedores">Vendedores</label>
                                 <input type="number" v-model="vendedores" placeholder="Vendedores" required>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label for="password">Cobradores</label>
                                 <input type="number" v-model="cobradores" placeholder="Cobradores" required>
-                            </div>
+                            </div> -->
                         </div>
                         <div>
                             <button class="btn btn-info" type="submit" :disabled="isDisabled">Guardar</button>

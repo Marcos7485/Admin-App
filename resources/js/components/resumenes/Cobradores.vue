@@ -90,7 +90,7 @@ const cobradores = ref<{ id: number; name: string }[]>([]);
 
 onMounted(async () => {
     try {
-        const response = await axios.get('/setup/cobradores'); // Ajusta la URL según sea necesario
+        const response = await axios.get('/setup/recorridos'); // Ajusta la URL según sea necesario
         cobradores.value = response.data;
 
     } catch (error) {

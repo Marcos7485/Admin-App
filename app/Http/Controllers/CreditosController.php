@@ -179,6 +179,7 @@ class CreditosController extends Controller
         if ($modalidad == 'Diaria') {
             $cuotas = [
                 ['value' => 15],
+                ['value' => 20],
                 ['value' => 30],
                 ['value' => 45],
                 ['value' => 60],

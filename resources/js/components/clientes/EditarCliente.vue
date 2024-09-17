@@ -25,6 +25,7 @@ interface ClienteData {
     comercio_localidad: string;
     comercio_tipo: string;
     recorrido: string;
+    prenda: string;
 }
 
 // Tipar clienteData con la interfaz
@@ -38,7 +39,8 @@ const clienteData = ref<ClienteData>({
     comercio_address: '',
     comercio_localidad: '',
     comercio_tipo: '',
-    recorrido: ''
+    recorrido: '',
+    prenda: ''
 });
 
 const formData = ref<FormData>({
@@ -52,6 +54,7 @@ const formData = ref<FormData>({
     comercio_localidad: '',
     comercio_tipo: '',
     recorrido: '',
+    prenda: '',
 });
 
 // Función para cargar datos del cliente
@@ -81,6 +84,7 @@ watch(clienteData, (newData) => {
         comercio_localidad: newData.comercio_localidad,
         comercio_tipo: newData.comercio_tipo,
         recorrido: newData.recorrido,
+        prenda: newData.prenda,
     };
 }, { immediate: true });
 
@@ -95,6 +99,7 @@ interface FormData {
     comercio_localidad: string;
     comercio_tipo: string;
     recorrido: string;
+    prenda: string;
 }
 
 const responseMessage = ref<string | null>(null);
@@ -135,7 +140,8 @@ function FormClear() {
         comercio_address: '',
         comercio_localidad: '',
         comercio_tipo: '',
-        recorrido: ''
+        recorrido: '',
+        prenda: ''
     };
 }
 
@@ -169,6 +175,9 @@ function FormClear() {
                         <div class="linea2">
                             <div>
                                 <input v-model="formData.localidad" placeholder="Localidad" type="text">
+                            </div>
+                            <div>
+                                <input v-model="formData.prenda" placeholder="Localidad" type="text">
                             </div>
                         </div>
                     </div>

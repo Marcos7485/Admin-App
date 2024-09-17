@@ -96,8 +96,7 @@ class AppSetupController extends Controller
             'daysOfWeek' => 'required|array|min:1',        
             'daysOfWeek.*' => 'integer|between:0,6',       
             'recorridos' => 'required|integer|min:0',    
-            'vendedores' => 'required|integer|min:0',      
-            'cobradores' => 'required|integer|min:0',     
+            'vendedores' => 'required|integer|min:0',        
         ]);
 
         $setup = AppSetup::where('active', 1)->first();
@@ -106,7 +105,6 @@ class AppSetupController extends Controller
             $setup->diaslibres = json_encode($validatedData['daysOfWeek']);
             $setup->recorridos = $validatedData['recorridos'];
             $setup->vendedores = $validatedData['vendedores'];
-            $setup->cobradores = $validatedData['cobradores'];
             $setup->save();
 
 
