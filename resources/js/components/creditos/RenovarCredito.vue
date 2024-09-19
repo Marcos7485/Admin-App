@@ -9,25 +9,6 @@ onMounted(() => {
     imageStore.fetchImagePath();
 });
 
-
-interface CuotaOption {
-    value: number | string;
-}
-
-const CuotaOptions = ref<CuotaOption[]>([]);
-
-const fetchCuotas = async (modalidad: string) => {
-    try {
-        const response = await axios.get(`/cuotas/${modalidad}`);
-        CuotaOptions.value = response.data.map((cuota: any) => ({
-            value: cuota.value
-        }));
-    } catch (error) {
-        console.log('Error al obtener ciertos valores');
-    }
-};
-
-
 const selectedIdStore = useSelectedIdStore()
 const selectedId = selectedIdStore.selectedId
 
@@ -106,13 +87,6 @@ watch(creditoData, (newData) => {
     };
 }, { immediate: true });
 
-watch(() => formData.value.modalidad, (newModalidad) => {
-    if (newModalidad) {
-        fetchCuotas(newModalidad);
-    } else {
-        CuotaOptions.value = [];
-    }
-});
 const responseMessage = ref<string | null>(null);
 const isDisabled = ref<boolean>(false);
 
@@ -178,7 +152,7 @@ function FormClear() {
                                     <input type="text" :placeholder="String(formData.cliente)" disabled>
                                 </p>
                             </div>
-                            
+
                             <div>
                                 <p>
                                     <label for="inicio">Credito</label>
@@ -200,12 +174,7 @@ function FormClear() {
                             <div>
                                 <p>
                                     <label for="inicio">Cuotas</label>
-                                    <select v-model="formData.cuotas" required>
-                                        <option :value="formData.cuotas" disabled selected>{{ formData.cuotas }}
-                                        </option>
-                                        <option v-for="cuota in CuotaOptions" :key="cuota.value" :value="cuota.value">{{
-                                            cuota.value }}</option>
-                                    </select>
+                                    <input type="number" v-model="formData.cuotas" placeholder="Cuotas">
                                 </p>
                             </div>
                             <div>
@@ -222,7 +191,7 @@ function FormClear() {
                                         <option value="Comercio">Comercio</option>
                                     </select>
                                 </p>
-                            </div>  
+                            </div>
                             <div>
                                 <p class="input-chico">
                                     <label for="interes">Interes</label>
@@ -270,6 +239,11 @@ function FormClear() {
     flex: 1;
 }
 
+.linea2 input {
+    font-size: var(--fontsize);
+    width: 15rem;
+}
+
 .linea2 select {
     font-size: var(--fontsize);
     width: 15rem;
@@ -279,6 +253,7 @@ function FormClear() {
     font-size: var(--fontsize);
     margin-right: 1rem;
 }
+
 .input-chico input {
     width: 10rem;
 }
@@ -373,14 +348,14 @@ h1 {
 
 @media (max-width: 600px) {
 
-.content {
-    margin-top: 15rem;
-}
+    .content {
+        margin-top: 15rem;
+    }
 
-.form div {
-    flex-direction: column;
-    align-items: center;
-}
+    .form div {
+        flex-direction: column;
+        align-items: center;
+    }
 
 }
 </style>

@@ -172,57 +172,6 @@ class CreditosController extends Controller
         return response()->json(['message' => 'Credito creado correctamente']);
     }
 
-    public function CuotasValue($modalidad)
-    {
-        $cuotas = [];
-
-        if ($modalidad == 'Diaria') {
-            $cuotas = [
-                ['value' => 15],
-                ['value' => 20],
-                ['value' => 30],
-                ['value' => 45],
-                ['value' => 60],
-                ['value' => 75],
-                ['value' => 90],
-            ];
-        } elseif ($modalidad == 'Semanal') {
-            $cuotas = [
-                ['value' => 2],
-                ['value' => 4],
-                ['value' => 6],
-                ['value' => 8]
-            ];
-        } elseif ($modalidad == 'Diaria-Articulo') {
-            $cuotas = [
-                ['value' => 30],
-                ['value' => 60],
-                ['value' => 90],
-                ['value' => 100],
-                ['value' => 120],
-                ['value' => 140],
-                ['value' => 160],
-                ['value' => 180],
-                ['value' => 200],
-                ['value' => 220],
-                ['value' => 240]
-            ];
-        } elseif ($modalidad == 'Semanal-Articulo') {
-            $cuotas = [
-                ['value' => 4],
-                ['value' => 8],
-                ['value' => 12],
-                ['value' => 16],
-                ['value' => 20],
-                ['value' => 24],
-                ['value' => 28],
-                ['value' => 32]
-            ];
-        }
-
-        return response()->json($cuotas);
-    }
-
     public function fechasCuotas($idCliente){
         $credito = Creditos::where('cliente', $idCliente)->where('active', 1)->first();
         $fechas = $this->CreditosSrv->DatasFichero($credito->inicio, $credito->cuotas, $credito->modalidad);

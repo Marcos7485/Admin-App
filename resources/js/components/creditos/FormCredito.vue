@@ -14,24 +14,6 @@ onMounted(() => {
     imageStore.fetchImagePath();
 });
 
-interface CuotaOption {
-    value: number | string;
-}
-
-const CuotaOptions = ref<CuotaOption[]>([]);
-
-const fetchCuotas = async (modalidad: string) => {
-    try {
-        const response = await axios.get(`/cuotas/${modalidad}`);
-        CuotaOptions.value = response.data.map((cuota: any) => ({
-            value: cuota.value
-        }));
-    } catch (error) {
-        console.log('Error al obtener ciertos valores');
-    }
-};
-
-
 interface FormData {
     cliente: string | number;
     credito: string;
@@ -164,18 +146,6 @@ function RegistrarCliente(id): void {
     selectedIdStore.setSelectedId(id);
 }
 
-function handleModalidadChange(newValue: string) {
-    formData.value.cuotas = '';
-
-    if (newValue) {
-        fetchCuotas(newValue);
-    } else {
-        CuotaOptions.value = [];
-    }
-}
-
-watch(() => formData.value.modalidad, handleModalidadChange);
-
 </script>
 
 <template>
@@ -254,11 +224,7 @@ watch(() => formData.value.modalidad, handleModalidadChange);
                         <div class="linea3">
 
                             <div>
-                                <select v-model="formData.cuotas" required>
-                                    <option value="" disabled selected>Cuotas</option>
-                                    <option v-for="cuota in CuotaOptions" :key="cuota.value" :value="cuota.value">{{
-                                        cuota.value }}</option>
-                                </select>
+                                <input type="number" v-model="formData.cuotas" placeholder="Cuotas">
                             </div>
                             <div>
                                 <p>
@@ -345,6 +311,11 @@ watch(() => formData.value.modalidad, handleModalidadChange);
     grid-template-columns: repeat(3, 1fr);
     padding: 1rem;
     flex: 1;
+}
+
+.linea3 input {
+    font-size: var(--fontsize);
+    width: 15rem;
 }
 
 .linea3 select {

@@ -234,6 +234,9 @@ const currentDate = new Date().toLocaleDateString();
                             <p>Total: ${{ valor_final }}</p>
                         </div>
                     </div>
+                    <div>
+                        <b>EL COBRADOR NO TIENE HORARIO DE COBRANZA - EL ATRASO IMPLICA PAGAR EL DOBLE AL DIA SIGUIENTE, CON MÁS UN INTERÉS PUNITORIO DEL 1% DIARIO SOBRE CAPITAL ADEUDADO POR CADA DIA DE MORA.</b>
+                    </div>
                 </div>
                 <div class="data-columns">
                     <!-- Iterar sobre las columnas -->
@@ -365,7 +368,7 @@ const currentDate = new Date().toLocaleDateString();
     }
 
     .encabezado h1 {
-        font-size: 20px;
+        font-size: 16px;
     }
 
     .encabezado {

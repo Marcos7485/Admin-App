@@ -177,7 +177,7 @@ function FormClear() {
                                 <input v-model="formData.localidad" placeholder="Localidad" type="text">
                             </div>
                             <div>
-                                <input v-model="formData.prenda" placeholder="Localidad" type="text">
+                                <input v-model="formData.prenda" placeholder="Articulo de Prenda" type="text">
                             </div>
                         </div>
                     </div>
