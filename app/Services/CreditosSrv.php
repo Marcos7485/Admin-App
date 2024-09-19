@@ -163,6 +163,11 @@ class CreditosSrv
         $creditos = Creditos::where('active', 1)->get();
 
         foreach ($creditos as $credito) {
+            $credito->pagado = 0;
+            $credito->save();
+        }
+
+        foreach ($creditos as $credito) {
             $valor = 0;
 
             foreach ($pagos as $pago) {
@@ -185,6 +190,8 @@ class CreditosSrv
                     }
                 }
             }
+
+
         }
     }
 
