@@ -58,8 +58,21 @@ class PagosController extends Controller
     public function PagoEdit(EditPagoRequest $request)
     {
         $pago = Pagos::where('id', $request->id)->first();
+        $credito = Creditos::where('cliente', $request->cliente)->where('active', 1)->first();
+        $ultimoPago = Pagos::where('cliente', $request->cliente)
+        ->orderBy('id', 'desc')
+        ->first();
 
+        if (empty($ultimoPago)) {
+            $pago_numero = 1;
+        } else {
+            $pago_numero = $ultimoPago->pago_numero + 1;
+        }
+
+
+        $pago->idcredito = $credito->id;
         $pago->cliente = $request->cliente;
+        $pago->pago_numero = $pago_numero;
         $pago->valor = $request->valor;
         $pago->pago_fecha = Carbon::parse($request->pago_fecha);
         $pago->save();

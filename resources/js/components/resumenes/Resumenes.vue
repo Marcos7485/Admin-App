@@ -24,7 +24,7 @@ onMounted(async () => {
         const data = await response.json();
         // Verifica la estructura de los datos
         creditosData.value = data.map(credito => ({
-            id: credito.id,
+            id: credito.cliente,
             nombre_cliente: credito.nombre_cliente,
             credito: credito.credito,
             interes: credito.interes,
