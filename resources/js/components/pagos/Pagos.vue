@@ -24,7 +24,8 @@ onMounted(async () => {
         const data = await response.json();
         // Verifica la estructura de los datos
         pagosData.value = data.map(pago => ({
-            id: pago.cliente,
+            id: pago.id,
+            idcredito: pago.idcredito,
             nombre_cliente: pago.nombre_cliente,
             valor: pago.valor,
             pago_numero: pago.pago_numero,
@@ -40,7 +41,7 @@ onMounted(() => {
 });
 
 
-const columns = [{ data: "id" }, { data: "nombre_cliente" },
+const columns = [{ data: "id" }, { data: "idcredito" }, { data: "nombre_cliente" },
 { data: "valor" }, { data: "pago_numero" }, { data: "pago_fecha" },
 {
     data: null,
@@ -118,6 +119,7 @@ onMounted(() => {
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Credito</th>
                         <th>Cliente</th>
                         <th>Valor</th>
                         <th>Pago Numero</th>
