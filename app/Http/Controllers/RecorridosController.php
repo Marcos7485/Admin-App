@@ -126,28 +126,34 @@ class RecorridosController extends Controller
 
     public function getResumeCobrador($idRecorrido)
     {
-        $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
-        $endOfMonth = Carbon::now()->endOfMonth()->toDateString();
+        $startOfWeek = Carbon::now()->startOfWeek()->toDateString();
+        $endOfWeek = Carbon::now()->endOfWeek()->toDateString();
 
         $clientes = Clientes::where('recorrido', $idRecorrido)
             ->where('active', 1)
             ->get();
 
         $pagos_totales = [];
+        $idPagos = [];
+        $valor = 0;
 
         foreach ($clientes as $cliente) {
             $pagos = Pagos::where('cliente', $cliente->id)
-                ->whereBetween('pago_fecha', [$startOfMonth, $endOfMonth])
+                ->whereBetween('pago_fecha', [$startOfWeek, $endOfWeek])
                 ->get();
 
             if (!$pagos->isEmpty()) {
                 foreach ($pagos as $pago) {
                     array_push($pagos_totales, $pago);
+                    array_push($idPagos, $pago->id);
+                    $valor += $pago->valor;
                 }
             }
         }
 
         $this->CreditosSrv->TransformIdEnName($pagos_totales, $clientes);
+        $this->CreditosSrv->CreateResumenSemanalCobrador($idRecorrido, $idPagos, $valor);
+
 
         return response()->json($pagos_totales);
     }

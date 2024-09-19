@@ -28,6 +28,7 @@ const groupedData = ref<CobradorItem[][]>([]);
 const rowsPerColumn = 30;
 
 const cobradorid = ref<string | null>('');
+const Total = ref<number>(0);
 
 
 
@@ -40,12 +41,17 @@ const fetchCobradorInfo = async (cobrador: string | null): Promise<void> => {
 
                 // Asignación de los datos obtenidos a VendedorData
                 CobradorData.value = data.map((item: any, index: number) => ({
-                    id: index+1,
+                    id: index + 1,
                     fecha: item.pago_fecha,
                     idPago: item.id,
                     cliente: item.nombre_cliente,
                     pago: item.valor,
                 }));
+
+                Total.value = CobradorData.value.reduce(
+                    (acc, item) => acc + Number(item.pago), // Sumar los créditos
+                    0
+                );
 
                 splitDataIntoColumns();
             } else {
@@ -143,6 +149,7 @@ const currentDate = new Date().toLocaleDateString();
                         <h1>{{ companyName }}</h1>
                         <p>{{ reportTitle }}</p>
                         <p>{{ currentDate }}</p>
+                        <b>Total: {{ Total }}</b>
                     </div>
 
                 </div>
@@ -177,6 +184,10 @@ const currentDate = new Date().toLocaleDateString();
 </template>
 
 <style scoped>
+.encabezado b {
+    font-size: 25px;
+}
+
 .data-columns {
     display: flex;
     flex-wrap: wrap;
@@ -309,12 +320,16 @@ const currentDate = new Date().toLocaleDateString();
         left: 10px;
         width: 120px;
     }
+
+    .encabezado b {
+        font-size: 25px;
+    }
 }
 
 @media (max-width: 600px) {
 
-.content {
-    margin-top: 15rem;
-}
+    .content {
+        margin-top: 15rem;
+    }
 }
 </style>

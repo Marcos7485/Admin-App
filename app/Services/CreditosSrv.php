@@ -8,7 +8,9 @@ use App\Models\Creditos;
 use App\Models\Ficheros;
 use App\Models\Pagos;
 use App\Models\Recorridos;
+use App\Models\Resumecobrador;
 use App\Models\ResumenMensual;
+use App\Models\Resumevendedor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -295,7 +297,7 @@ class CreditosSrv
         // Definir el inicio y el fin del mes actual
         $startOfMonth = $now->copy()->startOfMonth();
         $endOfMonth = $now->copy()->endOfMonth();
-        
+
 
         // Obtener los créditos activos creados en el mes actual
         $creditos = Creditos::where('active', 1)
@@ -322,15 +324,15 @@ class CreditosSrv
         $dinero_cancelado = 0;
         $creditos_refinanciados = 0;
 
-        foreach($pendiente as $cr){
+        foreach ($pendiente as $cr) {
             $creditos_otorgados += $cr->credito;
         }
 
-        foreach($refinanciados as $cr){
+        foreach ($refinanciados as $cr) {
             $creditos_refinanciados += $cr->credito;
         }
 
-        foreach($renovados as $cr){
+        foreach ($renovados as $cr) {
             $creditos_renovados += $cr->credito;
             $dinero_cancelado += $cr->dinero_cancelado;
         }
@@ -361,6 +363,67 @@ class CreditosSrv
             $ResumenMensual->pagos_totales = $pagos_totales;
             $ResumenMensual->data = $now->format('Y-m-d'); // Aquí puedes guardar la fecha actual en formato yyyy-mm-dd
             $ResumenMensual->save();
+        }
+    }
+
+    public function CreateResumenSemanalVendedor($idVendedor, $idCreditos, $valor)
+    {
+        $verificador = Resumevendedor::where('vendedor', $idVendedor)->where('active', 1)->first();
+        $fecha = Carbon::now();
+
+        if (empty($verificador)) {
+            $resume = new Resumevendedor();
+            $resume->vendedor = $idVendedor;
+            $resume->creditos = json_encode($idCreditos);
+            $resume->valor = $valor;
+            $resume->data = $fecha;
+            $resume->active = 1;
+            $resume->save();
+        } else {
+            if ($fecha->isFriday()) {
+                $verificador->creditos = json_encode($idCreditos);
+                $verificador->valor = $valor;
+                $verificador->data = $fecha;
+                $verificador->active = 1;
+                $verificador->save();
+            } elseif ($fecha->isSaturday()) {
+                $verificador->creditos = json_encode($idCreditos);
+                $verificador->valor = $valor;
+                $verificador->data = $fecha;
+                $verificador->active = 0;
+                $verificador->save();
+            }
+        }
+    }
+
+    public function CreateResumenSemanalCobrador($idRecorrido, $idPagos, $valor)
+    {
+
+        $verificador = Resumecobrador::where('cobrador', $idRecorrido)->where('active', 1)->first();
+        $fecha = Carbon::now();
+
+        if (empty($verificador)) {
+            $resume = new Resumecobrador();
+            $resume->cobrador = $idRecorrido;
+            $resume->pagos = json_encode($idPagos);
+            $resume->valor = $valor;
+            $resume->data = $fecha;
+            $resume->active = 1;
+            $resume->save();
+        } else {
+            if ($fecha->isFriday()) {
+                $verificador->pagos = json_encode($idPagos);
+                $verificador->valor = $valor;
+                $verificador->data = $fecha;
+                $verificador->active = 1;
+                $verificador->save();
+            } elseif ($fecha->isSaturday()) {
+                $verificador->pagos = json_encode($idPagos);
+                $verificador->valor = $valor;
+                $verificador->data = $fecha;
+                $verificador->active = 0;
+                $verificador->save();
+            }
         }
     }
 

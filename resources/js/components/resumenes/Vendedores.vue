@@ -29,6 +29,8 @@ const groupedData = ref<VendedorItem[][]>([]);
 const rowsPerColumn = 30;
 
 const vendedorid = ref<string | null>('');
+const Total = ref<number>(0);
+
 
 
 
@@ -48,6 +50,12 @@ const fetchVendedorInfo = async (vendedor: string | null): Promise<void> => {
                     credito: item.credito,
                 }));
 
+                // Calcular la suma de todos los créditos
+                Total.value = VendedorData.value.reduce(
+                    (acc, item) => acc + Number(item.credito), // Sumar los créditos
+                    0
+                );
+
                 splitDataIntoColumns();
             } else {
                 console.error('Error al obtener datos del vendedor.', response.status);
@@ -57,6 +65,7 @@ const fetchVendedorInfo = async (vendedor: string | null): Promise<void> => {
         }
     }
 };
+
 watch(selectedVendedor, (newVal) => {
     if (newVal !== null) {
         vendedorid.value = newVal;
@@ -144,6 +153,7 @@ const currentDate = new Date().toLocaleDateString();
                         <h1>{{ companyName }}</h1>
                         <p>{{ reportTitle }}</p>
                         <p>{{ currentDate }}</p>
+                        <b>Total: {{ Total }}</b>
                     </div>
 
                 </div>
@@ -178,6 +188,10 @@ const currentDate = new Date().toLocaleDateString();
 </template>
 
 <style scoped>
+.encabezado b {
+    font-size: 25px;
+}
+
 .data-columns {
     display: flex;
     flex-wrap: wrap;
@@ -309,6 +323,10 @@ const currentDate = new Date().toLocaleDateString();
         top: 10px;
         left: 10px;
         width: 120px;
+    }
+
+    .encabezado b {
+        font-size: 25px;
     }
 }
 
