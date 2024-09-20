@@ -21,13 +21,19 @@ class RecorridosController extends Controller
 
     public function RecorridoHoy($recorrido)
     {
-
         $clientes = Clientes::where('recorrido', $recorrido)->where('active', 1)->orderBy('id', 'asc')->get();
+
         $creditos = [];
         $ids = [];
         $direcciones = [];
         $totales = [];
         $nombres = [];
+        $cuotas_restantes = [];
+        $cuotas_totales = [];
+
+        // Cuotas pagadas
+        // Cuotas totales
+
 
         foreach ($clientes as $cliente) {
             $credito = Creditos::where('cliente', $cliente->id)->where('active', 1)->first();
@@ -51,18 +57,18 @@ class RecorridosController extends Controller
                         array_push($ids, $credito->cliente);
                         array_push($totales, $credito->pago_restante);
                     }
+                    
                 }
             }
         }
 
-
-
         foreach ($creditos as $credito) {
-
             $nombre = $this->CreditosSrv->NombreCliente($credito->cliente);
             $lugar_cobro = $this->CreditosSrv->CobroAddress($credito->id);
             array_push($direcciones, $lugar_cobro);
             array_push($nombres, $nombre);
+            array_push($cuotas_restantes, $credito->cuotas_restantes);
+            array_push($cuotas_totales, $credito->cuotas);
         }
 
         $elementos = count($ids);
@@ -71,6 +77,8 @@ class RecorridosController extends Controller
             'elementos' => $elementos,
             'ids' => $ids,
             'nombres' => $nombres,
+            'cuotas_restantes' => $cuotas_restantes,
+            'cuotas_totales' => $cuotas_totales,
             'direcciones' => $direcciones,
             'totales_creditos' => $totales,
         ];

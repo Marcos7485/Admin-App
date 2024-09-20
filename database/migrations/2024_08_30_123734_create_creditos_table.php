@@ -19,11 +19,13 @@ return new class extends Migration
             $table->string('total_credito')->nullable();
             $table->string('cuotas')->nullable();
             $table->string('cuotas_restantes')->nullable();
+            $table->string('cuota_real')->nullable();
             $table->string('modalidad')->nullable();
             $table->string('cuotas_valor')->nullable();
             $table->string('lugar_cobro')->nullable();
             $table->string('pagado')->nullable();
             $table->string('pago_restante')->nullable();
+            $table->string('saldo_real')->nullable();
             $table->date('inicio')->nullable();
             $table->date('finalizacion')->nullable();
             $table->string('status')->nullable();

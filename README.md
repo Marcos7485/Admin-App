@@ -78,3 +78,19 @@ vite.config.js: Configuración de Vite para el manejo de activos.
 # Configuración
 config: Archivos de configuración para Laravel.
 .env: Variables de entorno.
+
+
+
+# anotaciones:
+
+- Nombre
+- cuotas q quedan 6/20
+
+
+- "A", "P", articulo, prestamo.
+- Monto de la cuota
+- Zelda para completar
+
+- Direccion - Localidad
+- Telefono
+- Tipo de comercio

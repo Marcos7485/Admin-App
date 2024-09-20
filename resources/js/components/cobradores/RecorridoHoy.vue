@@ -15,6 +15,8 @@ const selectedId = selectedIdStore.selectedId
 interface RecorridoItem {
     id: string | number;
     nombre: string;
+    cuotas_restantes: string;
+    cuotas_totales: string;
     direccion: string;
     total_creditos: string | number;
 }
@@ -43,6 +45,8 @@ const fetchRecorridoInfo = async (recorrido: string | null): Promise<void> => {
                 RecorridoData.value = data.ids.map((id: string | number, index: number) => ({
                     id: id,
                     nombre: data.nombres[index],
+                    cuotas_restantes: (data.cuotas_totales[index] - data.cuotas_restantes[index]) + 1,
+                    cuotas_totales: data.cuotas_totales[index],
                     direccion: data.direcciones[index],
                     total_creditos: data.totales_creditos[index],
                 }));
@@ -135,15 +139,8 @@ const currentDate = new Date().toLocaleDateString();
         <div id="print-section">
             <div class="box">
                 <div class="header">
-
-                    <div class="imagen">
-                        <img :src="companyLogo" alt="Company Logo" class="logo">
-                    </div>
-
                     <div class="encabezado">
-                        <h1>{{ companyName }}</h1>
-                        <p>{{ reportTitle }}</p>
-                        <p>{{ currentDate }}</p>
+                        <p>{{ currentDate }} - {{ companyName }} - {{ reportTitle }}</p>
                     </div>
 
                 </div>
@@ -154,18 +151,28 @@ const currentDate = new Date().toLocaleDateString();
                                 <tr>
                                     <th>id</th>
                                     <th>Cliente</th>
+                                    <th>Cuota</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
                                     <th>Direccion</th>
+                                    <th>Telefono</th>
+                                    <th>Comercio</th>
                                     <th>Pago</th>
-                                    <th>Total</th>
+                                    <th>Saldo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in column" :key="index">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.nombre }}</td>
+                                    <td>{{ item.cuotas_restantes }}/{{ item.cuotas_totales }}</td>
+                                    <td>{{ item.tipo }}</td>
+                                    <td>{{ item.valor }}</td>
                                     <td>{{ item.direccion }}</td>
+                                    <td>{{ item.telefono }}</td>
+                                    <td>{{ item.comercio }}</td>
                                     <td></td>
-                                    <td>{{ item.total_creditos }}</td>
+                                    <td>{{ item.saldo }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -223,14 +230,6 @@ const currentDate = new Date().toLocaleDateString();
     width: 10rem;
     background-color: var(--color-base);
     border-radius: 10%;
-}
-
-.header {
-    border: solid 2px grey;
-    padding: 2rem;
-    height: 100%;
-    border-radius: 4rem;
-    font-size: 1.4rem;
 }
 
 .box {

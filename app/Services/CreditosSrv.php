@@ -164,6 +164,7 @@ class CreditosSrv
 
         foreach ($creditos as $credito) {
             $credito->pagado = 0;
+            $credito->cuotas_restantes = 0;
             $credito->save();
         }
 
@@ -174,7 +175,7 @@ class CreditosSrv
                 if ($credito->id == $pago->idcredito) {
                     $valor += $pago->valor;
                     $pago_restante = ($credito->total_credito - $valor);
-                    $cuotas_restantes = floor($pago_restante / $credito->cuotas_valor);
+                    $cuotas_restantes = round($pago_restante / $credito->cuotas_valor);
 
                     $credito->cuotas_restantes = $cuotas_restantes;
                     $credito->pagado = $valor;
@@ -191,7 +192,10 @@ class CreditosSrv
                 }
             }
 
-
+            if($credito->pagado == 0){
+                $credito->cuotas_restantes = $credito->cuotas;
+                $credito->save();
+            }
         }
     }
 
@@ -253,6 +257,16 @@ class CreditosSrv
                 $recorrido->save();
             }
         }
+    }
+
+    public function CalcCuotaReal($idCredito){
+        $credito = Creditos::where('id', $idCredito)->first();
+
+        $cuotas = $credito->cuotas;
+        $inicio = $credito->inicio;
+        $hoy = Carbon::now();
+
+        
     }
 
     public function PagoRecorridoHoy($idCliente, $valor, $fecha)

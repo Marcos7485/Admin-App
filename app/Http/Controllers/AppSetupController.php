@@ -16,6 +16,7 @@ class AppSetupController extends Controller
         if (!$setup) {
             return response()->json(['error' => 'No se encontró configuración activa'], 404);
         }
+        
         $recorridos = [];
 
         for ($i = 0; $i < $setup->recorridos; $i++) {

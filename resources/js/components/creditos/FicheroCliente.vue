@@ -30,7 +30,7 @@ interface FicheroItem {
 const FicheroData = ref<FicheroItem[]>([]);
 const groupedData = ref<FicheroItem[][]>([]); // Array para manejar múltiples columnas
 const Fechas = ref<string[]>([]); // Array para manejar múltiples columnas
-const rowsPerColumn = 30;
+const rowsPerColumn = 24;
 const idFicha = ref(0);
 const cuotaCount = ref(0);
 const cuotaValor = ref('');
@@ -197,45 +197,29 @@ const currentDate = new Date().toLocaleDateString();
     <div class="content">
         <button @click="printPage">Imprimir</button>
         <div id="print-section">
-
             <div class="box">
                 <div class="header">
-                    <div class="imagen">
-                        <img :src="companyLogo" alt="Company Logo" class="logo">
-                    </div>
-
-                    <div class="encabezado">
-                        <h1>{{ companyName }}</h1>
-                        <p>{{ reportTitle }}</p>
+                    <div class="hd">
+                        <b>LEMAX FINANZAS - Fichero de cobro</b>
                     </div>
                     <div class="info-fichero">
                         <div class="info-section">
-                            <p>{{ currentDate }}</p>
-                            <p>Nº Ficha: {{ idFicha }}</p>
-                            <p>Recorrido: {{ recorrido }}</p>
-                            <p>Modalidad: {{ modalidad }}</p>
-                        </div>
-                        <div class="info-section">
-                            <p>Cliente: {{ nombreCliente }}</p>
-                            <p>Domicilio: {{ domicilioCliente }}</p>
-                            <p>Zona: {{ localidadDomicilio }}</p>
-                            <p>Telefono: {{ phone }}</p>
-                        </div>
-                        <div class="info-section">
-                            <p>Rubro: {{ comercio_tipo }}</p>
-                            <p>Estado: {{ status }}</p>
-                            <p>Dinero Cancelado: {{ dinero_cancelado }}</p>
-                            <p>A recibir: {{ dinero_arecibir }}</p>
-                        </div>
-                        <div class="info-section">
-                            <p>Credito: ${{ credito_valor }}</p>
-                            <p>Cuotas: {{ cuotaCount }}</p>
-                            <p>Valor: ${{ cuotaValor }}</p>
-                            <p>Total: ${{ valor_final }}</p>
+                            <p> <b>{{ currentDate }}</b>&nbsp;<b>Nº Ficha: {{ idFicha }}</b><b> Recorrido: {{ recorrido }}
+                                </b><b> Modalidad: {{ modalidad }}</b>
+                                <b>Cliente: {{ nombreCliente }}</b><b>Domicilio: {{ domicilioCliente }}</b><b> Zona: {{
+                                localidadDomicilio }}</b><b>Telefono: {{ phone }}</b>
+                            </p>
+                            <p>
+                                <b>Rubro: {{ comercio_tipo }}</b><b>Estado: {{ status }}</b><b>Dinero Cancelado: {{
+                                dinero_cancelado }}</b><b>A recibir: {{ dinero_arecibir }}</b>
+                                <b>Credito: ${{ credito_valor }}</b><b>Cuotas: {{ cuotaCount }}</b><b>Valor: ${{ cuotaValor }}</b><b>
+                                Valor: ${{ cuotaValor }}</b>
+                            </p>
                         </div>
                     </div>
                     <div>
-                        <b>EL COBRADOR NO TIENE HORARIO DE COBRANZA - EL ATRASO IMPLICA PAGAR EL DOBLE AL DIA SIGUIENTE, CON MÁS UN INTERÉS PUNITORIO DEL 1% DIARIO SOBRE CAPITAL ADEUDADO POR CADA DIA DE MORA.</b>
+                        <b>EL COBRADOR NO TIENE HORARIO DE COBRANZA - EL ATRASO IMPLICA PAGAR EL DOBLE AL DIA SIGUIENTE,
+                            CON MÁS UN INTERÉS PUNITORIO DEL 1% DIARIO SOBRE CAPITAL ADEUDADO POR CADA DIA DE MORA.</b>
                     </div>
                 </div>
                 <div class="data-columns">
@@ -266,6 +250,10 @@ const currentDate = new Date().toLocaleDateString();
 </template>
 
 <style scoped>
+.hd {
+    display: flex;
+}
+
 .data-columns {
     display: flex;
     flex-wrap: wrap;
@@ -283,12 +271,19 @@ const currentDate = new Date().toLocaleDateString();
 .table {
     width: 100%;
     border-collapse: collapse;
+
 }
 
 .table th,
 .table td {
     border: 1px solid #ddd;
     padding: .8rem;
+}
+
+.info-section b {
+    border: solid .5px grey;
+    padding: .1rem;
+    margin-right: 1rem;
 }
 
 .info-section {
@@ -308,26 +303,25 @@ const currentDate = new Date().toLocaleDateString();
     font-size: var(--fontsize);
 }
 
-.logo {
-    width: 10rem;
-    background-color: var(--color-base);
-    border-radius: 10%;
-}
-
 .header {
     border: solid 2px grey;
     padding: 2rem;
     height: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
+    background-image: url('/public/images/Fichero/logomarca.png');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .box {
-    border: solid 2px grey;
+    border: solid .2rem grey;
     padding: 2rem;
     width: 100%;
     border-radius: 4rem;
     font-size: 1.4rem;
+
 }
 
 .content button {
@@ -356,28 +350,11 @@ const currentDate = new Date().toLocaleDateString();
 
     .table th,
     .table td {
-        font-size: 9px;
+        font-size: 1vh;
     }
 
     .info-fichero p {
-        font-size: 16px;
-    }
-
-    .encabezado p {
-        font-size: 16px;
-    }
-
-    .encabezado h1 {
-        font-size: 16px;
-    }
-
-    .encabezado {
-        position: absolute;
-        left: 30%;
-        top: 5%;
-        text-align: left;
-        background-color: var(--color-base);
-        border-radius: 50%;
+        font-size: 1.4vh;
     }
 
     .header,
@@ -405,12 +382,6 @@ const currentDate = new Date().toLocaleDateString();
         padding: 0;
     }
 
-    .logo {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        width: 120px;
-    }
 }
 
 @media (max-width: 600px) {
