@@ -72,8 +72,7 @@ onMounted(() => {
 });
 
 
-const columns = [{ data: "id" }, { data: "elementos" }, { data: "ids" }, { data: "nombres" }, { data: "direcciones" },
-{ data: "totales_creditos" }, { data: "recorrido" }, { data: "created_at" },
+const columns = [{ data: "id" }, { data: "elementos" }, { data: "ids" }, { data: "recorrido" }, { data: "created_at" },
 {
     data: null,
     render: function (data, type, row) {
@@ -162,9 +161,6 @@ onMounted(() => {
                         <th>id</th>
                         <th>Clientes</th>
                         <th>Ids</th>
-                        <th>Nombres</th>
-                        <th>Direcciones</th>
-                        <th>Totales_creditos</th>
                         <th>Recorrido</th>
                         <th>Fecha</th>
                         <th>Detalles</th>

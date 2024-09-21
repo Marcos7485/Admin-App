@@ -21,7 +21,7 @@ class VendedorController extends Controller
     {
 
         $startOfWeek = Carbon::now()->startOfWeek()->toDateString();
-        $endOfWeek= Carbon::now()->endOfWeek()->toDateString();
+        $endOfWeek = Carbon::now()->endOfWeek()->toDateString();
 
 
         $clientes = Clientes::where('vendedor', $idVendedor)->where('active', 1)->get();
@@ -34,7 +34,7 @@ class VendedorController extends Controller
                 ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
                 ->where('active', 1)
                 ->first();
-                
+
             if (!empty($credito)) {
                 array_push($creditos, $credito);
                 array_push($idCreditos, $credito->id);

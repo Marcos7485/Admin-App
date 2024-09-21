@@ -243,6 +243,13 @@ class CreditosSrv
                 array_push($pagos, 'No pago');
             }
 
+            $cuotas_reales = [];
+
+            for($i=0; $i<count($data['cuotas_reales']); $i++){
+                $cuota = $data['cuotas_reales'][$i] . '/' . $data['cuotas_totales'][$i];
+                array_push($cuotas_reales, $cuota);
+            }
+
             $verificador = Recorridos::whereDate('created_at', $fechaHoy)->where('recorrido', $recorridoId)->first();
 
             if (empty($verificador)) {
@@ -250,8 +257,14 @@ class CreditosSrv
                 $recorrido->elementos = json_encode($data['elementos']);
                 $recorrido->ids = json_encode($data['ids']);
                 $recorrido->nombres = json_encode($data['nombres']);
+                $recorrido->cuota = json_encode($cuotas_reales);
+                $recorrido->tipo = json_encode($data['tipo_credito']);
                 $recorrido->direcciones = json_encode($data['direcciones']);
+                $recorrido->telefonos = json_encode($data['telefonos']);
+                $recorrido->comercio = json_encode($data['tiposdecomercio']);
+                $recorrido->cuota_valor = json_encode($data['valorescuotas']);
                 $recorrido->totales_creditos = json_encode($data['totales_creditos']);
+                $recorrido->saldo = json_encode($data['saldosreales']);
                 $recorrido->recorrido = $recorridoId;
                 $recorrido->pagos = json_encode($pagos);
                 $recorrido->save();
