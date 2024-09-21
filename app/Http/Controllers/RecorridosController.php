@@ -19,6 +19,11 @@ class RecorridosController extends Controller
         $this->CreditosSrv = $CreditosSrv;
     }
 
+    public function prueba($idCredito){
+     
+        $this->CreditosSrv->CalcCuotaReal($idCredito);
+    }
+
     public function RecorridoHoy($recorrido)
     {
         $clientes = Clientes::where('recorrido', $recorrido)->where('active', 1)->orderBy('id', 'asc')->get();
@@ -30,6 +35,12 @@ class RecorridosController extends Controller
         $nombres = [];
         $cuotas_restantes = [];
         $cuotas_totales = [];
+        $cuotas_reales = [];
+        $tipo_credito = [];
+        $telefonos = [];
+        $tiposdecomercio = [];
+        $valorescuotas = [];
+        $saldosReales = [];
 
         // Cuotas pagadas
         // Cuotas totales
@@ -65,10 +76,28 @@ class RecorridosController extends Controller
         foreach ($creditos as $credito) {
             $nombre = $this->CreditosSrv->NombreCliente($credito->cliente);
             $lugar_cobro = $this->CreditosSrv->CobroAddress($credito->id);
+            $this->CreditosSrv->CalcCuotaReal($credito->id);
+            $telefono = $this->CreditosSrv->TelefonoCliente($credito->id);
+            $comercio_tipo = $this->CreditosSrv->ComercioTipo($credito->id);
+            $cuota_valor = $this->CreditosSrv->CuotaValor($credito->id);
+            $saldo_real = $this->CreditosSrv->SaldoReal($credito->id);
+            array_push($saldosReales, $saldo_real);
+            array_push($valorescuotas, $cuota_valor);
+            array_push($tiposdecomercio, $comercio_tipo);
+            array_push($telefonos, $telefono);
             array_push($direcciones, $lugar_cobro);
             array_push($nombres, $nombre);
             array_push($cuotas_restantes, $credito->cuotas_restantes);
             array_push($cuotas_totales, $credito->cuotas);
+            array_push($cuotas_reales, $credito->cuota_real);
+
+            if($credito->modalidad == 'Diaria' || $credito->modalidad == 'Semanal'){
+                $letra = "P";
+                array_push($tipo_credito, $letra);
+            } else {
+                $letra = "A";
+                array_push($tipo_credito, $letra);
+            }
         }
 
         $elementos = count($ids);
@@ -78,9 +107,15 @@ class RecorridosController extends Controller
             'ids' => $ids,
             'nombres' => $nombres,
             'cuotas_restantes' => $cuotas_restantes,
+            'cuotas_reales' => $cuotas_reales,
             'cuotas_totales' => $cuotas_totales,
             'direcciones' => $direcciones,
             'totales_creditos' => $totales,
+            'tipo_credito' => $tipo_credito,
+            'telefonos' => $telefonos,
+            'tiposdecomercio' => $tiposdecomercio,
+            'valorescuotas' => $valorescuotas,
+            'saldosreales' => $saldosReales
         ];
 
         $fechaHoy = Carbon::now()->format('Y-m-d');

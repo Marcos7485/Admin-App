@@ -85,9 +85,9 @@ config: Archivos de configuración para Laravel.
 
 - Nombre
 - cuotas q quedan 6/20
-
-
 - "A", "P", articulo, prestamo.
+
+
 - Monto de la cuota
 - Zelda para completar
 

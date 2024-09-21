@@ -16,9 +16,15 @@ interface RecorridoItem {
     id: string | number;
     nombre: string;
     cuotas_restantes: string;
+    cuotas_reales: string;
     cuotas_totales: string;
+    tipo_credito: string;
     direccion: string;
     total_creditos: string | number;
+    telefonos: string;
+    tiposdecomercio: string;
+    valorescuotas: string;
+    saldosreales: string;
 }
 
 // Recorrido
@@ -27,9 +33,10 @@ const RecorridoData = ref<RecorridoItem[]>([]);
 const elementos = ref<number>(0);
 
 const groupedData = ref<RecorridoItem[][]>([]);
-const rowsPerColumn = 30;
+const rowsPerColumn = 40;
 
 const recorridoid = ref<string | null>('');
+const Total = ref<number>(0);
 
 
 const fetchRecorridoInfo = async (recorrido: string | null): Promise<void> => {
@@ -46,10 +53,21 @@ const fetchRecorridoInfo = async (recorrido: string | null): Promise<void> => {
                     id: id,
                     nombre: data.nombres[index],
                     cuotas_restantes: (data.cuotas_totales[index] - data.cuotas_restantes[index]) + 1,
+                    cuotas_reales: data.cuotas_reales[index],
                     cuotas_totales: data.cuotas_totales[index],
                     direccion: data.direcciones[index],
                     total_creditos: data.totales_creditos[index],
+                    tipo_credito: data.tipo_credito[index],
+                    telefonos: data.telefonos[index],
+                    tiposdecomercio: data.tiposdecomercio[index],
+                    valorescuotas: data.valorescuotas[index],
+                    saldosreales: data.saldosreales[index]
                 }));
+
+                Total.value = RecorridoData.value.reduce(
+                    (acc, item) => acc + Number(item.valorescuotas), // Sumar los créditos
+                    0
+                );
 
                 // Llamar a la función para dividir los datos en columnas
                 splitDataIntoColumns();
@@ -113,6 +131,7 @@ const printPage = () => {
         document.body.innerHTML = originalContent;
         location.reload();
     }
+
 };
 
 const companyLogo = `${imageStore.imagePath}/Principal/logomarca.png`;
@@ -141,7 +160,9 @@ const currentDate = new Date().toLocaleDateString();
                 <div class="header">
                     <div class="encabezado">
                         <p>{{ currentDate }} - {{ companyName }} - {{ reportTitle }}</p>
+
                     </div>
+
 
                 </div>
                 <div class="data-columns">
@@ -153,10 +174,10 @@ const currentDate = new Date().toLocaleDateString();
                                     <th>Cliente</th>
                                     <th>Cuota</th>
                                     <th>Tipo</th>
-                                    <th>Valor</th>
                                     <th>Direccion</th>
                                     <th>Telefono</th>
                                     <th>Comercio</th>
+                                    <th>Valor cuota</th>
                                     <th>Pago</th>
                                     <th>Saldo</th>
                                 </tr>
@@ -165,18 +186,23 @@ const currentDate = new Date().toLocaleDateString();
                                 <tr v-for="(item, index) in column" :key="index">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.nombre }}</td>
-                                    <td>{{ item.cuotas_restantes }}/{{ item.cuotas_totales }}</td>
-                                    <td>{{ item.tipo }}</td>
-                                    <td>{{ item.valor }}</td>
+                                    <td>{{ item.cuotas_reales !== null ? item.cuotas_reales + '/' + item.cuotas_totales
+                                        : 'Mora' }}</td>
+                                    <td>{{ item.tipo_credito }}</td>
                                     <td>{{ item.direccion }}</td>
-                                    <td>{{ item.telefono }}</td>
-                                    <td>{{ item.comercio }}</td>
+                                    <td>{{ item.telefonos }}</td>
+                                    <td>{{ item.tiposdecomercio }}</td>
+                                    <td>${{ item.valorescuotas }}</td>
                                     <td></td>
-                                    <td>{{ item.saldo }}</td>
+                                    <td>{{ item.saldosreales }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="total_page">
+                    <p>Total a cobrar: ${{ Total }}</p>
+                    <p>Cobrado:______________</p>
                 </div>
             </div>
         </div>
@@ -184,6 +210,18 @@ const currentDate = new Date().toLocaleDateString();
 </template>
 
 <style scoped>
+
+.total_page p{
+    border: 1px solid gray;
+    margin-right: 1rem;
+}
+
+.total_page {
+    display: flex;
+    justify-content: center;
+    font-size: 2rem;
+}
+
 .data-columns {
     display: flex;
     flex-wrap: wrap;

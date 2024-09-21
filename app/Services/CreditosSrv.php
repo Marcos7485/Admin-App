@@ -192,7 +192,7 @@ class CreditosSrv
                 }
             }
 
-            if($credito->pagado == 0){
+            if ($credito->pagado == 0) {
                 $credito->cuotas_restantes = $credito->cuotas;
                 $credito->save();
             }
@@ -259,14 +259,59 @@ class CreditosSrv
         }
     }
 
-    public function CalcCuotaReal($idCredito){
+    public function CalcCuotaReal($idCredito)
+    {
         $credito = Creditos::where('id', $idCredito)->first();
 
         $cuotas = $credito->cuotas;
         $inicio = $credito->inicio;
-        $hoy = Carbon::now();
+        $hoy = Carbon::now()->format('d/m');
 
-        
+        $cuotasReales = $this->DatasFichero($inicio, $cuotas, $credito->modalidad);
+        $indice = null;
+
+        foreach ($cuotasReales as $key => $cr) {
+            if ($cr == $hoy) {
+                $indice = $key + 1; // Índice comienza desde 1, no desde 0
+                break;
+            }
+        }
+
+        if ($indice !== null) {
+            $saldo_real = round($credito->cuotas_valor * ($indice - 1));
+            $credito->cuota_real = $indice;
+            $credito->saldo_real = $saldo_real;
+            $credito->save();
+        } else {
+            $saldo_real = $credito->total_credito;
+            $credito->saldo_real = $saldo_real;
+            $credito->save();
+        }
+
+        return;
+    }
+
+    public function TelefonoCliente($idCredito){
+        $credito = Creditos::where('id', $idCredito)->first();
+        $cliente = Clientes::where('id', $credito->cliente)->first();
+        return $cliente->phone;
+    }
+
+    public function ComercioTipo($idCredito){
+        $credito = Creditos::where('id', $idCredito)->first();
+        $cliente = Clientes::where('id', $credito->cliente)->first();
+        return $cliente->comercio_tipo;
+    }
+
+    public function CuotaValor($idCredito){
+        $credito = Creditos::where('id', $idCredito)->first();
+        return round($credito->cuotas_valor);
+    }
+
+    public function SaldoReal($idCredito){
+        $credito = Creditos::where('id', $idCredito)->first();
+        $resultado = $credito->saldo_real - $credito->pagado;
+        return $resultado;
     }
 
     public function PagoRecorridoHoy($idCliente, $valor, $fecha)
