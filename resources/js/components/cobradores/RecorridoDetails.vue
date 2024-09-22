@@ -15,10 +15,18 @@ onMounted(() => {
 
 interface RecorridoItem {
     id: string | number;
+    elementos: string;
+    ids: string;
     nombre: string;
-    direccion: string;
-    pago: string | number;
-    total_creditos: string | number;
+    cuota: string;
+    tipo: string;
+    direcciones: string;
+    telefonos: string | number;
+    comercio: string;
+    cuota_valor: string;
+    totales_creditos: string | number;
+    saldo: string;
+    pago: string;
 }
 
 // Recorrido
@@ -45,10 +53,18 @@ const fetchRecorridoInfo = async (recorrido: string | null): Promise<void> => {
                 // Asignación de arrays en un formato adecuado
                 RecorridoData.value = data.ids.map((id: string | number, index: number) => ({
                     id: id,
+                    elementos: data.elementos,
+                    ids: data.ids[index],
                     nombre: data.nombres[index],
-                    direccion: data.direcciones[index],
+                    cuota: data.cuota[index],
+                    tipo: data.tipo[index],
+                    direcciones: data.direcciones[index],
+                    telefonos: data.telefonos[index],
+                    comercio: data.comercio[index],
+                    cuota_valor: data.cuota_valor[index],
+                    totales_creditos: data.totales_creditos[index],
+                    saldo: data.saldo[index],
                     pago: data.pago[index],
-                    total_creditos: data.totales_creditos[index],
                 }));
 
                 // Llamar a la función para dividir los datos en columnas
@@ -141,18 +157,28 @@ const reportTitle = 'Fichero de cobro';
                                 <tr>
                                     <th>id</th>
                                     <th>Cliente</th>
+                                    <th>Cuota</th>
+                                    <th>Tipo</th>
                                     <th>Direccion</th>
+                                    <th>Telefono</th>
+                                    <th>Comercio</th>
+                                    <th>Valor cuota</th>
                                     <th>Pago</th>
-                                    <th>Total</th>
+                                    <th>Saldo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in column" :key="index">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.nombre }}</td>
-                                    <td>{{ item.direccion }}</td>
+                                    <td>{{ item.cuota.startsWith('/') ? 'Mora' : item.cuota }}</td>
+                                    <td>{{ item.tipo }}</td>
+                                    <td>{{ item.direcciones }}</td>
+                                    <td>{{ item.telefonos }}</td>
+                                    <td>{{ item.comercio }}</td>
+                                    <td>${{ item.cuota_valor }}</td>
                                     <td>{{ item.pago }}</td>
-                                    <td>{{ item.total_creditos }}</td>
+                                    <td>{{ item.saldo }}</td>
                                 </tr>
                             </tbody>
                         </table>

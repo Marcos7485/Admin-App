@@ -26,6 +26,9 @@ class RecorridosController extends Controller
 
     public function RecorridoHoy($recorrido)
     {
+
+        
+
         $clientes = Clientes::where('recorrido', $recorrido)->where('active', 1)->orderBy('id', 'asc')->get();
 
         $creditos = [];
@@ -157,9 +160,15 @@ class RecorridosController extends Controller
             'elementos' => json_decode($recorrido->elementos, true),
             'ids' => json_decode($recorrido->ids, true),
             'nombres' => json_decode($recorrido->nombres, true),
+            'cuota' => json_decode($recorrido->cuota, true),
+            'tipo' => json_decode($recorrido->tipo, true),
             'direcciones' => json_decode($recorrido->direcciones, true),
+            'telefonos' => json_decode($recorrido->telefonos, true),
+            'comercio' => json_decode($recorrido->comercio, true),
+            'cuota_valor' => json_decode($recorrido->cuota_valor, true),
             'totales_creditos' => json_decode($recorrido->totales_creditos, true),
             'pago' => json_decode($recorrido->pagos),
+            'saldo' => json_decode($recorrido->saldo),
             'created_at' => $recorrido->created_at,
             'updated_at' => $recorrido->updated_at
         ];
