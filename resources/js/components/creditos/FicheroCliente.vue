@@ -138,7 +138,7 @@ onMounted(async () => {
 
 const splitDataIntoColumns = () => {
     // Genera una lista de elementos basada en el número de cuotas
-    const itemsArray: FicheroItem[] = Array.from({ length: cuotaCount.value }, (_, i) => ({
+    const itemsArray: FicheroItem[] = Array.from({ length: 240 }, (_, i) => ({
         id: i,
         cliente: '',
         inicio: fechaFirma.value,
@@ -351,6 +351,8 @@ const currentDate = new Date().toLocaleDateString();
     .table th,
     .table td {
         font-size: 1vh;
+        height: 25px;
+        width: 15px;
     }
 
     .info-fichero p {
