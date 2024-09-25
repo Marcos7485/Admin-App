@@ -239,6 +239,7 @@ class CreditosSrv
     {
         if (!empty($data['ids'])) {
             $pagos = [];
+            
             foreach ($data['ids'] as $elemento) {
                 array_push($pagos, 'No pago');
             }
