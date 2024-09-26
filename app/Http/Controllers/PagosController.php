@@ -60,8 +60,8 @@ class PagosController extends Controller
         $pago = Pagos::where('id', $request->id)->first();
         $credito = Creditos::where('cliente', $request->cliente)->where('active', 1)->first();
         $ultimoPago = Pagos::where('cliente', $request->cliente)
-        ->orderBy('id', 'desc')
-        ->first();
+            ->orderBy('id', 'desc')
+            ->first();
 
         if (empty($ultimoPago)) {
             $pago_numero = 1;
@@ -76,7 +76,7 @@ class PagosController extends Controller
         $pago->valor = $request->valor;
         $pago->pago_fecha = Carbon::parse($request->pago_fecha);
         $pago->save();
-        
+
         $this->CreditosSrv->PagoRecorridoHoy($request->cliente, $request->valor, $request->pago_fecha);
         $this->CreditosSrv->ActualizarPagos();
         return response()->json(['message' => 'Credito editado correctamente']);
@@ -87,7 +87,7 @@ class PagosController extends Controller
         $pagos = Pagos::all();
         $clientes = Clientes::all();
         $this->CreditosSrv->TransformIdEnName($pagos, $clientes);
-        
+
         return response()->json($pagos);
     }
 
@@ -95,5 +95,10 @@ class PagosController extends Controller
     {
         $pago = Pagos::where('id', $id)->first();
         return response()->json($pago);
+    }
+
+    public function PagoDestroy(Request $request)
+    {
+        return $this->CreditosSrv->deletePago($request->id);
     }
 }

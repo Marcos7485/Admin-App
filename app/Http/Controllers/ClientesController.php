@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegistrarCliente;
 use App\Models\Clientes;
+use App\Services\CreditosSrv;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,14 @@ use Inertia\Inertia;
 
 class ClientesController extends Controller
 {
+
+    protected $CreditosSrv;
+
+    public function __construct(CreditosSrv $CreditosSrv)
+    {
+        $this->CreditosSrv = $CreditosSrv;
+    }
+
     public function ClientesForm()
     {
         return Inertia::location(route('dashboard'));
@@ -69,5 +78,9 @@ class ClientesController extends Controller
         $cliente->save();
 
         return response()->json(['message' => 'Cliente editado correctamente']);
+    }
+
+    public function ClienteDestroy(Request $request){
+        return $this->CreditosSrv->deleteCliente($request->id);
     }
 }

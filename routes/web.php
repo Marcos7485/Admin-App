@@ -37,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
     // Clientes:
     Route::get('/new/cliente', [ClientesController::class, 'ClientesForm']);
     Route::post('/new/cliente', [ClientesController::class, 'NewCliente'])->name('cliente.new');
+    Route::post('/destroy/cliente', [ClientesController::class, 'ClienteDestroy']);
+
 
     Route::get('/datos-clientes', [ClientesController::class, 'getDatosClientes']);
     Route::get('/info/cliente/{id}', [ClientesController::class, 'ClienteInfo']);
@@ -50,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/info/credito/{id}', [CreditosController::class, 'CreditoInfo']);
     Route::get('/info/fichero/{id}', [CreditosController::class, 'FicheroInfo']);
     Route::post('/modify/credito', [CreditosController::class, 'CreditoEdit']);
+    Route::post('/destroy/credito', [CreditosController::class, 'CreditoDestroy']);
 
     Route::post('/refinanciar/credito', [CreditosController::class, 'Refinanciar']);
     Route::post('/renovar/credito', [CreditosController::class, 'Renovar']);
@@ -59,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
     // Pagos:
     Route::post('/new/pago', [PagosController::class, 'NewPago'])->name('pago.new');
     Route::get('/new/pago', [PagosController::class, 'PagoForm']);
+    Route::post('/destroy/pago', [PagosController::class, 'PagoDestroy']);
 
     Route::get('/datos-pagos', [PagosController::class, 'getDatosPagos']);
     Route::get('/info/pago/{id}', [PagosController::class, 'PagosInfo']);

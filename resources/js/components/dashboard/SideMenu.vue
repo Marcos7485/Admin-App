@@ -82,6 +82,9 @@ const saveMenu = () => {
                         <a @click="$emit('changeComponent', 'BuscarCliente')">
                             <li @click="saveMenu()">Buscar cliente</li>
                         </a>
+                        <a @click="$emit('changeComponent', 'BorrarCliente')">
+                            <li @click="saveMenu()">Borrar</li>
+                        </a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('prestamos')">
@@ -99,6 +102,9 @@ const saveMenu = () => {
                         <a @click="$emit('changeComponent', 'Renovacion')">
                             <li @click="saveMenu()">Renovacion</li>
                         </a>
+                        <a @click="$emit('changeComponent', 'BorrarCredito')">
+                            <li @click="saveMenu()">Borrar</li>
+                        </a>
                     </ul>
                 </button>
                 <button @click="toggleSubMenu('pagos')">
@@ -109,6 +115,9 @@ const saveMenu = () => {
                         </a>
                         <a @click="$emit('changeComponent', 'Pagos')">
                             <li @click="saveMenu()">Pagos</li>
+                        </a>
+                        <a @click="$emit('changeComponent', 'BorrarPago')">
+                            <li @click="saveMenu()">Borrar</li>
                         </a>
                     </ul>
                 </button>

@@ -239,14 +239,14 @@ class CreditosSrv
     {
         if (!empty($data['ids'])) {
             $pagos = [];
-            
+
             foreach ($data['ids'] as $elemento) {
                 array_push($pagos, 'No pago');
             }
 
             $cuotas_reales = [];
 
-            for($i=0; $i<count($data['cuotas_reales']); $i++){
+            for ($i = 0; $i < count($data['cuotas_reales']); $i++) {
                 $cuota = $data['cuotas_reales'][$i] . '/' . $data['cuotas_totales'][$i];
                 array_push($cuotas_reales, $cuota);
             }
@@ -305,24 +305,28 @@ class CreditosSrv
         return;
     }
 
-    public function TelefonoCliente($idCredito){
+    public function TelefonoCliente($idCredito)
+    {
         $credito = Creditos::where('id', $idCredito)->first();
         $cliente = Clientes::where('id', $credito->cliente)->first();
         return $cliente->phone;
     }
 
-    public function ComercioTipo($idCredito){
+    public function ComercioTipo($idCredito)
+    {
         $credito = Creditos::where('id', $idCredito)->first();
         $cliente = Clientes::where('id', $credito->cliente)->first();
         return $cliente->comercio_tipo;
     }
 
-    public function CuotaValor($idCredito){
+    public function CuotaValor($idCredito)
+    {
         $credito = Creditos::where('id', $idCredito)->first();
         return round($credito->cuotas_valor);
     }
 
-    public function SaldoReal($idCredito){
+    public function SaldoReal($idCredito)
+    {
         $credito = Creditos::where('id', $idCredito)->first();
         $resultado = $credito->saldo_real - $credito->pagado;
         return $resultado;
@@ -504,6 +508,46 @@ class CreditosSrv
                 $verificador->active = 0;
                 $verificador->save();
             }
+        }
+    }
+
+    public function deleteCliente($id){
+        $cliente = Clientes::where('id', $id)->first();
+
+        if ($cliente) {
+            Pagos::where('cliente', $id)->delete();
+            Ficheros::where('cliente', $id)->delete();
+            Creditos::where('cliente', $id)->delete();
+            $cliente->delete();
+            return response()->json(['message' => 'Cliente borrado correctamente']);
+        } else {
+            return response()->json(['message' => 'El cliente que intenta eliminar no existe']);
+        }
+    }
+
+    public function deleteCredito($id)
+    {
+        $credito = Creditos::where('id', $id)->first();
+
+        if ($credito) {
+            Pagos::where('idcredito', $id)->delete();
+            Ficheros::where('cliente', $credito->cliente)->delete();
+            $credito->delete();
+            return response()->json(['message' => 'Credito borrado correctamente']);
+        } else {
+            return response()->json(['message' => 'El credito que intenta eliminar no existe']);
+        }
+    }
+
+    public function deletePago($id){
+        $pago = Pagos::where('id', $id)->first();
+
+        if ($pago) {
+            $pago->delete();
+            $this->ActualizarPagos();
+            return response()->json(['message' => 'Pago borrado correctamente']);
+        } else {
+            return response()->json(['message' => 'El pago que intenta eliminar no existe']);
         }
     }
 

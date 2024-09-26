@@ -30,7 +30,7 @@ class CreditosController extends Controller
         $creditos = Creditos::where('active', 1)->get();
         $clientes = Clientes::all();
         $this->CreditosSrv->TransformIdEnName($creditos, $clientes);
-        
+
         return response()->json($creditos);
     }
 
@@ -40,10 +40,11 @@ class CreditosController extends Controller
         return response()->json($credito);
     }
 
-    public function FicheroInfo($id){
-        
+    public function FicheroInfo($id)
+    {
+
         $fichero = Ficheros::where('cliente', $id)->where('active', 1)->first();
-        if(empty($fichero)){
+        if (empty($fichero)) {
             $credito = Creditos::where('id', $id)->where('active', 1)->first();
             $fichero = Ficheros::where('cliente', $credito->cliente)->where('active', 1)->first();
         }
@@ -82,6 +83,11 @@ class CreditosController extends Controller
         return response()->json(['message' => 'Credito editado correctamente']);
     }
 
+    public function CreditoDestroy(Request $request)
+    {
+        return $this->CreditosSrv->deleteCredito($request->id);
+    }
+
     public function Refinanciar(Request $request)
     {
         $this->CreditosSrv->Refinanciar($request->cliente);
@@ -113,7 +119,7 @@ class CreditosController extends Controller
 
     public function Renovar(Request $request)
     {
-        
+
         $this->CreditosSrv->DesactivarFichero($request->cliente);
         $cliente = $request->cliente;
 
@@ -167,12 +173,13 @@ class CreditosController extends Controller
         $credito->inicio = $request->inicio;
         $credito->status = 'Pendiente';
         $credito->save();
-        
+
         $this->CreditosSrv->CrearFichero($cliente);
         return response()->json(['message' => 'Credito creado correctamente']);
     }
 
-    public function fechasCuotas($idCliente){
+    public function fechasCuotas($idCliente)
+    {
         $credito = Creditos::where('cliente', $idCliente)->where('active', 1)->first();
         $fechas = $this->CreditosSrv->DatasFichero($credito->inicio, $credito->cuotas, $credito->modalidad);
         return response()->json($fechas);

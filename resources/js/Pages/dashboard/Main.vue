@@ -29,6 +29,10 @@ import Cobradores from '../../components/resumenes/Cobradores.vue';
 import Mensual from '../../components/resumenes/Mensual.vue';
 import VerCliente from '../../components/clientes/VerCliente.vue';
 import VerCredito from '../../components/creditos/VerCredito.vue';
+import BorrarCredito from '../../components/creditos/BorrarCredito.vue';
+import BorrarPago from '../../components/pagos/BorrarPago.vue';
+import BorrarCliente from '../../components/clientes/BorrarCliente.vue';
+
 
 const imageStore = useImageStore();
 
@@ -63,6 +67,9 @@ const components = {
     RecorridoDetails: markRaw(RecorridoDetails),
     Seguridad: markRaw(Seguridad),
     App: markRaw(App),
+    BorrarCredito: markRaw(BorrarCredito),
+    BorrarPago: markRaw(BorrarPago),
+    BorrarCliente: markRaw(BorrarCliente)
 };
 
 const currentComponent = ref(components.Principal);
