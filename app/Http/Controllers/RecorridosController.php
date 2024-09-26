@@ -27,8 +27,6 @@ class RecorridosController extends Controller
     public function RecorridoHoy($recorrido)
     {
 
-        
-
         $clientes = Clientes::where('recorrido', $recorrido)->where('active', 1)->orderBy('id', 'asc')->get();
 
         $creditos = [];

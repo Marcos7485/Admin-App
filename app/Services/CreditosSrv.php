@@ -216,6 +216,11 @@ class CreditosSrv
     {
         $cliente = Clientes::where('id', $idCliente)->first();
         $nombre = $cliente->name;
+
+        if($nombre == null){
+            $nombre = '';
+        }
+
         return $nombre;
     }
 
@@ -227,8 +232,10 @@ class CreditosSrv
 
         if ($credito->lugar_cobro == 'Domicilio') {
             $direccion = $cliente->address;
-        } else {
+        } elseif ($credito->lugar_cobro == 'Comercio'){
             $direccion = $cliente->comercio_address;
+        } else {
+            $direccion = '';
         }
 
         return $direccion;
@@ -309,14 +316,26 @@ class CreditosSrv
     {
         $credito = Creditos::where('id', $idCredito)->first();
         $cliente = Clientes::where('id', $credito->cliente)->first();
-        return $cliente->phone;
+        $telefono = $cliente->phone;
+        
+        if($telefono == null){
+            $telefono = '';
+        }
+
+        return $telefono;
     }
 
     public function ComercioTipo($idCredito)
     {
         $credito = Creditos::where('id', $idCredito)->first();
         $cliente = Clientes::where('id', $credito->cliente)->first();
-        return $cliente->comercio_tipo;
+        $comercioTipo = $cliente->comercio_tipo;
+
+        if ( $comercioTipo == null){
+            $comercioTipo = '';
+        }
+        
+        return $comercioTipo;
     }
 
     public function CuotaValor($idCredito)

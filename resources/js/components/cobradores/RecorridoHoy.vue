@@ -33,7 +33,7 @@ const RecorridoData = ref<RecorridoItem[]>([]);
 const elementos = ref<number>(0);
 
 const groupedData = ref<RecorridoItem[][]>([]);
-const rowsPerColumn = 40;
+const rowsPerColumn = 30;
 
 const recorridoid = ref<string | null>('');
 const Total = ref<number>(0);

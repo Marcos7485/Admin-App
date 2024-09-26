@@ -22,7 +22,6 @@ Route::get('/logout', function () {
 });
 Route::post('/logout', [MainController::class, 'logout'])->name('logout');
 
-
 // 
 // Route::get('/prueba/{id}', [RecorridosController::class, 'prueba']);
 // 
