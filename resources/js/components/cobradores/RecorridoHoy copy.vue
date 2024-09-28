@@ -170,16 +170,29 @@ const currentDate = new Date().toLocaleDateString();
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Clientes</th>
+                                    <th>Cliente</th>
+                                    <th>Cuota</th>
+                                    <th>Tipo</th>
+                                    <th>Direccion</th>
+                                    <th>Telefono</th>
+                                    <th>Comercio</th>
+                                    <th>Valor cuota</th>
                                     <th style="min-width: 80px;">Pago</th>
+                                    <th>Saldo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in column" :key="index">
-                                    <td>{{ item.nombre }} - {{ item.cuotas_reales !== null ? item.cuotas_reales + '/' + item.cuotas_totales
-                                        : 'Mora' }} - {{ item.tipo_credito }} - {{ item.direccion }} - {{ item.telefonos }} - {{ item.tiposdecomercio }}
-                                        - <b>Cuota:</b> ${{ item.valorescuotas }} - <b>Saldo:</b> {{ item.saldosreales }}</td>
+                                    <td>{{ item.nombre }}</td>
+                                    <td>{{ item.cuotas_reales !== null ? item.cuotas_reales + '/' + item.cuotas_totales
+                                        : 'Mora' }}</td>
+                                    <td>{{ item.tipo_credito }}</td>
+                                    <td>{{ item.direccion }}</td>
+                                    <td>{{ item.telefonos }}</td>
+                                    <td>{{ item.tiposdecomercio }}</td>
+                                    <td>${{ item.valorescuotas }}</td>
                                     <td></td>
+                                    <td>{{ item.saldosreales }}</td>
                                 </tr>
                             </tbody>
                         </table>
