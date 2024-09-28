@@ -23,12 +23,12 @@ NPM/Yarn: Para manejar dependencias frontend
  - Acceso
 Administrador:
 
-Usuario: admin@lemaxfinanzas
-Contraseña: 123123123/
+Usuario: ***********
+Contraseña: ************
 Asistente:
 
-Usuario: asistente@lemaxfinanzas
-Contraseña: 123123123/
+Usuario: ***********
+Contraseña: **********
 
 Funcionalidades Principales
 
